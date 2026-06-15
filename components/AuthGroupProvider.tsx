@@ -49,7 +49,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
           nick = prompt("A nickname is required to continue. Please enter a nickname:");
         }
         currentNickname = nick.trim();
-        
+
         await setDoc(userDocRef, {
           nickname: currentNickname,
           email: user.email,
@@ -64,7 +64,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
       const identifier = user.email || user.uid;
       const q = query(collection(db, "groups"), where("ownerId", "==", user.uid), where("isSystem", "==", true));
       const snap = await getDocs(q);
-      
+
       if (snap.empty) {
         const defaultLists = ['Owned', 'Want to buy', 'Pre-ordered'];
         for (const name of defaultLists) {
@@ -78,7 +78,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
         }
       }
     };
-    
+
     checkUserAndDefaults();
   }, [user]);
 
@@ -90,11 +90,13 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    const identifier = user.email || user.uid; 
+    const identifier = user.email || user.uid;
     const q = query(collection(db, "groups"), where("members", "array-contains", identifier));
-    
+
     const unsubscribeGroups = onSnapshot(q, (snapshot) => {
-      const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // FIX: Added 'as any[]' at the end of the map routine
+      const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[];
+
       groups.sort((a, b) => (b.isSystem ? 1 : 0) - (a.isSystem ? 1 : 0));
       setUserGroups(groups);
     });
