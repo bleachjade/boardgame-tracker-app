@@ -87,7 +87,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         
-        <form onSubmit={handleSearch} className="p-4 border-b border-slate-200 flex gap-3 bg-white">
+        <form onSubmit={handleSearch} className="p-4 border-b border-slate-200 flex flex-col md:flex-row gap-3 bg-white">
           <input 
             type="text" 
             placeholder="Search for a game..." 

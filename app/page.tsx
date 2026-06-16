@@ -532,7 +532,7 @@ export default function Home() {
       )}
 
       {/* SIDEBAR */}
-      <aside className={`fixed inset-y-0 left-0 w-72 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shadow-2xl md:shadow-sm z-40 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 right-0 w-72 bg-white border-r border-slate-200 p-5 flex flex-col justify-between shadow-2xl md:shadow-sm z-40 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="overflow-y-auto">
           <div className="flex items-center justify-between mb-8 md:block">
             <h1 className="hidden md:flex text-2xl font-black text-slate-900 items-center gap-3">
@@ -662,9 +662,9 @@ export default function Home() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5">
               {games.map(game => (
-                <div key={game.id} className="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200 hover:shadow-md transition-shadow flex flex-col group">
+                <div key={game.id} className="bg-white rounded-2xl md:shadow-sm overflow-hidden border border-slate-200 hover:shadow-md transition-shadow flex flex-col group">
                   <div className="h-48 sm:h-56 w-full overflow-hidden bg-slate-100 border-b border-slate-200 shrink-0 relative">
                     {/* UPDATED: Pass the whole game object, and dynamic title */}
                     {game.userId === user.uid && (
@@ -683,11 +683,11 @@ export default function Home() {
                       <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>
                     )}
                   </div>
-                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                  <div className="p-2 sm:p-5 flex-1 flex flex-col justify-start md:justify-between">
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-slate-900 leading-tight mb-1 line-clamp-2">{game.name}</h3>
+                      <h3 className="font-bold text-lg sm:text-xl text-slate-900 leading-tight mb-1 line-clamp-2 min-h-[45px]">{game.name}</h3>
                       <p className="text-sm font-semibold text-slate-500 mb-4">{game.year || 'Unknown Year'}</p>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 bg-slate-100 p-2.5 rounded-lg mb-4">
+                      <div className="flex justify-between text-xs font-bold text-slate-700 bg-slate-100 p-2.5 rounded-lg md:mb-4">
                         <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} Players</span>
                         <span>{game.playTime || '?'} Mins</span>
                       </div>
@@ -697,7 +697,7 @@ export default function Home() {
                     <div className="space-y-2">
                       <button
                         onClick={() => setScoringGame(game)}
-                        className="w-full flex items-center justify-center gap-2 py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm border border-blue-100 hover:bg-blue-100 transition shadow-sm"
+                        className="w-full flex items-center justify-center gap-2 py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm border border-blue-100 hover:bg-blue-100 transition shadow-sm mt-[8px] md:mt-0"
                       >
                         <Trophy size={16} /> Scores & History
                       </button>
