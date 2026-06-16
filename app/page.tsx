@@ -2,21 +2,17 @@
 
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
-import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, arrayUnion, orderBy } from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
+import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, arrayUnion, orderBy, writeBatch, getDocs } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { LogOut, Plus, Users, Library, FolderPlus, FolderOpen, Check, X, Trash2, Menu, UserPlus, BookOpen, Trophy, Calendar, Calculator, History } from "lucide-react";
+import { LogOut, Plus, Users, Library, FolderPlus, FolderOpen, Check, X, Trash2, Menu, UserPlus, BookOpen, Trophy, Calendar, Calculator, History, Download, Upload, ListChecks } from "lucide-react";
 import toast from "react-hot-toast";
 
-// --- MODALS ---
+// --- HELPERS ---
 
-// UPDATED: Robust safe math calculation helper that fixes leading zero bugs (e.g., 05 + 09)
+// Robust safe math calculation helper that fixes leading zero bugs (e.g., 05 + 09)
 const calculateScoreString = (input: string): number => {
-  // 1. Strip away everything except numbers and valid basic math symbols
   let sanitized = input.replace(/[^0-9+\-*/().]/g, "");
-  
-  // 2. FIX: Strip out leading zeros from numbers (e.g., "05" becomes "5", "009" becomes "9") 
-  // This prevents strict-mode engine crashes or unintended octal conversions
   sanitized = sanitized.replace(/\b0+(?=\d)/g, "");
 
   if (!sanitized) return 0;
@@ -24,11 +20,12 @@ const calculateScoreString = (input: string): number => {
     const total = new Function(`return ${sanitized}`)();
     return typeof total === "number" && !isNaN(total) ? total : 0;
   } catch {
-    return 0; // Return 0 gracefully while user is in the middle of typing an expression
+    return 0; 
   }
 };
 
-// UPDATED MODAL: Score Sheet & Match History Log Panel
+// --- MODALS ---
+
 function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
@@ -52,14 +49,8 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
     return () => unsub();
   }, [game.bggId]);
 
-  const addPlayerRow = () => {
-    setPlayers([...players, { name: `Player ${players.length + 1}`, scoreInput: "" }]);
-  };
-
-  const removePlayerRow = (index: number) => {
-    setPlayers(players.filter((_, i) => i !== index));
-  };
-
+  const addPlayerRow = () => setPlayers([...players, { name: `Player ${players.length + 1}`, scoreInput: "" }]);
+  const removePlayerRow = (index: number) => setPlayers(players.filter((_, i) => i !== index));
   const updatePlayer = (index: number, field: "name" | "scoreInput", value: string) => {
     const newPlayers = [...players];
     newPlayers[index][field] = value;
@@ -68,7 +59,6 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
 
   const handleSavePlay = async () => {
     if (!user) return;
-    
     const finalScores = players.map(p => ({
       name: p.name.trim() || "Anonymous",
       score: calculateScoreString(p.scoreInput),
@@ -95,8 +85,6 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
   return (
     <div className="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 max-h-[85vh]">
-        
-        {/* Modal Header */}
         <div className="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl shrink-0">
           <div>
             <h2 className="font-black text-slate-900 text-lg flex items-center gap-2 truncate max-w-[320px]">
@@ -106,82 +94,45 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
           <button onClick={onClose}><X size={20} className="text-slate-500 hover:text-slate-900"/></button>
         </div>
 
-        {/* Tab Headers */}
         <div className="flex border-b text-sm font-bold text-slate-600 bg-white shrink-0">
-          <button 
-            onClick={() => setActiveTab("log")}
-            className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 ${activeTab === "log" ? "border-blue-600 text-blue-600 bg-blue-50/40" : "border-transparent hover:bg-slate-50"}`}
-          >
+          <button onClick={() => setActiveTab("log")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 ${activeTab === "log" ? "border-blue-600 text-blue-600 bg-blue-50/40" : "border-transparent hover:bg-slate-50"}`}>
             <Calculator size={16}/> Calculator Score Sheet
           </button>
-          <button 
-            onClick={() => setActiveTab("history")}
-            className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 ${activeTab === "history" ? "border-blue-600 text-blue-600 bg-blue-50/40" : "border-transparent hover:bg-slate-50"}`}
-          >
+          <button onClick={() => setActiveTab("history")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 ${activeTab === "history" ? "border-blue-600 text-blue-600 bg-blue-50/40" : "border-transparent hover:bg-slate-50"}`}>
             <History size={16}/> Match History ({history.length})
           </button>
         </div>
 
-        {/* Tab Content Panels */}
         <div className="p-4 overflow-y-auto flex-1 bg-slate-50">
           {activeTab === "log" ? (
             <div className="space-y-4">
               <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
                 Tip: Enter calculation formats directly (e.g., <code className="bg-slate-200 px-1 text-slate-800 rounded">35+12+4</code>)
               </div>
-              
               <div className="space-y-3">
                 {players.map((player, idx) => (
                   <div key={idx} className="flex gap-2 items-center bg-white p-3 border border-slate-200 rounded-xl shadow-sm">
-                    <input 
-                      type="text"
-                      placeholder="Player Name"
-                      value={player.name}
-                      onChange={(e) => updatePlayer(idx, "name", e.target.value)}
-                      className="flex-1 min-w-[100px] border border-slate-200 p-2 text-sm rounded-lg text-slate-900 font-bold"
-                    />
+                    <input type="text" placeholder="Player Name" value={player.name} onChange={(e) => updatePlayer(idx, "name", e.target.value)} className="flex-1 min-w-[100px] border border-slate-200 p-2 text-sm rounded-lg text-slate-900 font-bold" />
                     <div className="relative w-36 shrink-0">
-                      <input 
-                        type="text"
-                        placeholder="e.g. 10+5+2"
-                        value={player.scoreInput}
-                        onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)}
-                        className="w-full border border-slate-200 p-2 pr-10 text-sm rounded-lg text-right font-black bg-slate-50 text-slate-900 focus:bg-white"
-                      />
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
-                        ={calculateScoreString(player.scoreInput)}
-                      </span>
+                      <input type="text" placeholder="e.g. 10+5+2" value={player.scoreInput} onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)} className="w-full border border-slate-200 p-2 pr-10 text-sm rounded-lg text-right font-black bg-slate-50 text-slate-900 focus:bg-white" />
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">={calculateScoreString(player.scoreInput)}</span>
                     </div>
-                    {players.length > 1 && (
-                      <button onClick={() => removePlayerRow(idx)} className="text-slate-400 hover:text-red-500 p-1">
-                        <X size={18} />
-                      </button>
-                    )}
+                    {players.length > 1 && <button onClick={() => removePlayerRow(idx)} className="text-slate-400 hover:text-red-500 p-1"><X size={18} /></button>}
                   </div>
                 ))}
               </div>
-
-              <button 
-                onClick={addPlayerRow}
-                className="w-full py-2.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition"
-              >
+              <button onClick={addPlayerRow} className="w-full py-2.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition">
                 <Plus size={16}/> Add Player Row
               </button>
             </div>
           ) : (
-            /* Match History Log Panel */
             <div className="space-y-3">
               {history.length === 0 ? (
                 <div className="text-center py-8 text-slate-500 font-medium">No recorded score metrics found for this title.</div>
               ) : (
                 history.map((record) => {
-                  // UPDATED: Enforce explicit casting to Number to prevent string math comparison bugs
                   const maxScore = Math.max(...record.players.map((p: any) => Number(p.score || 0)));
-                  const formattedDate = record.playedAt?.toDate() 
-                    ? new Date(record.playedAt.toDate()).toLocaleDateString() 
-                    : "Just now";
-
-                  // UPDATED: Enforce strong Number conversion during array sorting routines
+                  const formattedDate = record.playedAt?.toDate() ? new Date(record.playedAt.toDate()).toLocaleDateString() : "Just now";
                   const sortedPlayers = [...record.players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
 
                   return (
@@ -199,9 +150,7 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
                             </span>
                             <div className="text-right">
                               <span className="font-black text-slate-900">{p.score} pts</span>
-                              {p.rawExpression && p.rawExpression !== String(p.score) && (
-                                <span className="block text-[10px] text-slate-400 font-normal">({p.rawExpression})</span>
-                              )}
+                              {p.rawExpression && p.rawExpression !== String(p.score) && <span className="block text-[10px] text-slate-400 font-normal">({p.rawExpression})</span>}
                             </div>
                           </div>
                         ))}
@@ -213,15 +162,9 @@ function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
             </div>
           )}
         </div>
-
-        {/* Modal Footer */}
         <div className="p-4 border-t bg-slate-50 rounded-b-xl flex justify-end gap-2 shrink-0">
           <button onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg font-medium transition">Close</button>
-          {activeTab === "log" && (
-            <button onClick={handleSavePlay} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-sm">
-              Save Match Results
-            </button>
-          )}
+          {activeTab === "log" && <button onClick={handleSavePlay} className="px-5 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-sm">Save Match Results</button>}
         </div>
       </div>
     </div>
@@ -255,11 +198,7 @@ function AssignModal({ game, onClose }: { game: any, onClose: () => void }) {
         </div>
         <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
           {userGroups.map(group => (
-            <div
-              key={group.id}
-              onClick={() => toggleGroup(group.id)}
-              className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer border border-transparent hover:border-slate-200 transition"
-            >
+            <div key={group.id} onClick={() => toggleGroup(group.id)} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer border border-transparent hover:border-slate-200 transition">
               <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${selected.includes(group.id) ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300'}`}>
                 {selected.includes(group.id) && <Check size={14} strokeWidth={3} />}
               </div>
@@ -270,6 +209,56 @@ function AssignModal({ game, onClose }: { game: any, onClose: () => void }) {
         <div className="p-4 border-t bg-slate-50 rounded-b-xl flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg font-medium transition">Cancel</button>
           <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-sm">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BulkAssignModal({ gameIds, onClose, onClearSelection }: { gameIds: string[], onClose: () => void, onClearSelection: () => void }) {
+  const { userGroups } = useAuthGroup();
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const handleBulkSave = async () => {
+    if (selected.length === 0) {
+      toast.error("Select at least one group to add these to.");
+      return;
+    }
+    try {
+      const batch = writeBatch(db);
+      gameIds.forEach(id => {
+        batch.update(doc(db, "userGames", id), { groupIds: arrayUnion(...selected) });
+      });
+      await batch.commit();
+      toast.success(`Assigned ${gameIds.length} games to selected lists!`);
+      onClearSelection();
+      onClose();
+    } catch (err) {
+      toast.error("Failed to bulk update.");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm flex flex-col border border-slate-200">
+        <div className="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+          <h2 className="font-bold text-slate-900 flex items-center gap-2"><ListChecks size={18}/> Bulk Assign ({gameIds.length})</h2>
+          <button onClick={onClose}><X size={20} className="text-slate-500 hover:text-slate-900"/></button>
+        </div>
+        <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
+          <p className="text-sm text-slate-500 mb-3">Add selected games to:</p>
+          {userGroups.map(group => (
+            <div key={group.id} onClick={() => setSelected(p => p.includes(group.id) ? p.filter(x => x !== group.id) : [...p, group.id])} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer border border-transparent hover:border-slate-200 transition">
+              <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${selected.includes(group.id) ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300'}`}>
+                {selected.includes(group.id) && <Check size={14} strokeWidth={3} />}
+              </div>
+              <span className="font-medium text-slate-700">{group.name}</span>
+            </div>
+          ))}
+        </div>
+        <div className="p-4 border-t bg-slate-50 rounded-b-xl flex justify-end gap-2">
+          <button onClick={onClose} className="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg font-medium transition">Cancel</button>
+          <button onClick={handleBulkSave} className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-sm">Apply Bulk</button>
         </div>
       </div>
     </div>
@@ -316,19 +305,11 @@ function AddFromLibraryModal({ group, onClose }: { group: any, onClose: () => vo
             myGames.map(game => {
               const inGroup = game.groupIds?.includes(group.id);
               return (
-                <div
-                  key={game.id}
-                  onClick={() => toggleGameInGroup(game)}
-                  className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer border border-transparent hover:border-slate-200 transition"
-                >
+                <div key={game.id} onClick={() => toggleGameInGroup(game)} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer border border-transparent hover:border-slate-200 transition">
                   <div className={`shrink-0 w-6 h-6 rounded flex items-center justify-center border transition-colors ${inGroup ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-300'}`}>
                     {inGroup && <Check size={14} strokeWidth={3} />}
                   </div>
-                  {game.image ? (
-                    <img src={game.image} alt={game.name} className="w-10 h-10 object-cover rounded shadow-sm shrink-0" />
-                  ) : (
-                    <div className="w-10 h-10 bg-slate-200 rounded shrink-0 flex items-center justify-center text-xs font-bold text-slate-400">N/A</div>
-                  )}
+                  {game.image ? <img src={game.image} alt={game.name} className="w-10 h-10 object-cover rounded shadow-sm shrink-0" /> : <div className="w-10 h-10 bg-slate-200 rounded shrink-0 flex items-center justify-center text-xs font-bold text-slate-400">N/A</div>}
                   <span className="font-bold text-slate-700 truncate flex-1">{game.name}</span>
                 </div>
               );
@@ -353,9 +334,7 @@ function InviteModal({ group, onClose }: { group: any, onClose: () => void }) {
 
     setLoading(true);
     try {
-      await updateDoc(doc(db, "groups", group.id), {
-        members: arrayUnion(email.trim().toLowerCase())
-      });
+      await updateDoc(doc(db, "groups", group.id), { members: arrayUnion(email.trim().toLowerCase()) });
       toast.success(`Invited ${email}!`);
       onClose();
     } catch (err) {
@@ -375,14 +354,7 @@ function InviteModal({ group, onClose }: { group: any, onClose: () => void }) {
         <form onSubmit={handleInvite} className="p-5 space-y-4">
           <div>
             <label className="block text-sm font-bold text-slate-700 mb-1">Friend's Google Email</label>
-            <input
-              type="email"
-              required
-              placeholder="friend@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-slate-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-indigo-600 text-slate-900 placeholder-slate-400 font-medium"
-            />
+            <input type="email" required placeholder="friend@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-slate-300 p-3 rounded-lg outline-none focus:ring-2 focus:ring-indigo-600 text-slate-900 placeholder-slate-400 font-medium" />
             <p className="text-xs text-slate-500 mt-2">They will see this group when they log in with this email.</p>
           </div>
           <div className="flex justify-end gap-2 pt-2">
@@ -400,13 +372,20 @@ function InviteModal({ group, onClose }: { group: any, onClose: () => void }) {
 // --- MAIN PAGE ---
 export default function Home() {
   const { user, userNickname, loading, activeGroup, userGroups, setActiveGroup } = useAuthGroup();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [games, setGames] = useState<any[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [assigningGame, setAssigningGame] = useState<any | null>(null);
-  const [scoringGame, setScoringGame] = useState<any | null>(null); // NEW: Controls the Score/History modal
+  const [scoringGame, setScoringGame] = useState<any | null>(null);
   const [invitingGroup, setInvitingGroup] = useState<any | null>(null);
   const [libraryModalGroup, setLibraryModalGroup] = useState<any | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // BULK STATE
+  const [isBulkMode, setIsBulkMode] = useState(false);
+  const [selectedGameIds, setSelectedGameIds] = useState<string[]>([]);
+  const [isBulkAssignModalOpen, setIsBulkAssignModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -423,6 +402,16 @@ export default function Home() {
     });
     return () => unsub();
   }, [activeGroup, user]);
+
+  // Turn off bulk mode when switching tabs
+  useEffect(() => {
+    setIsBulkMode(false);
+    setSelectedGameIds([]);
+  }, [activeGroup]);
+
+  const toggleBulkSelection = (gameId: string) => {
+    setSelectedGameIds(prev => prev.includes(gameId) ? prev.filter(id => id !== gameId) : [...prev, gameId]);
+  };
 
   const handleCreateGroup = async () => {
     const name = prompt("Enter a name for your new friend group (e.g., 'Game Night Crew'):");
@@ -457,12 +446,10 @@ export default function Home() {
     }
   };
 
-  // UPDATED: Contextual game removal logic
   const handleDeleteGame = async (e: React.MouseEvent, game: any) => {
     e.stopPropagation();
 
     if (activeGroup === null) {
-      // 1. ALL MY GAMES VIEW: Permanently remove from the entire database
       if (!confirm(`Are you sure you want to permanently delete "${game.name}" from your entire library? This will remove it from all groups too.`)) return;
 
       try {
@@ -472,7 +459,6 @@ export default function Home() {
         toast.error("Failed to remove game from library.");
       }
     } else {
-      // 2. GROUP/LIST VIEW: Just untag the group ID from the game document
       if (!confirm(`Remove "${game.name}" from "${activeGroup.name}"? (It will remain safe in your master library)`)) return;
 
       try {
@@ -483,6 +469,59 @@ export default function Home() {
         toast.error("Failed to remove from group.");
       }
     }
+  };
+
+  const handleExport = async () => {
+    if (!user) return;
+    try {
+      const q = query(collection(db, "userGames"), where("userId", "==", user.uid));
+      const snap = await getDocs(q);
+      const data = snap.docs.map(d => {
+        const { userId, ownerNickname, addedAt, id, groupIds, ...rest } = d.data();
+        return rest; 
+      });
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `boardgames-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      toast.success("Library exported!");
+    } catch(err) { toast.error("Failed to export."); }
+  };
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const imported = JSON.parse(event.target?.result as string);
+        if (!Array.isArray(imported)) throw new Error("Invalid format");
+        
+        const batch = writeBatch(db);
+        let count = 0;
+        imported.forEach(game => {
+          if (!game.bggId || !game.name) return; 
+          const newRef = doc(collection(db, "userGames"));
+          batch.set(newRef, {
+            ...game,
+            userId: user.uid,
+            ownerNickname: userNickname,
+            groupIds: [], 
+            addedAt: serverTimestamp()
+          });
+          count++;
+        });
+        await batch.commit();
+        toast.success(`Successfully imported ${count} games!`);
+      } catch(err) {
+        toast.error("Failed to parse import file.");
+      }
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+    reader.readAsText(file);
   };
 
   const selectGroupMobile = (group: any | null) => {
@@ -567,7 +606,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
+            
             <div>
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 px-1">Friend Groups</h2>
               <div className="space-y-1">
@@ -593,6 +632,17 @@ export default function Home() {
                   <Plus size={18} /> Create New Group
                 </button>
               </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-200">
+              <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 px-1">Library Tools</h2>
+              <button onClick={handleExport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 font-medium hover:bg-slate-100">
+                <Download size={18} className="text-slate-400" /> Export JSON
+              </button>
+              <input type="file" accept=".json" ref={fileInputRef} onChange={handleImport} className="hidden" />
+              <button onClick={() => fileInputRef.current?.click()} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 font-medium hover:bg-slate-100">
+                <Upload size={18} className="text-slate-400" /> Import JSON
+              </button>
             </div>
           </div>
         </div>
@@ -620,30 +670,51 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap w-full xl:w-auto gap-3">
-              {activeGroup && !activeGroup.isSystem && activeGroup.ownerId === user.uid && (
-                <button
-                  onClick={() => setInvitingGroup(activeGroup)}
-                  className="flex-1 sm:flex-none bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition border border-indigo-200"
-                >
-                  <UserPlus size={20} /> <span className="hidden sm:inline">Invite</span>
-                </button>
-              )}
+              {isBulkMode ? (
+                <>
+                  <button onClick={() => setIsBulkMode(false)} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-3 rounded-xl transition">
+                    Cancel Bulk
+                  </button>
+                  <button 
+                    disabled={selectedGameIds.length === 0}
+                    onClick={() => setIsBulkAssignModalOpen(true)}
+                    className="flex-1 sm:flex-none bg-indigo-600 disabled:bg-indigo-300 text-white font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm transition"
+                  >
+                    <ListChecks size={20} /> Assign ({selectedGameIds.length})
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setIsBulkMode(true)} className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition">
+                    <ListChecks size={20} /> <span className="hidden sm:inline">Bulk Edit</span>
+                  </button>
 
-              {activeGroup && (
-                <button
-                  onClick={() => setLibraryModalGroup(activeGroup)}
-                  className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition hover:shadow"
-                >
-                  <BookOpen size={20} /> <span className="hidden sm:inline">Add from Library</span>
-                </button>
-              )}
+                  {activeGroup && !activeGroup.isSystem && activeGroup.ownerId === user.uid && (
+                    <button
+                      onClick={() => setInvitingGroup(activeGroup)}
+                      className="flex-1 sm:flex-none bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition border border-indigo-200"
+                    >
+                      <UserPlus size={20} /> <span className="hidden sm:inline">Invite</span>
+                    </button>
+                  )}
 
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
-              >
-                <Plus size={20} /> <span className="hidden sm:inline">Search New Game</span><span className="sm:hidden">Search New</span>
-              </button>
+                  {activeGroup && (
+                    <button
+                      onClick={() => setLibraryModalGroup(activeGroup)}
+                      className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition hover:shadow"
+                    >
+                      <BookOpen size={20} /> <span className="hidden sm:inline">Add from Library</span>
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => setIsSearchOpen(true)}
+                    className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
+                  >
+                    <Plus size={20} /> <span className="hidden sm:inline">Search New Game</span><span className="sm:hidden">Search New</span>
+                  </button>
+                </>
+              )}
             </div>
           </header>
 
@@ -663,61 +734,83 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5">
-              {games.map(game => (
-                <div key={game.id} className="bg-white rounded-2xl md:shadow-sm overflow-hidden border border-slate-200 hover:shadow-md transition-shadow flex flex-col group">
-                  <div className="h-48 sm:h-56 w-full overflow-hidden bg-slate-100 border-b border-slate-200 shrink-0 relative">
-                    {/* UPDATED: Pass the whole game object, and dynamic title */}
-                    {game.userId === user.uid && (
-                      <button
-                        onClick={(e) => handleDeleteGame(e, game)}
-                        className="absolute top-2 right-2 p-2 bg-white/90 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full shadow-sm md:opacity-0 group-hover:opacity-100 transition-all z-10"
-                        title={activeGroup === null ? "Delete from Library" : "Remove from Group"}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
+              {games.map(game => {
+                const isSelected = selectedGameIds.includes(game.id);
+                const iOwnIt = game.userId === user.uid;
 
-                    {game.image ? (
-                      <img src={game.image} alt={game.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>
-                    )}
-                  </div>
-                  <div className="p-2 sm:p-5 flex-1 flex flex-col justify-start md:justify-between">
-                    <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-slate-900 leading-tight mb-1 line-clamp-2 min-h-[45px]">{game.name}</h3>
-                      <p className="text-sm font-semibold text-slate-500 mb-4">{game.year || 'Unknown Year'}</p>
-                      <div className="flex justify-between text-xs font-bold text-slate-700 bg-slate-100 p-2.5 rounded-lg md:mb-4">
-                        <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} Players</span>
-                        <span>{game.playTime || '?'} Mins</span>
+                return (
+                  <div 
+                    key={game.id} 
+                    onClick={() => isBulkMode && iOwnIt && toggleBulkSelection(game.id)}
+                    className={`bg-white rounded-2xl md:shadow-sm overflow-hidden border transition-all flex flex-col group relative ${isBulkMode && iOwnIt ? 'cursor-pointer hover:shadow-md' : ''} ${isSelected ? 'border-blue-500 ring-4 ring-blue-500/20' : 'border-slate-200'}`}
+                  >
+                    {isBulkMode && iOwnIt && (
+                      <div className="absolute top-3 left-3 z-20 pointer-events-none">
+                        <div className={`w-6 h-6 rounded flex items-center justify-center border-2 transition-colors ${isSelected ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white/80 border-slate-400'}`}>
+                          {isSelected && <Check size={16} strokeWidth={3} />}
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    {isBulkMode && !iOwnIt && (
+                      <div className="absolute inset-0 bg-slate-100/60 z-20 flex items-center justify-center backdrop-blur-[1px]">
+                        <span className="bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">Not Owner</span>
+                      </div>
+                    )}
 
-                    {/* UPDATED ACTION PANEL: Added Scores & History layout toggle buttons */}
-                    <div className="space-y-2">
-                      <button
-                        onClick={() => setScoringGame(game)}
-                        className="w-full flex items-center justify-center gap-2 py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm border border-blue-100 hover:bg-blue-100 transition shadow-sm mt-[8px] md:mt-0"
-                      >
-                        <Trophy size={16} /> Scores & History
-                      </button>
-
-                      {game.userId === user.uid ? (
+                    <div className="h-48 sm:h-56 w-full overflow-hidden bg-slate-100 border-b border-slate-200 shrink-0 relative">
+                      {!isBulkMode && game.userId === user.uid && (
                         <button
-                          onClick={() => setAssigningGame(game)}
-                          className="w-full flex items-center justify-center gap-2 py-2 border border-slate-200 text-slate-600 font-bold rounded-xl text-sm hover:border-slate-300 hover:bg-slate-50 transition"
+                          onClick={(e) => handleDeleteGame(e, game)}
+                          className="absolute top-2 right-2 p-2 bg-white/90 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full shadow-sm md:opacity-0 group-hover:opacity-100 transition-all z-10"
+                          title={activeGroup === null ? "Delete from Library" : "Remove from Group"}
                         >
-                          <FolderPlus size={16} /> Assign Lists
+                          <Trash2 size={16} />
                         </button>
+                      )}
+
+                      {game.image ? (
+                        <img src={game.image} alt={game.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <div className="w-full flex items-center justify-center gap-2 py-2 border border-transparent text-slate-500 font-medium rounded-xl text-xs bg-slate-50">
-                          Shared by {game.ownerNickname || "a friend"}
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>
+                      )}
+                    </div>
+                    <div className="p-2 sm:p-5 flex-1 flex flex-col justify-start md:justify-between">
+                      <div>
+                        <h3 className="font-bold text-lg sm:text-xl text-slate-900 leading-tight mb-1 line-clamp-2 min-h-[45px]">{game.name}</h3>
+                        <p className="text-sm font-semibold text-slate-500 mb-4">{game.year || 'Unknown Year'}</p>
+                        <div className="flex justify-between text-xs font-bold text-slate-700 bg-slate-100 p-2.5 rounded-lg md:mb-4">
+                          <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} Players</span>
+                          <span>{game.playTime || '?'} Mins</span>
+                        </div>
+                      </div>
+
+                      {!isBulkMode && (
+                        <div className="space-y-2">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setScoringGame(game); }}
+                            className="w-full flex items-center justify-center gap-2 py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm border border-blue-100 hover:bg-blue-100 transition shadow-sm mt-[8px] md:mt-0"
+                          >
+                            <Trophy size={16} /> Scores & History
+                          </button>
+
+                          {game.userId === user.uid ? (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setAssigningGame(game); }}
+                              className="w-full flex items-center justify-center gap-2 py-2 border border-slate-200 text-slate-600 font-bold rounded-xl text-sm hover:border-slate-300 hover:bg-slate-50 transition"
+                            >
+                              <FolderPlus size={16} /> Assign Lists
+                            </button>
+                          ) : (
+                            <div className="w-full flex items-center justify-center gap-2 py-2 border border-transparent text-slate-500 font-medium rounded-xl text-xs bg-slate-50">
+                              Shared by {game.ownerNickname || "a friend"}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -726,6 +819,7 @@ export default function Home() {
       {/* MODALS */}
       {isSearchOpen && <SearchModal onClose={() => setIsSearchOpen(false)} />}
       {assigningGame && <AssignModal game={assigningGame} onClose={() => setAssigningGame(null)} />}
+      {isBulkAssignModalOpen && <BulkAssignModal gameIds={selectedGameIds} onClose={() => setIsBulkAssignModalOpen(false)} onClearSelection={() => { setIsBulkMode(false); setSelectedGameIds([]); }} />}
       {invitingGroup && <InviteModal group={invitingGroup} onClose={() => setInvitingGroup(null)} />}
       {libraryModalGroup && <AddFromLibraryModal group={libraryModalGroup} onClose={() => setLibraryModalGroup(null)} />}
       {scoringGame && <ScoresModal game={scoringGame} onClose={() => setScoringGame(null)} />}
