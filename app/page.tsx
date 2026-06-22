@@ -5,7 +5,7 @@ import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect, useRef } from "react";
 import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, arrayUnion, orderBy, writeBatch, getDocs } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { LogOut, Plus, Users, Library, FolderPlus, FolderOpen, Check, X, Trash2, Menu, UserPlus, BookOpen, Trophy, Calendar, Calculator, History, Download, Upload, ListChecks, Filter, Shuffle, ArrowDownAZ, Sparkles, Loader2 } from "lucide-react";
+import { LogOut, Plus, Users, Library, FolderPlus, FolderOpen, Check, X, Trash2, Menu, UserPlus, BookOpen, Trophy, Calendar, Calculator, History, ListChecks, Filter, Shuffle, ArrowDownAZ, Sparkles, Loader2, Settings, Moon, Sun, Copy, ClipboardPaste } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
@@ -460,7 +460,6 @@ function RecommendationsTab({ userGames }: { userGames: any[] }) {
 // --- MAIN PAGE ---
 export default function Home() {
   const { user, userNickname, loading, activeGroup, userGroups, setActiveGroup } = useAuthGroup();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [games, setGames] = useState<any[]>([]);
 
@@ -555,32 +554,60 @@ export default function Home() {
     try {
       const q = query(collection(db, "userGames"), where("userId", "==", user.uid));
       const snap = await getDocs(q);
-      const data = snap.docs.map(d => { const { userId, ownerNickname, addedAt, id, groupIds, ...rest } = d.data(); return rest; });
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `boardgames-export.json`; a.click(); toast.success("Exported!");
-    } catch (err) { }
+      
+      // Strip out sensitive/structural data
+      const data = snap.docs.map(d => { 
+        const { userId, ownerNickname, addedAt, id, groupIds, ...rest } = d.data(); 
+        return rest; 
+      });
+      
+      const jsonString = JSON.stringify(data, null, 2);
+      
+      // Write directly to clipboard
+      await navigator.clipboard.writeText(jsonString);
+      toast.success("Library copied to clipboard!");
+    } catch(err) {
+      console.error(err);
+      toast.error("Failed to copy to clipboard.");
+    }
   };
 
-  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const imported = JSON.parse(event.target?.result as string);
-        const batch = writeBatch(db);
-        imported.forEach((game: any) => {
-          if (!game.bggId) return;
-          batch.set(doc(collection(db, "userGames")), { ...game, userId: user.uid, ownerNickname: userNickname, groupIds: [], addedAt: serverTimestamp() });
+  const handleImport = async () => {
+    if (!user) return;
+    
+    try {
+      // Read directly from clipboard
+      const text = await navigator.clipboard.readText();
+      
+      if (!text) {
+        toast.error("Your clipboard is empty.");
+        return;
+      }
+
+      const imported = JSON.parse(text);
+      if (!Array.isArray(imported)) throw new Error("Invalid format");
+      
+      const batch = writeBatch(db);
+      let count = 0;
+      
+      imported.forEach((game: any) => {
+        if (!game.bggId) return; 
+        batch.set(doc(collection(db, "userGames")), { 
+          ...game, 
+          userId: user.uid, 
+          ownerNickname: userNickname, 
+          groupIds: [], 
+          addedAt: serverTimestamp() 
         });
-        await batch.commit();
-        toast.success("Import successful!");
-      } catch (err) { toast.error("Failed to import."); }
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    };
-    reader.readAsText(file);
+        count++;
+      });
+      
+      await batch.commit();
+      toast.success(`Successfully imported ${count} games from clipboard!`);
+    } catch(err) {
+      console.error(err);
+      toast.error("Failed to parse clipboard data. Ensure you copied valid JSON.");
+    }
   };
 
   // --- FILTER & SORT ENGINE ---
@@ -685,14 +712,15 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-200">
-              <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 px-1">Library Tools</h2>
-              <button onClick={handleExport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 font-medium hover:bg-slate-100">
-                <Download size={18} className="text-slate-400" /> Export JSON
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+              <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">App Tools</h2>
+              
+              <button onClick={handleExport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700">
+                <Copy size={18} className="text-slate-400 dark:text-slate-500" /> Copy Export Data
               </button>
-              <input type="file" accept=".json" ref={fileInputRef} onChange={handleImport} className="hidden" />
-              <button onClick={() => fileInputRef.current?.click()} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 font-medium hover:bg-slate-100">
-                <Upload size={18} className="text-slate-400" /> Import JSON
+              
+              <button onClick={handleImport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700">
+                <ClipboardPaste size={18} className="text-slate-400 dark:text-slate-500" /> Import from Clipboard
               </button>
             </div>
           </div>
