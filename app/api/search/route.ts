@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
 
+// Force Next.js to NEVER cache this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q');
@@ -16,11 +19,12 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    // Call the live BGG search API specifically filtered for board games
-    const response = await fetch(`https://boardgamegeek.com/xmlapi2/search?query=${encodeURIComponent(q)}&type=boardgame`, {
+    // UPDATED: Added boardgameexpansion to the type filter and cache: 'no-store'
+    const response = await fetch(`https://boardgamegeek.com/xmlapi2/search?query=${encodeURIComponent(q)}&type=boardgame,boardgameexpansion`, {
       headers: {
         'Authorization': `Bearer ${token}`
-      }
+      },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -38,7 +42,7 @@ export async function GET(request: Request) {
     let items = parsed.items?.item;
     
     if (!items) return NextResponse.json([]); 
-    if (!Array.isArray(items)) items = [items]; // Normalize single search result object into an array
+    if (!Array.isArray(items)) items = [items]; 
 
     const results = items.map((game: any) => {
       const names = Array.isArray(game.name) ? game.name : [game.name];

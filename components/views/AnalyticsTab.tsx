@@ -19,8 +19,8 @@ export function AnalyticsTab() {
     return () => unsub();
   }, [user]);
 
-  if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-indigo-600" size={32}/></div>;
-  if (plays.length === 0) return <div className="text-center p-12 text-slate-500 font-bold">No matches logged yet! Play some games and log their scores to generate leaderboards.</div>;
+  if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32}/></div>;
+  if (plays.length === 0) return <div className="text-center p-12 text-slate-500 dark:text-slate-400 font-bold">No matches logged yet! Play some games and log their scores to generate leaderboards.</div>;
 
   const playerWins: Record<string, number> = {};
   const gameHighScores: Record<string, { player: string; score: number }> = {};
@@ -30,7 +30,7 @@ export function AnalyticsTab() {
     const maxScore = Math.max(...play.players.map((p: any) => Number(p.score || 0)));
     const winners = play.players.filter((p: any) => Number(p.score || 0) === maxScore);
     winners.forEach((w: any) => { playerWins[w.name] = (playerWins[w.name] || 0) + 1; });
-    if (play.gameName && maxScore > 0) {
+    if (play.gameName && maxScore > 0 && !play.isCoop) {
       if (!gameHighScores[play.gameName] || maxScore > gameHighScores[play.gameName].score) {
         gameHighScores[play.gameName] = { player: winners.map((w:any) => w.name).join(", "), score: maxScore };
       }
@@ -43,29 +43,29 @@ export function AnalyticsTab() {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 mb-6"><Trophy className="text-amber-500" /> Hall of Fame (Wins)</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2 mb-6"><Trophy className="text-amber-500" /> Hall of Fame (Wins)</h2>
           <div className="space-y-3">
             {sortedWinners.map(([name, wins], idx) => (
-              <div key={name} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+              <div key={name} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                 <div className="flex items-center gap-3">
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${idx === 0 ? "bg-amber-100 text-amber-600" : idx === 1 ? "bg-slate-200 text-slate-600" : idx === 2 ? "bg-orange-100 text-orange-700" : "bg-white text-slate-400"}`}>#{idx + 1}</span>
-                  <span className="font-bold text-slate-900">{name}</span>
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm ${idx === 0 ? "bg-amber-100 text-amber-600" : idx === 1 ? "bg-slate-200 text-slate-600" : idx === 2 ? "bg-orange-100 text-orange-700" : "bg-white dark:bg-slate-700 text-slate-400 dark:text-slate-300"}`}>#{idx + 1}</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{name}</span>
                 </div>
-                <span className="font-black text-indigo-600">{wins} Wins</span>
+                <span className="font-black text-indigo-600 dark:text-indigo-400">{wins} Wins</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 mb-6"><BarChart3 className="text-emerald-500" /> High Scores</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2 mb-6"><BarChart3 className="text-emerald-500" /> High Scores</h2>
           <div className="space-y-3">
             {sortedRecords.map(([gameName, record]) => (
-              <div key={gameName} className="flex flex-col justify-between p-3 bg-slate-50 rounded-xl">
-                <span className="font-bold text-slate-700 text-sm mb-1">{gameName}</span>
+              <div key={gameName} className="flex flex-col justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
+                <span className="font-bold text-slate-700 dark:text-slate-300 text-sm mb-1">{gameName}</span>
                 <div className="flex justify-between items-center text-xs font-semibold">
-                  <span className="text-slate-500">Held by {record.player}</span>
-                  <span className="bg-emerald-100 text-emerald-700 px-2 py-1 rounded border border-emerald-200">{record.score} pts</span>
+                  <span className="text-slate-500 dark:text-slate-400">Held by {record.player}</span>
+                  <span className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded border border-emerald-200 dark:border-emerald-800">{record.score} pts</span>
                 </div>
               </div>
             ))}

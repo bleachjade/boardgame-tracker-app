@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* 1. Tell Tailwind v4 to use our manual .dark class instead of checking the OS */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,11 +15,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 2. Bind your background/foreground colors directly to the .dark class */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
