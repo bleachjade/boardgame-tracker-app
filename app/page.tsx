@@ -5,7 +5,7 @@ import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, writeBatch, getDocs } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle } from "lucide-react";
+import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 // Extracted Components
@@ -33,6 +33,9 @@ export default function Home() {
   const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year">("recent");
   const [playerFilter, setPlayerFilter] = useState<string>("");
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Toggle state for mobile filter dropdown
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // MODAL STATE
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -64,6 +67,7 @@ export default function Home() {
     setSelectedGameIds([]);
     setSearchQuery("");
     setPlayerFilter("");
+    setIsFilterOpen(false); // Close mobile filter when switching tabs
   }, [activeGroup, currentView]);
 
   // --- ACTIONS ---
@@ -163,10 +167,10 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 overflow-hidden">
-      {/* MOBILE NAV */}
-      <div className="md:hidden bg-white border-b border-slate-200 p-4 flex items-center justify-between shrink-0 z-20 shadow-sm">
-        <h1 className="text-xl font-black text-slate-900 flex items-center gap-2"><Library size={24} className="text-indigo-600" /> Boardgame Tracker</h1>
-        <button onClick={() => setIsSidebarOpen(true)} className="p-2 bg-slate-100 rounded-lg text-slate-600 hover:text-slate-900 transition"><Menu size={24} /></button>
+      {/* MOBILE NAV - Reduced padding to p-3 */}
+      <div className="md:hidden bg-white border-b border-slate-200 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm">
+        <h1 className="text-lg font-black text-slate-900 flex items-center gap-2"><Library size={22} className="text-indigo-600" /> BG Tracker</h1>
+        <button onClick={() => setIsSidebarOpen(true)} className="p-1.5 bg-slate-100 rounded-lg text-slate-600 hover:text-slate-900 transition"><Menu size={22} /></button>
       </div>
       {isSidebarOpen && <div className="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsSidebarOpen(false)} />}
 
@@ -188,41 +192,74 @@ export default function Home() {
         : currentView === "analytics" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><AnalyticsTab /></div>
         : (
           <>
-            <div className={`bg-slate-50/95 backdrop-blur z-20 sticky top-0 border-b border-slate-200 transition-all duration-300 ${isScrolled ? "p-3 shadow-sm" : "p-4 md:p-8 pb-4 md:pb-6"}`}>
-              <div className="max-w-7xl mx-auto flex flex-col gap-3">
-                <header className={`flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 transition-all duration-300 overflow-hidden ${isScrolled ? "max-h-0 opacity-0 mb-0 md:max-h-[200px] md:opacity-100 md:mb-2" : "max-h-[500px] opacity-100 mb-2"}`}>
+            {/* STICKY HEADER - Compact Mobile Padding (p-3), Normal Desktop Padding (md:p-8) */}
+            <div className={`bg-slate-50/95 backdrop-blur z-20 sticky top-0 border-b border-slate-200 transition-all duration-300 ${isScrolled ? "shadow-sm" : ""} p-3 md:p-8 pb-3 md:pb-6`}>
+              <div className="max-w-7xl mx-auto flex flex-col gap-2 md:gap-3">
+                
+                <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 md:gap-4 mb-0 md:mb-2">
                   <div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-slate-900">{activeGroup === null ? "All My Games" : activeGroup.name}</h2>
-                    <p className="text-slate-600 font-medium mt-1">{processedGames.length} games {activeGroup && !activeGroup.isSystem ? `• ${activeGroup.members?.length || 1} members` : ''}</p>
+                    {/* Compact Title Typography */}
+                    <h2 className="text-xl md:text-3xl font-black text-slate-900">{activeGroup === null ? "All My Games" : activeGroup.name}</h2>
+                    <p className="text-xs md:text-sm text-slate-600 font-medium mt-0.5 md:mt-1">{processedGames.length} games {activeGroup && !activeGroup.isSystem ? `• ${activeGroup.members?.length || 1} members` : ''}</p>
                   </div>
-                  <div className="flex flex-wrap w-full xl:w-auto gap-3">
+                  
+                  {/* Action Buttons - Reduced gaps & padding for mobile */}
+                  <div className="flex flex-wrap w-full xl:w-auto gap-2 md:gap-3">
                     {isBulkMode ? (
                       <>
-                        <button onClick={() => setIsBulkMode(false)} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-3 rounded-xl transition">Cancel Bulk</button>
-                        <button disabled={selectedGameIds.length === 0} onClick={() => setIsBulkAssignModalOpen(true)} className="flex-1 sm:flex-none bg-indigo-600 disabled:bg-indigo-300 text-white font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm transition"><ListChecks size={20} /> Assign ({selectedGameIds.length})</button>
+                        <button onClick={() => setIsBulkMode(false)} className="flex-1 sm:flex-none bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl transition">Cancel Bulk</button>
+                        <button disabled={selectedGameIds.length === 0} onClick={() => setIsBulkAssignModalOpen(true)} className="flex-1 sm:flex-none bg-indigo-600 disabled:bg-indigo-300 text-white font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl flex items-center justify-center gap-1.5 md:gap-2 shadow-sm transition"><ListChecks size={18} className="md:w-5 md:h-5" /> Assign ({selectedGameIds.length})</button>
                       </>
                     ) : (
                       <>
-                        <button onClick={() => setIsBulkMode(true)} className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition"><ListChecks size={20} /> <span className="hidden sm:inline">Bulk Edit</span></button>
-                        {activeGroup && !activeGroup.isSystem && activeGroup.ownerId === user.uid && <button onClick={() => setInvitingGroup(activeGroup)} className="flex-1 sm:flex-none bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition border border-indigo-200"><UserPlus size={20} /> <span className="hidden sm:inline">Invite</span></button>}
-                        {activeGroup && <button onClick={() => setLibraryModalGroup(activeGroup)} className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition hover:shadow"><BookOpen size={20} /> <span className="hidden sm:inline">Add from Library</span></button>}
-                        <button onClick={() => setIsSearchOpen(true)} className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md transition transform hover:-translate-y-0.5"><Plus size={20} /> <span className="hidden sm:inline">Search New Game</span><span className="sm:hidden">Search New</span></button>
+                        <button onClick={() => setIsBulkMode(true)} className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl flex items-center justify-center gap-1.5 md:gap-2 border border-slate-300 shadow-sm transition"><ListChecks size={18} className="md:w-5 md:h-5" /> <span className="hidden sm:inline">Bulk Edit</span></button>
+                        {activeGroup && !activeGroup.isSystem && activeGroup.ownerId === user.uid && <button onClick={() => setInvitingGroup(activeGroup)} className="flex-1 sm:flex-none bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl flex items-center justify-center gap-1.5 md:gap-2 transition border border-indigo-200"><UserPlus size={18} className="md:w-5 md:h-5" /> <span className="hidden sm:inline">Invite</span></button>}
+                        {activeGroup && <button onClick={() => setLibraryModalGroup(activeGroup)} className="flex-1 sm:flex-none bg-white hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl flex items-center justify-center gap-1.5 md:gap-2 border border-slate-300 shadow-sm transition hover:shadow"><BookOpen size={18} className="md:w-5 md:h-5" /> <span className="hidden sm:inline">Add from Library</span></button>}
+                        <button onClick={() => setIsSearchOpen(true)} className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-xl flex items-center justify-center gap-1.5 md:gap-2 shadow-md transition transform hover:-translate-y-0.5"><Plus size={18} className="md:w-5 md:h-5" /> <span className="hidden sm:inline">Search New Game</span><span className="sm:hidden">Search New</span></button>
                       </>
                     )}
                   </div>
                 </header>
 
                 {games.length > 0 && !isBulkMode && (
-                  <div className="flex flex-wrap items-center gap-3 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
-                    <div className="flex-1 min-w-[200px] relative"><Filter size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" /><input type="text" placeholder="Filter by name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-indigo-600 outline-none" /></div>
-                    <div className="w-32 relative"><Users size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" /><input type="number" placeholder="Players" value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)} min="1" max="99" className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-indigo-600 outline-none" /></div>
-                    <div className="w-44 relative"><ArrowDownAZ size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" /><select value={sortOption} onChange={(e: any) => setSortOption(e.target.value)} className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 focus:ring-2 focus:ring-indigo-600 outline-none appearance-none cursor-pointer"><option value="recent">Recently Added</option><option value="alpha">Alphabetical</option><option value="year">Release Year</option></select></div>
-                    <button onClick={pickRandomGame} className="bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-200 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition"><Shuffle size={16} /> What to Play?</button>
+                  <div className="flex flex-col gap-2">
+                    {/* MOBILE TOGGLE BUTTON - Compact padding */}
+                    <button 
+                      onClick={() => setIsFilterOpen(!isFilterOpen)}
+                      className="md:hidden flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-xl shadow-sm text-slate-700 font-bold text-sm transition hover:bg-slate-50"
+                    >
+                      <div className="flex items-center gap-2"><Filter size={16} /> Filters & Sorting</div>
+                      {isFilterOpen ? <X size={16} /> : <ArrowDownAZ size={16} />}
+                    </button>
+
+                    {/* COLLAPSIBLE FILTER CONTENT */}
+                    <div className={`${isFilterOpen ? "flex" : "hidden"} md:flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 md:gap-3 bg-white p-2.5 md:p-2 rounded-xl border border-slate-200 shadow-sm`}>
+                      <div className="flex-1 relative">
+                        <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 md:w-[18px] md:h-[18px]" />
+                        <input type="text" placeholder="Filter by name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-indigo-600 outline-none" />
+                      </div>
+                      <div className="w-full sm:w-32 relative">
+                        <Users size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 md:w-[18px] md:h-[18px]" />
+                        <input type="number" placeholder="Players" value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)} min="1" max="99" className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-indigo-600 outline-none" />
+                      </div>
+                      <div className="w-full sm:w-44 relative">
+                        <ArrowDownAZ size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 md:w-[18px] md:h-[18px]" />
+                        <select value={sortOption} onChange={(e: any) => setSortOption(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium text-slate-900 focus:ring-2 focus:ring-indigo-600 outline-none appearance-none cursor-pointer">
+                          <option value="recent">Recently Added</option>
+                          <option value="alpha">Alphabetical</option>
+                          <option value="year">Release Year</option>
+                        </select>
+                      </div>
+                      <button onClick={pickRandomGame} className="w-full sm:w-auto bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-200 px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-1.5 md:gap-2 transition">
+                        <Shuffle size={16} /> What to Play?
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
+            {/* MAIN GRID */}
             <div className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
               {processedGames.length === 0 ? <div className="flex flex-col items-center justify-center h-64 text-slate-500 font-medium">{games.length === 0 ? "No games here yet." : "No games match your current filters."}</div>
               : (
