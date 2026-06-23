@@ -16,25 +16,25 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!queryText.trim()) return;
-    
+
     setLoading(true);
     try {
       // 1. Fetch search tokens from BGG
       const res = await fetch(`/api/search?q=${encodeURIComponent(queryText)}`);
       const searchData = await res.json();
-      
+
       if (!Array.isArray(searchData) || searchData.length === 0) {
         setResults([]);
         return;
       }
-      
+
       // 2. FIXED: Filter out duplicates using a Set before joining IDs
       const rawIds = searchData.slice(0, 12).map((item: any) => item.id);
       const uniqueIds = Array.from(new Set(rawIds)).join(',');
-      
+
       const bggRes = await fetch(`/api/bgg?ids=${uniqueIds}`);
       const enrichedData = await bggRes.json();
-      
+
       let finalResults = Array.isArray(enrichedData) ? enrichedData : [];
 
       // 3. Exclude owned games
@@ -42,10 +42,10 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
         const ownedQuery = query(collection(db, "userGames"), where("userId", "==", user.uid));
         const ownedSnap = await getDocs(ownedQuery);
         const ownedBggIds = new Set(ownedSnap.docs.map(doc => String(doc.data().bggId)));
-        
+
         finalResults = finalResults.filter(game => !ownedBggIds.has(String(game.bggId)));
       }
-      
+
       setResults(finalResults);
     } catch (err) {
       console.error(err);
@@ -66,7 +66,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
       where("bggId", "==", game.bggId)
     );
     const existing = await getDocs(q);
-    
+
     if (!existing.empty) {
       toast.error(`${game.name} is already in your library!`);
       return;
@@ -105,38 +105,45 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
             <X size={24} />
           </button>
         </div>
-        
+
         <form onSubmit={handleSearch} className="p-4 border-b border-slate-200 dark:border-slate-700 flex flex-col md:flex-row gap-3 bg-white dark:bg-slate-800">
-          <input 
-            type="text" 
-            placeholder="Search for a game..." 
+          <input
+            type="text"
+            placeholder="Search for a game..."
             className="flex-1 border border-slate-300 dark:border-slate-600 bg-transparent p-3 rounded-lg outline-none focus:ring-2 focus:ring-indigo-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-medium"
             value={queryText}
             onChange={(e) => setQueryText(e.target.value)}
             autoFocus
           />
           <button type="submit" disabled={loading} className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 dark:disabled:bg-indigo-800 text-white px-6 py-2 rounded-lg flex items-center justify-center gap-2 font-semibold transition-colors shadow-sm">
-            {loading ? <Loader2 className="animate-spin" size={20}/> : <Search size={20}/>}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : <Search size={20} />}
             Search
           </button>
         </form>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50 dark:bg-slate-900/50 rounded-b-xl">
           {(!Array.isArray(results) || results.length === 0) && !loading && (
-             <div className="text-center text-slate-500 dark:text-slate-400 py-8 font-medium">Search for a game to add it to your collection.</div>
+            <div className="text-center text-slate-500 dark:text-slate-400 py-8 font-medium">Search for a game to add it to your collection.</div>
           )}
           {Array.isArray(results) && results.map((game) => (
             <div key={game.bggId} className="flex gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl items-center shadow-sm hover:shadow transition-shadow">
               {game.image ? (
-                <img src={game.image} alt={game.name} className="w-16 h-16 object-cover rounded shadow-sm border border-slate-100 dark:border-slate-600" />
+                <img
+                  src={`/api/media?url=${encodeURIComponent(game.image)}`}
+                  alt={game.name}
+                  className="w-16 h-16 object-cover rounded-xl shadow-xs border border-slate-100 dark:border-slate-700 shrink-0"
+                  loading="lazy"
+                />
               ) : (
-                <div className="w-16 h-16 bg-slate-200 dark:bg-slate-700 rounded flex items-center justify-center text-slate-400 font-bold text-xs text-center border border-slate-300 dark:border-slate-600">No Image</div>
+                <div className="w-16 h-16 bg-slate-200 dark:bg-slate-700 rounded-xl flex items-center justify-center text-slate-400 font-bold text-xs text-center border border-slate-300 dark:border-slate-600 shrink-0">
+                  No Image
+                </div>
               )}
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-lg text-slate-900 dark:text-white truncate">{game.name} <span className="text-slate-500 font-normal text-sm">({game.year || 'N/A'})</span></h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">{game.minPlayers || '?'}-{game.maxPlayers || '?'} Players • {game.playTime || '?'} Mins</p>
               </div>
-              <button 
+              <button
                 onClick={() => handleAddGame(game)}
                 className="bg-slate-100 dark:bg-slate-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-slate-200 dark:border-slate-600 hover:border-indigo-200 dark:hover:border-indigo-800 p-3 rounded-full transition-colors group shrink-0"
                 title="Add Game"
