@@ -3,12 +3,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
-// UPDATED: Added doc, getDoc, setDoc
 import { collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
 
 type AuthContextType = {
   user: User | null;
-  userNickname: string; // NEW: Expose nickname to the app
+  userProfile: any | null; // NEW: Exposes the full profile (including couple status)
+  userNickname: string;
   loading: boolean;
   activeGroup: any | null;
   setActiveGroup: (group: any | null) => void;
@@ -19,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<any | null>(null);
   const [userNickname, setUserNickname] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [userGroups, setUserGroups] = useState<any[]>([]);
@@ -32,80 +33,79 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribeAuth();
   }, []);
 
-  // Check user profile and system groups
-  useEffect(() => {
-    if (!user) return;
-
-    const checkUserAndDefaults = async () => {
-      // 1. Handle Nickname
-      const userDocRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userDocRef);
-      let currentNickname = "";
-
-      if (!userDoc.exists()) {
-        // Prompt for nickname on first login
-        let nick = prompt("Welcome to Boardgame Tracker! Please enter a nickname:");
-        while (!nick || !nick.trim()) {
-          nick = prompt("A nickname is required to continue. Please enter a nickname:");
-        }
-        currentNickname = nick.trim();
-
-        await setDoc(userDocRef, {
-          nickname: currentNickname,
-          email: user.email,
-          createdAt: serverTimestamp()
-        });
-      } else {
-        currentNickname = userDoc.data().nickname;
-      }
-      setUserNickname(currentNickname);
-
-      // 2. Handle Default System Groups
-      const identifier = user.email || user.uid;
-      const q = query(collection(db, "groups"), where("ownerId", "==", user.uid), where("isSystem", "==", true));
-      const snap = await getDocs(q);
-
-      if (snap.empty) {
-        const defaultLists = ['Owned', 'Want to buy', 'Pre-ordered'];
-        for (const name of defaultLists) {
-          await addDoc(collection(db, "groups"), {
-            name,
-            ownerId: user.uid,
-            members: [identifier],
-            isSystem: true,
-            createdAt: serverTimestamp()
-          });
-        }
-      }
-    };
-
-    checkUserAndDefaults();
-  }, [user]);
-
+  // 1. LIVE PROFILE LISTENER: Auto-updates if a partner links to you!
   useEffect(() => {
     if (!user) {
-      setUserGroups([]);
-      setActiveGroup(null);
+      setUserProfile(null);
       setUserNickname("");
       return;
     }
 
+    const userDocRef = doc(db, "users", user.uid);
+    const unsubProfile = onSnapshot(userDocRef, async (docSnap) => {
+      if (!docSnap.exists()) {
+        // Initialization for brand new accounts
+        let nick = prompt("Welcome to Boardgame Tracker! Please enter a nickname:");
+        while (!nick || !nick.trim()) nick = prompt("A nickname is required. Please enter a nickname:");
+        
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          nickname: nick.trim(),
+          email: user.email?.toLowerCase() || "",
+          isCouple: false,
+          partnerId: null,
+          friendsList: [],
+          createdAt: serverTimestamp()
+        });
+      } else {
+        const data = docSnap.data();
+        setUserProfile(data);
+        setUserNickname(data.nickname);
+        
+        // Safety Backfill: Add missing couple fields to older accounts
+        if (data.isCouple === undefined) {
+          await setDoc(userDocRef, { isCouple: false, partnerId: null, friendsList: data.friendsList || [] }, { merge: true });
+        }
+      }
+    });
+
+    return () => unsubProfile();
+  }, [user]);
+
+  // 2. Default System Groups
+  useEffect(() => {
+    if (!user) return;
+    const checkDefaults = async () => {
+      const q = query(collection(db, "groups"), where("ownerId", "==", user.uid), where("isSystem", "==", true));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        for (const name of ['Owned', 'Want to buy', 'Pre-ordered']) {
+          await addDoc(collection(db, "groups"), { name, ownerId: user.uid, members: [user.email || user.uid], isSystem: true, createdAt: serverTimestamp() });
+        }
+      }
+    };
+    checkDefaults();
+  }, [user]);
+
+  // 3. Listen to Groups
+  useEffect(() => {
+    if (!user) {
+      setUserGroups([]);
+      setActiveGroup(null);
+      return;
+    }
     const identifier = user.email || user.uid;
     const q = query(collection(db, "groups"), where("members", "array-contains", identifier));
-
     const unsubscribeGroups = onSnapshot(q, (snapshot) => {
-      // FIX: Added 'as any[]' at the end of the map routine
-      const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[];
-
+      const groups = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as any[];
       groups.sort((a, b) => (b.isSystem ? 1 : 0) - (a.isSystem ? 1 : 0));
       setUserGroups(groups);
     });
-
     return () => unsubscribeGroups();
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, userNickname, loading, activeGroup, setActiveGroup, userGroups }}>
+    <AuthContext.Provider value={{ user, userProfile, userNickname, loading, activeGroup, setActiveGroup, userGroups }}>
       {children}
     </AuthContext.Provider>
   );

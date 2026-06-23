@@ -3,7 +3,7 @@
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, setDoc, serverTimestamp } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
 import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { GameCard } from "@/components/GameCard";
 import { RecommendationsTab } from "@/components/views/RecommendationsTab";
 import { AnalyticsTab } from "@/components/views/AnalyticsTab";
+import { FriendsTab } from "@/components/views/FriendsTab";
 
 // Extracted Modals
 import { GameDetailsModal } from "@/components/modals/GameDetailsModal";
@@ -24,10 +25,11 @@ import { InviteModal } from "@/components/modals/InviteModal";
 import { AddFromLibraryModal } from "@/components/modals/AddFromLibraryModal";
 
 export default function Home() {
-  const { user, userNickname, loading: authLoading, activeGroup, setActiveGroup } = useAuthGroup();
+  // NEW: We are now pulling userProfile from the context so the main page knows if you are in a couple!
+  const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup } = useAuthGroup();
   const [games, setGames] = useState<any[]>([]);
 
-  const [currentView, setCurrentView] = useState<"library" | "recommendations" | "analytics">("library");
+  const [currentView, setCurrentView] = useState<"library" | "recommendations" | "analytics" | "friends">("library");
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
@@ -58,15 +60,9 @@ export default function Home() {
         if (snap.exists() && snap.data().theme) {
           const loadedTheme = snap.data().theme;
           setUserTheme(loadedTheme);
-
-          // Explicitly add OR remove the class on initial load
-          if (loadedTheme === "dark") {
-            document.documentElement.classList.add("dark");
-          } else {
-            document.documentElement.classList.remove("dark");
-          }
+          if (loadedTheme === "dark") document.documentElement.classList.add("dark");
+          else document.documentElement.classList.remove("dark");
         } else {
-          // If no preference is saved, force light mode by default
           document.documentElement.classList.remove("dark");
         }
       } catch (err) { } finally { setSettingsLoaded(true); }
@@ -74,12 +70,25 @@ export default function Home() {
     fetchPref();
   }, [user]);
 
+  // --- COUPLE MERGE ENGINE: Fetch games for BOTH accounts simultaneously ---
   useEffect(() => {
-    if (!user || !settingsLoaded) return;
-    let q = activeGroup === null ? query(collection(db, "userGames"), where("userId", "==", user.uid)) : query(collection(db, "userGames"), where("groupIds", "array-contains", activeGroup.id));
+    if (!user || !settingsLoaded || !userProfile) return;
+
+    let targetUids = [user.uid];
+    
+    // If you have completed the couple handshake, add their ID to the fetch array
+    if (userProfile.isCouple && userProfile.partnerId) {
+      targetUids.push(userProfile.partnerId);
+    }
+
+    // Fetch from all IDs in the target array
+    let q = activeGroup === null 
+      ? query(collection(db, "userGames"), where("userId", "in", targetUids)) 
+      : query(collection(db, "userGames"), where("groupIds", "array-contains", activeGroup.id));
+      
     const unsub = onSnapshot(q, (snap) => setGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
     return () => unsub();
-  }, [activeGroup, user, settingsLoaded]);
+  }, [activeGroup, user, settingsLoaded, userProfile]);
 
   useEffect(() => { setIsBulkMode(false); setSelectedGameIds([]); setSearchQuery(""); setPlayerFilter(""); setIsFilterOpen(false); }, [activeGroup, currentView]);
 
@@ -88,19 +97,31 @@ export default function Home() {
     setUserTheme(newTheme);
     if (newTheme === "dark") document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
-
-    if (user) {
-      await setDoc(doc(db, "userPreferences", user.uid), { theme: newTheme }, { merge: true });
-    }
+    if (user) await setDoc(doc(db, "userPreferences", user.uid), { theme: newTheme }, { merge: true });
   };
 
   const selectGroupMobile = (group: any | null) => { setActiveGroup(group); setCurrentView("library"); setIsSidebarOpen(false); };
-  const selectTab = (tab: "recommendations" | "analytics" | "library") => { setActiveGroup(null); setCurrentView(tab); setIsSidebarOpen(false); };
+  const selectTab = (tab: "recommendations" | "analytics" | "library" | "friends") => { setActiveGroup(null); setCurrentView(tab); setIsSidebarOpen(false); };
   const toggleBulkSelection = (gameId: string) => setSelectedGameIds(prev => prev.includes(gameId) ? prev.filter(id => id !== gameId) : [...prev, gameId]);
 
   const handleCreateGroup = async () => { const name = prompt("Enter a name for your new friend group:"); if (name) { try { await addDoc(collection(db, "groups"), { name: name.trim(), ownerId: user?.uid, members: [user?.email || user?.uid], isSystem: false, createdAt: serverTimestamp() }); toast.success("Created!"); setIsSidebarOpen(true); } catch (error) { toast.error("Failed."); } } };
   const handleDeleteGroup = async (e: React.MouseEvent, groupId: string, groupName: string) => { e.stopPropagation(); if (confirm(`Delete "${groupName}"?`)) { try { await deleteDoc(doc(db, "groups", groupId)); if (activeGroup?.id === groupId) setActiveGroup(null); toast.success("Deleted!"); } catch (error) { } } };
-  const handleDeleteGame = async (e: React.MouseEvent, game: any) => { e.stopPropagation(); if (activeGroup === null) { if (confirm(`Delete "${game.name}"?`)) { await deleteDoc(doc(db, "userGames", game.id)); toast.success("Deleted!"); } } else { if (confirm(`Remove "${game.name}"?`)) { await updateDoc(doc(db, "userGames", game.id), { groupIds: (game.groupIds || []).filter((id: string) => id !== activeGroup.id) }); toast.success("Removed!"); } } };
+  
+  const handleDeleteGame = async (e: React.MouseEvent, game: any) => { 
+    e.stopPropagation(); 
+    if (activeGroup === null) { 
+      if (confirm(`Delete "${game.name}" from your collection?`)) { 
+        await deleteDoc(doc(db, "userGames", game.id)); 
+        toast.success("Deleted!"); 
+      } 
+    } else { 
+      if (confirm(`Remove "${game.name}" from this list?`)) { 
+        await updateDoc(doc(db, "userGames", game.id), { groupIds: (game.groupIds || []).filter((id: string) => id !== activeGroup.id) }); 
+        toast.success("Removed!"); 
+      } 
+    } 
+  };
+  
   const handleExport = async () => { if (user) { const snap = await getDocs(query(collection(db, "userGames"), where("userId", "==", user.uid))); const data = snap.docs.map(d => { const { userId, ownerNickname, addedAt, id, groupIds, ...rest } = d.data(); return rest; }); await navigator.clipboard.writeText(JSON.stringify(data, null, 2)); toast.success("Copied to clipboard!"); } };
   const handleImport = async () => { if (!user) return; try { const text = await navigator.clipboard.readText(); if (!text) return toast.error("Empty clipboard."); const imported = JSON.parse(text); const batch = writeBatch(db); imported.forEach((g: any) => { if (g.bggId) batch.set(doc(collection(db, "userGames")), { ...g, userId: user.uid, ownerNickname: userNickname, groupIds: [], addedAt: serverTimestamp() }); }); await batch.commit(); toast.success("Imported!"); } catch (err) { toast.error("Invalid JSON."); } };
 
@@ -109,29 +130,22 @@ export default function Home() {
   if (searchQuery.trim()) processedGames = processedGames.filter(g => g.name.toLowerCase().includes(searchQuery.toLowerCase()));
   if (playerFilter) processedGames = processedGames.filter(g => parseInt(playerFilter) >= parseInt(g.minPlayers || "0") && parseInt(playerFilter) <= parseInt(g.maxPlayers || "99"));
 
-  // NEW: Separate Base Games from Expansions
   const baseGames = processedGames.filter(g => !g.isExpansion);
-
-  // If they own an expansion but don't own the base game in this specific group, treat it as an "orphan" and render it as a standalone base card
   const orphanedExpansions = processedGames.filter(g => g.isExpansion && !baseGames.some(bg => bg.bggId === g.baseGameId));
-
   const parentGamesToRender = [...baseGames, ...orphanedExpansions];
 
-  // Sort only the parent games for the grid
   parentGamesToRender.sort((a, b) => sortOption === "alpha" ? a.name.localeCompare(b.name) : sortOption === "year" ? parseInt(b.year || "0") - parseInt(a.year || "0") : (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
 
   const pickRandomGame = () => { if (parentGamesToRender.length === 0) return toast.error("No matches!"); setRandomGameOpen(parentGamesToRender[Math.floor(Math.random() * parentGamesToRender.length)]); };
 
   if (authLoading || (user && !settingsLoaded)) return <div className="min-h-screen flex items-center justify-center text-slate-700 dark:text-slate-300 font-bold dark:bg-slate-900">Loading...</div>;
   if (!user) return <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4"><div className="bg-white p-8 rounded-xl shadow-xl border border-slate-200 max-w-sm w-full text-center"><Library className="mx-auto text-indigo-600 mb-4" size={56} /><h1 className="text-3xl font-black text-slate-900 mb-2">BG Tracker</h1><button onClick={() => signInWithPopup(auth, googleProvider)} className="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg mt-8 shadow-md">Sign in with Google</button></div></div>;
+  
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
-
-      {/* MOBILE NAV */}
       <div className="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-colors">
         <h1 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2"><Library size={22} className="text-indigo-600 dark:text-indigo-400" /> BG Tracker</h1>
         <div className="flex items-center gap-2">
-          {/* Mobile Theme Toggle */}
           <button onClick={toggleTheme} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
             {userTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -146,7 +160,7 @@ export default function Home() {
       <main className="flex-1 overflow-y-auto flex flex-col relative" onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 15)}>
         {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : []} /></div>
           : currentView === "analytics" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><AnalyticsTab /></div>
-            : (
+            : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : (
               <>
                 <div className={`bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur z-20 sticky top-0 border-b border-slate-200 dark:border-slate-800 transition-all duration-300 ${isScrolled ? "shadow-sm" : ""} p-3 md:p-8 pb-3 md:pb-6`}>
                   <div className="max-w-7xl mx-auto flex flex-col gap-2 md:gap-3">
@@ -156,8 +170,6 @@ export default function Home() {
                         <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 font-medium mt-0.5 md:mt-1">{processedGames.length} games</p>
                       </div>
                       <div className="flex flex-wrap w-full xl:w-auto gap-2 md:gap-3">
-
-                        {/* Desktop Theme Toggle (Hidden on Mobile) */}
                         <button onClick={toggleTheme} className="hidden md:flex flex-none bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 p-2 md:p-3 rounded-xl border border-slate-300 dark:border-slate-600 shadow-sm transition items-center justify-center">
                           {userTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
                         </button>
@@ -200,16 +212,18 @@ export default function Home() {
                     : (
                       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5 items-start">
                         {parentGamesToRender.map((game, index) => {
-
-                          // Filter the original raw list to find all expansions that belong to this specific base game
                           const gameExpansions = processedGames.filter(g => g.isExpansion && g.baseGameId === game.bggId);
+                          
+                          // NEW: Admin permission now checks if you own it OR if your linked partner owns it!
+                          const hasEditPermission = game.userId === user.uid || (userProfile?.isCouple && game.userId === userProfile.partnerId);
 
                           return (
                             <GameCard
                               key={game.id} game={game} userUid={user.uid}
-                              isBulkMode={isBulkMode} isSelected={selectedGameIds.includes(game.id)} iOwnIt={game.userId === user.uid}
+                              isBulkMode={isBulkMode} isSelected={selectedGameIds.includes(game.id)} 
+                              iOwnIt={hasEditPermission} 
                               activeGroup={activeGroup} index={index}
-                              expansions={gameExpansions} // PASS EXPANSIONS TO CARD
+                              expansions={gameExpansions} 
                               onToggleBulk={toggleBulkSelection} onOpenDetails={setDetailsGame} onDelete={handleDeleteGame}
                               onLogScore={(e, g) => { e.stopPropagation(); setScoringGame(g); }}
                               onAssign={(e, g) => { e.stopPropagation(); setAssigningGame(g); }}
@@ -222,11 +236,11 @@ export default function Home() {
               </>
             )}
       </main>
+      
       {isSearchOpen && <SearchModal onClose={() => setIsSearchOpen(false)} />}
       {assigningGame && <AssignModal game={assigningGame} onClose={() => setAssigningGame(null)} />}
       {isBulkAssignModalOpen && <BulkAssignModal gameIds={selectedGameIds} onClose={() => setIsBulkAssignModalOpen(false)} onClearSelection={() => { setIsBulkMode(false); setSelectedGameIds([]); }} />}
       {invitingGroup && <InviteModal group={invitingGroup} onClose={() => setInvitingGroup(null)} />}
-
       {libraryModalGroup && <AddFromLibraryModal group={libraryModalGroup} onClose={() => setLibraryModalGroup(null)} />}
       {scoringGame && <ScoresModal game={scoringGame} onClose={() => setScoringGame(null)} />}
       {randomGameOpen && <RandomGameModal game={randomGameOpen} onClose={() => setRandomGameOpen(null)} />}

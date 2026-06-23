@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Library, Sparkles, BarChart3, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X } from "lucide-react";
+import { Library, Sparkles, BarChart3, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck } from "lucide-react";
 
 interface SidebarProps {
   currentView: string; 
   isSidebarOpen: boolean; 
   setIsSidebarOpen: (open: boolean) => void; 
   selectGroupMobile: (group: any | null) => void; 
-  selectTab: (tab: "recommendations" | "analytics" | "library") => void; 
+  // UPDATED: Added "friends" view state string literal to interface matching signatures
+  selectTab: (tab: "recommendations" | "analytics" | "library" | "friends") => void; 
   handleCreateGroup: () => void; 
   handleDeleteGroup: (e: React.MouseEvent, groupId: string, groupName: string) => void; 
   handleExport: () => void; 
@@ -32,9 +33,12 @@ export function Sidebar({ currentView, isSidebarOpen, setIsSidebarOpen, selectGr
 
         <div className="space-y-6">
           <div className="space-y-1">
-            <button onClick={() => selectGroupMobile(null)} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${activeGroup === null && currentView === "library" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Library size={20} className={activeGroup === null && currentView === "library" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> All My Games</button>
+            <button onClick={() => { selectGroupMobile(null); selectTab("library"); }} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${activeGroup === null && currentView === "library" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Library size={20} className={activeGroup === null && currentView === "library" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> All My Games</button>
             <button onClick={() => selectTab("recommendations")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "recommendations" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Sparkles size={20} className={currentView === "recommendations" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> For You</button>
             <button onClick={() => selectTab("analytics")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "analytics" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><BarChart3 size={20} className={currentView === "analytics" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> Analytics</button>
+            
+            {/* NEW EXTENSION BUTTON ELEMENT: Navigates cleanly to our FriendsTab framework component views */}
+            <button onClick={() => selectTab("friends")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "friends" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><UserCheck size={20} className={currentView === "friends" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> Friends</button>
           </div>
 
           <div>
