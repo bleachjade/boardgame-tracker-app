@@ -1,0 +1,21 @@
+{
+  "name": "Boardgame Tracker",
+  "short_name": "BG Tracker",
+  "description": "Manage your board game collection and log scores.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "opengraph-image.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "opengraph-image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

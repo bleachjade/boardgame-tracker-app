@@ -4,9 +4,15 @@ import { AuthGroupProvider } from '@/components/AuthGroupProvider'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: 'Boardgame Tracker',
-  description: 'Manage your master library, track pre-orders, and log game night scores with friends.',
-  
+  title: "Boardgame Tracker",
+  description: "Manage your board game collection and log scores.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BG Tracker",
+  },
+
   // Open Graph configuration (Facebook, Discord, LinkedIn, etc.)
   openGraph: {
     title: 'Boardgame Tracker',
