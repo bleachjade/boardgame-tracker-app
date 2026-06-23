@@ -3,7 +3,7 @@
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
 import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon } from "lucide-react";
 import toast from "react-hot-toast";
