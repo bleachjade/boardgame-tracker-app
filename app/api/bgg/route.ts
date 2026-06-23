@@ -12,7 +12,8 @@ export async function GET(request: Request) {
     const chunkSize = 20; 
     let allFormattedGames: any[] = [];
 
-    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@_" });
+    // Added textNodeName so it correctly parses HTML-heavy descriptions
+    const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@_", textNodeName: "#text" });
 
     for (let i = 0; i < idsArray.length; i += chunkSize) {
       const chunk = idsArray.slice(i, i + chunkSize).join(',');
@@ -37,6 +38,48 @@ export async function GET(request: Request) {
         const categories = links.filter((l:any) => l['@_type'] === 'boardgamecategory').map((l:any) => l['@_value']).slice(0, 3);
         const mechanics = links.filter((l:any) => l['@_type'] === 'boardgamemechanic').map((l:any) => l['@_value']).slice(0, 3);
 
+        // Safely extract description whether it's a string or a text node object
+        const rawDesc = typeof game.description === 'string' ? game.description : game.description?.['#text'] || '';
+
+        // Extract Community Polls for Best Players & Age
+        let bestPlayers = "";
+        let communityAge = "";
+        if (game.poll) {
+          const polls = Array.isArray(game.poll) ? game.poll : [game.poll];
+          
+          // Best Players Poll
+          const playerPoll = polls.find((p: any) => p['@_name'] === 'suggested_numplayers');
+          if (playerPoll && playerPoll.results) {
+            let maxBestVotes = 0;
+            const resultsArr = Array.isArray(playerPoll.results) ? playerPoll.results : [playerPoll.results];
+            resultsArr.forEach((r: any) => {
+              const votes = Array.isArray(r.result) ? r.result : [r.result];
+              const bestVote = votes.find((v: any) => v['@_value'] === 'Best');
+              if (bestVote) {
+                const numVotes = parseInt(bestVote['@_numvotes'] || '0');
+                if (numVotes > maxBestVotes) {
+                  maxBestVotes = numVotes;
+                  bestPlayers = r['@_numplayers'];
+                }
+              }
+            });
+          }
+
+          // Community Age Poll
+          const agePoll = polls.find((p: any) => p['@_name'] === 'suggested_playerage');
+          if (agePoll && agePoll.results && agePoll.results.result) {
+             let maxVotes = 0;
+             const votes = Array.isArray(agePoll.results.result) ? agePoll.results.result : [agePoll.results.result];
+             votes.forEach((v: any) => {
+                const numVotes = parseInt(v['@_numvotes'] || '0');
+                if (numVotes > maxVotes) {
+                   maxVotes = numVotes;
+                   communityAge = v['@_value'];
+                }
+             });
+          }
+        }
+
         return {
           bggId: String(game['@_id']),
           name: primaryName?.['@_value'] || 'Unknown Game',
@@ -45,10 +88,15 @@ export async function GET(request: Request) {
           minPlayers: game.minplayers?.['@_value'] || '',
           maxPlayers: game.maxplayers?.['@_value'] || '',
           playTime: game.playingtime?.['@_value'] || '',
-          description: game.description || '',
+          minPlayTime: game.minplaytime?.['@_value'] || '',
+          maxPlayTime: game.maxplaytime?.['@_value'] || '',
+          minAge: game.minage?.['@_value'] || '',
+          description: rawDesc,
           weight: game.statistics?.ratings?.averageweight?.['@_value'] || '0',
           categories,
-          mechanics
+          mechanics,
+          bestPlayers,
+          communityAge
         };
       });
 
