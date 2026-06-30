@@ -9,7 +9,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [liveData, setLiveData] = useState<any>(game);
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState<any[]>([]);
-  
+
   // ROI Tracker State
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [price, setPrice] = useState(game.pricePaid ? String(game.pricePaid) : "");
@@ -28,7 +28,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           // Merge Firestore local changes (like Thai description) with fresh BGG structural data
           setLiveData({ ...game, ...data[0] });
         }
-      } catch (err) {} finally { setLoading(false); }
+      } catch (err) { } finally { setLoading(false); }
     }
     fetchFullDetails();
   }, [game]);
@@ -63,7 +63,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
   const timeDisplay = liveData.minPlayTime !== liveData.maxPlayTime ? `${liveData.minPlayTime}–${liveData.maxPlayTime}` : liveData.playTime;
   const slugifiedName = liveData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-  
+
   const playsCount = history.length;
   const costPerPlay = liveData.pricePaid ? (liveData.pricePaid / Math.max(playsCount, 1)).toFixed(2) : "0.00";
 
@@ -80,21 +80,32 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           <h2 className="font-black text-slate-900 dark:text-white text-xl flex items-center gap-2"><Info className="text-indigo-600 dark:text-indigo-400" /> Game Details</h2>
           <button onClick={onClose}><X size={24} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
         </div>
-        
+
         <div className="p-6 overflow-y-auto flex-1 space-y-8">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-56 h-56 md:h-auto rounded-xl overflow-hidden shadow-md shrink-0 relative bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
               {liveData.image ? <Image src={liveData.image} alt={liveData.name} fill className="object-cover" unoptimized /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>}
             </div>
-            
+
             <div className="flex-1 flex flex-col justify-center space-y-4">
               <div>
-                <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-1 leading-tight">{liveData.name} <span className="text-slate-400 font-medium text-2xl">({liveData.year || 'N/A'})</span></h3>
-                {!loading && liveData.mechanics && liveData.mechanics.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {liveData.mechanics.map((m: string) => <span key={m} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-bold border border-slate-200 dark:border-slate-600">{m}</span>)}
-                  </div>
-                )}
+                <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-1 leading-tight">
+                  {liveData.name} <span className="text-slate-400 font-medium text-2xl">({liveData.year || 'N/A'})</span>
+                </h3>
+
+                {/* The wrapper stays in the DOM permanently to reserve space and prevent layout shift */}
+                <div className="mt-3 min-h-[28px] flex flex-wrap gap-1.5">
+                  {!loading && liveData.mechanics && liveData.mechanics.length > 0 && (
+                    liveData.mechanics.map((m: string) => (
+                      <span
+                        key={m}
+                        className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-bold border border-slate-200 dark:border-slate-600"
+                      >
+                        {m}
+                      </span>
+                    ))
+                  )}
+                </div>
               </div>
 
               <div className="bg-[#0f1115] text-white rounded-xl p-4 md:p-5 grid grid-cols-2 divide-x divide-slate-800 border border-slate-800 shadow-inner w-full">
@@ -109,40 +120,40 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                 <a href={`https://boardgamegeek.com/boardgame/${game.bggId}/${slugifiedName}/sleeves`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 font-bold text-sm rounded-lg border border-indigo-200 dark:border-indigo-800 transition">
-                   <Layers size={16} /> BGG Sleeve Guide
-                 </a>
+                <a href={`https://boardgamegeek.com/boardgame/${game.bggId}/${slugifiedName}/sleeves`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 font-bold text-sm rounded-lg border border-indigo-200 dark:border-indigo-800 transition">
+                  <Layers size={16} /> BGG Sleeve Guide
+                </a>
 
-                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm rounded-lg border border-emerald-200 dark:border-emerald-800">
-                    <PiggyBank size={16} />
-                    {isEditingPrice ? (
-                      <div className="flex items-center gap-1">
-                        ฿<input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0.00" className="w-16 bg-transparent border-b border-emerald-300 dark:border-emerald-700 outline-none px-1" autoFocus />
-                        <button onClick={handleSavePrice} className="hover:text-emerald-900 dark:hover:text-white p-1"><Check size={14}/></button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 cursor-pointer group" onClick={() => setIsEditingPrice(true)}>
-                        {liveData.pricePaid ? (
-                          <span>ROI: <strong className="text-emerald-900 dark:text-emerald-200">฿{costPerPlay}</strong> / play</span>
-                        ) : (
-                          <span>Set Game Cost</span>
-                        )}
-                        <Edit3 size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    )}
-                 </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold text-sm rounded-lg border border-emerald-200 dark:border-emerald-800">
+                  <PiggyBank size={16} />
+                  {isEditingPrice ? (
+                    <div className="flex items-center gap-1">
+                      ฿<input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="0.00" className="w-16 bg-transparent border-b border-emerald-300 dark:border-emerald-700 outline-none px-1" autoFocus />
+                      <button onClick={handleSavePrice} className="hover:text-emerald-900 dark:hover:text-white p-1"><Check size={14} /></button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 cursor-pointer group" onClick={() => setIsEditingPrice(true)}>
+                      {liveData.pricePaid ? (
+                        <span>ROI: <strong className="text-emerald-900 dark:text-emerald-200">฿{costPerPlay}</strong> / play</span>
+                      ) : (
+                        <span>Set Game Cost</span>
+                      )}
+                      <Edit3 size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  )}
+                </div>
               </div>
 
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-            
+
             {/* Description Area with Language Toggles */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest">Publisher Description</h4>
-                
+
                 {/* Language Switcher Badges */}
                 {liveData.description_th && (
                   <div className="flex gap-1 bg-slate-100 dark:bg-slate-700 p-0.5 rounded-lg text-xs font-bold shadow-inner">
@@ -156,16 +167,16 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                 <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold py-4"><Loader2 size={20} className="animate-spin" /> Fetching latest BGG data...</div>
               ) : isEditingThaiDesc ? (
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900/40 p-4 border rounded-xl border-slate-200 dark:border-slate-700">
-                  <textarea 
-                    value={thaiDescInput} 
-                    onChange={e => setThaiDescInput(e.target.value)} 
-                    placeholder="พิมพ์หรือวางคำอธิบายภาษาไทยที่นี่..." 
-                    rows={6} 
+                  <textarea
+                    value={thaiDescInput}
+                    onChange={e => setThaiDescInput(e.target.value)}
+                    placeholder="พิมพ์หรือวางคำอธิบายภาษาไทยที่นี่..."
+                    rows={6}
                     className="w-full text-sm font-medium bg-transparent border-none focus:ring-0 text-slate-800 dark:text-white resize-none outline-none"
                   />
                   <div className="flex justify-end gap-2 border-t pt-2 dark:border-slate-700">
                     <button onClick={() => setIsEditingThaiDesc(false)} className="px-3 py-1 text-xs font-bold text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg">Cancel</button>
-                    <button onClick={handleSaveThaiDesc} className="px-3 py-1 text-xs font-bold bg-indigo-600 text-white rounded-lg flex items-center gap-1 shadow-sm hover:bg-indigo-700"><Check size={12}/> Save Translation</button>
+                    <button onClick={handleSaveThaiDesc} className="px-3 py-1 text-xs font-bold bg-indigo-600 text-white rounded-lg flex items-center gap-1 shadow-sm hover:bg-indigo-700"><Check size={12} /> Save Translation</button>
                   </div>
                 </div>
               ) : (

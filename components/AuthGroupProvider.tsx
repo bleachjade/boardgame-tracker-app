@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
@@ -24,6 +24,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [userGroups, setUserGroups] = useState<any[]>([]);
   const [activeGroup, setActiveGroup] = useState<any | null>(null);
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -78,7 +79,11 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
     const checkDefaults = async () => {
       const q = query(collection(db, "groups"), where("ownerId", "==", user.uid), where("isSystem", "==", true));
       const snap = await getDocs(q);
-      if (snap.empty) {
+      
+      // NO. 3 ADDED HERE: We check the lock, and immediately lock it if it's open!
+      if (snap.empty && !hasInitialized.current) {
+        hasInitialized.current = true; // LOCK THE GATES
+        
         for (const name of ['Owned', 'Want to buy', 'Pre-ordered']) {
           await addDoc(collection(db, "groups"), { name, ownerId: user.uid, members: [user.email || user.uid], isSystem: true, createdAt: serverTimestamp() });
         }
