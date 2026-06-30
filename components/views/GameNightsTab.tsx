@@ -6,15 +6,16 @@ import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Loader2, Trophy, Clock, Search, PartyPopper, Link as LinkIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next"; // NEW
 
 export function GameNightsTab({ userGames }: { userGames: any[] }) {
   const { user, userNickname, userProfile } = useAuthGroup();
+  const { t } = useTranslation(); // NEW
   
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
   
-  // Create Modal State
   const [isCreating, setIsCreating] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: "", date: "", time: "", location: "" });
   const [selectedGames, setSelectedGames] = useState<any[]>([]);
@@ -53,7 +54,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
     if (selectedGames.some(g => g.id === game.id)) {
       setSelectedGames(selectedGames.filter(g => g.id !== game.id));
     } else {
-      if (selectedGames.length >= 10) return toast.error("You can only propose up to 10 games.");
+      if (selectedGames.length >= 10) return toast.error(t('gameNights.maxPropose'));
       setSelectedGames([...selectedGames, game]);
     }
   };
@@ -65,7 +66,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
 
   const handleCreateEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || selectedGames.length === 0) return toast.error("Please propose at least 1 game!");
+    if (!user || selectedGames.length === 0) return toast.error(t('gameNights.minPropose'));
     
     const eventId = doc(collection(db, "gameNights")).id;
     const participants = [user.uid, ...selectedFriends];
@@ -81,15 +82,15 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
         participants,
         proposedGames: selectedGames.map(g => ({ id: g.id, name: g.name, image: g.image, maxPlayers: g.maxPlayers })),
         rsvps: { [user.uid]: "yes" },
-        votes: {}, // uid -> gameId[] (Array for multi-voting)
+        votes: {},
         createdAt: serverTimestamp()
       });
-      toast.success("Game night created! Share the link for guests.");
+      toast.success(t('gameNights.createSuccess'));
       setIsCreating(false);
       setNewEvent({ title: "", date: "", time: "", location: "" });
       setSelectedGames([]);
       setSelectedFriends([]);
-    } catch (err) { toast.error("Failed to create event."); }
+    } catch (err) { toast.error(t('gameNights.createFail')); }
   };
 
   const handleRSVP = async (eventId: string, status: "yes" | "no") => {
@@ -97,8 +98,8 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
     try {
       const eventRef = doc(db, "gameNights", eventId);
       await updateDoc(eventRef, { [`rsvps.${user.uid}`]: status });
-      toast.success(status === "yes" ? "You're in! Vote for up to 5 games below." : "RSVP updated.");
-    } catch (err) { toast.error("Failed to update RSVP."); }
+      toast.success(status === "yes" ? t('gameNights.rsvpYes') : t('gameNights.rsvpUpdated'));
+    } catch (err) { toast.error(t('gameNights.rsvpFail')); }
   };
 
   const handleVote = async (eventId: string, gameId: string) => {
@@ -113,25 +114,25 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
     if (currentVotes.includes(gameId)) {
       newVotes = currentVotes.filter((id: string) => id !== gameId); 
     } else {
-      if (currentVotes.length >= 5) return toast.error("You can only vote for up to 5 games.");
+      if (currentVotes.length >= 5) return toast.error(t('gameNights.maxVote'));
       newVotes = [...currentVotes, gameId]; 
     }
 
     try {
       await updateDoc(doc(db, "gameNights", eventId), { [`votes.${user.uid}`]: newVotes });
-    } catch (err) { toast.error("Failed to submit vote."); }
+    } catch (err) { toast.error(t('gameNights.voteFail')); }
   };
 
   const handleCopyLink = (eventId: string) => {
     const url = `${window.location.origin}/invite/${eventId}`;
     navigator.clipboard.writeText(url);
-    toast.success("Guest link copied! Send it in your group chat.");
+    toast.success(t('gameNights.copySuccess'));
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    if (!confirm("Cancel this game night for everyone?")) return;
-    try { await deleteDoc(doc(db, "gameNights", eventId)); toast.success("Event canceled."); } 
-    catch (err) { toast.error("Failed to cancel event."); }
+    if (!confirm(t('gameNights.cancelConfirm'))) return;
+    try { await deleteDoc(doc(db, "gameNights", eventId)); toast.success(t('gameNights.cancelSuccess')); } 
+    catch (err) { toast.error(t('gameNights.cancelFail')); }
   };
 
   if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-indigo-600" size={32} /></div>;
@@ -139,52 +140,49 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-300 px-1 sm:px-0">
-      
-      {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
         <div>
           <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <PartyPopper className="text-indigo-600 dark:text-indigo-400" size={22} /> Game Night Hub
+            <PartyPopper className="text-indigo-600 dark:text-indigo-400" size={22} /> {t('gameNights.hubTitle')}
           </h2>
-          <p className="text-xs font-medium text-slate-400 mt-0.5">Plan sessions, collect RSVPs, and multi-vote on what hits the table.</p>
+          <p className="text-xs font-medium text-slate-400 mt-0.5">{t('gameNights.hubDesc')}</p>
         </div>
         <button onClick={() => setIsCreating(true)} className="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-2">
-          <Plus size={18} /> Host Game Night
+          <Plus size={18} /> {t('gameNights.hostBtn')}
         </button>
       </div>
 
-      {/* CREATE MODAL */}
       {isCreating && (
         <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
             <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
-              <h3 className="font-black text-lg text-slate-900 dark:text-white">Plan a Session</h3>
+              <h3 className="font-black text-lg text-slate-900 dark:text-white">{t('gameNights.planTitle')}</h3>
               <button onClick={() => setIsCreating(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition"><X size={20}/></button>
             </div>
             
             <form id="create-event-form" onSubmit={handleCreateEvent} className="p-5 overflow-y-auto flex-1 space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-black text-slate-500 uppercase">Event Title</label>
-                  <input required type="text" placeholder="e.g. Friday Night Dice" value={newEvent.title} onChange={e => setNewEvent({...newEvent, title: e.target.value})} className="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" />
+                  <label className="text-xs font-black text-slate-500 uppercase">{t('gameNights.eventTitle')}</label>
+                  <input required type="text" placeholder={t('gameNights.titlePlace')} value={newEvent.title} onChange={e => setNewEvent({...newEvent, title: e.target.value})} className="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black text-slate-500 uppercase">Date</label>
+                  <label className="text-xs font-black text-slate-500 uppercase">{t('gameNights.date')}</label>
                   <input required type="date" value={newEvent.date} onChange={e => setNewEvent({...newEvent, date: e.target.value})} className="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black text-slate-500 uppercase">Time & Location (Optional)</label>
-                  <input type="text" placeholder="7:00 PM @ My Place" value={newEvent.location} onChange={e => setNewEvent({...newEvent, location: e.target.value})} className="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" />
+                  <label className="text-xs font-black text-slate-500 uppercase">{t('gameNights.timeLoc')}</label>
+                  <input type="text" placeholder={t('gameNights.locPlace')} value={newEvent.location} onChange={e => setNewEvent({...newEvent, location: e.target.value})} className="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" />
                 </div>
               </div>
 
               <div className="space-y-3">
                 <label className="text-xs font-black text-slate-500 uppercase flex justify-between">
-                  <span>Propose Games ({selectedGames.length}/10)</span>
+                  <span>{t('gameNights.proposeCount', { count: selectedGames.length })}</span>
                 </label>
                 <div className="relative">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input type="text" placeholder="Search your library..." value={searchGame} onChange={e => setSearchGame(e.target.value)} className="w-full pl-8 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs dark:text-white outline-none focus:ring-2 focus:ring-indigo-600 mb-2" />
+                  <input type="text" placeholder={t('gameNights.searchLib')} value={searchGame} onChange={e => setSearchGame(e.target.value)} className="w-full pl-8 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs dark:text-white outline-none focus:ring-2 focus:ring-indigo-600 mb-2" />
                 </div>
                 <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
                   {filteredLibrary.slice(0, 15).map(game => {
@@ -200,19 +198,18 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
               </div>
             </form>
             <div className="p-4 border-t dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-2 shrink-0">
-              <button onClick={() => setIsCreating(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition">Cancel</button>
-              <button form="create-event-form" type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition">Create Event</button>
+              <button onClick={() => setIsCreating(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition">{t('common.cancel')}</button>
+              <button form="create-event-form" type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition">{t('gameNights.createBtn')}</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* EVENTS FEED */}
       <div className="space-y-4">
         {events.length === 0 ? (
           <div className="text-center py-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl">
             <CalendarDays size={40} className="mx-auto text-slate-300 dark:text-slate-600 mb-3" />
-            <h3 className="text-slate-500 dark:text-slate-400 font-bold">No upcoming game nights.</h3>
+            <h3 className="text-slate-500 dark:text-slate-400 font-bold">{t('gameNights.noUpcoming')}</h3>
           </div>
         ) : events.map(event => {
           const isHost = event.hostId === user?.uid;
@@ -220,7 +217,6 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
           let myVotes = event.votes[user?.uid || ""] || [];
           if (!Array.isArray(myVotes)) myVotes = [myVotes];
           
-          // Calculate Votes 
           const voteTallies: Record<string, number> = {};
           Object.values(event.votes).forEach((voteData: any) => {
             if (Array.isArray(voteData)) voteData.forEach(gId => voteTallies[gId] = (voteTallies[gId] || 0) + 1);
@@ -228,7 +224,6 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
           });
           const highestVotes = Math.max(0, ...Object.values(voteTallies) as number[]);
 
-          // Tally RSVPs and collect Display Names of attendees
           const goingIds = Object.keys(event.rsvps).filter(id => event.rsvps[id] === "yes");
           const guestsGoingCount = goingIds.length;
           
@@ -243,21 +238,18 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
 
           return (
             <div key={event.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col md:flex-row">
-              
-              {/* Event Info Panel */}
               <div className="p-5 md:w-1/3 bg-slate-50 dark:bg-slate-900/40 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 flex flex-col justify-between">
                 <div>
                   <div className="flex justify-between items-start mb-2">
                     <span className="text-[10px] font-black uppercase tracking-widest bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 px-2 py-0.5 rounded">
                       {new Date(event.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
                     </span>
-                    {isHost && <button onClick={() => handleDeleteEvent(event.id)} className="text-slate-400 hover:text-red-500 transition" title="Cancel Event"><X size={16}/></button>}
+                    {isHost && <button onClick={() => handleDeleteEvent(event.id)} className="text-slate-400 hover:text-red-500 transition" title={t('gameNights.cancelEvent')}><X size={16}/></button>}
                   </div>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white mb-1">{event.title}</h3>
                   
-                  {/* ATTENDEE LIST RENDERING */}
                   <div className="mb-3">
-                    <p className="text-xs font-bold text-slate-500 flex items-center gap-1.5 mb-1.5"><Users size={14}/> {guestsGoingCount} players going</p>
+                    <p className="text-xs font-bold text-slate-500 flex items-center gap-1.5 mb-1.5"><Users size={14}/> {t('gameNights.playersGoing', { count: guestsGoingCount })}</p>
                     {goingNames.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
                         {goingNames.map((name, i) => (
@@ -277,33 +269,32 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
                   )}
                   
                   <button onClick={() => handleCopyLink(event.id)} className="mt-4 w-full py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5">
-                    <LinkIcon size={14} /> Copy Guest Link
+                    <LinkIcon size={14} /> {t('gameNights.copyGuest')}
                   </button>
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Your RSVP</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">{t('gameNights.yourRsvp')}</span>
                   <div className="flex gap-2">
                     <button onClick={() => handleRSVP(event.id, "yes")} className={`flex-1 py-2 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-1.5 ${myRSVP === "yes" ? "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/40 dark:border-emerald-800 dark:text-emerald-400 ring-2 ring-emerald-500/20" : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-emerald-400"}`}>
-                      <CheckCircle2 size={16} /> I'm In
+                      <CheckCircle2 size={16} /> {t('gameNights.imIn')}
                     </button>
                     <button onClick={() => handleRSVP(event.id, "no")} className={`flex-1 py-2 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-1.5 ${myRSVP === "no" ? "bg-red-50 border-red-200 text-red-700 dark:bg-red-900/40 dark:border-red-800 dark:text-red-400 ring-2 ring-red-500/20" : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-red-400"}`}>
-                      <XCircle size={16} /> Out
+                      <XCircle size={16} /> {t('gameNights.out')}
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Voting Panel */}
               <div className="p-5 flex-1 bg-white dark:bg-slate-800">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3 flex justify-between">
-                  <span>Vote for up to 5 games</span>
-                  <span>{myVotes.length}/5 Votes</span>
+                  <span>{t('gameNights.voteTitle')}</span>
+                  <span>{t('gameNights.voteCount', { count: myVotes.length })}</span>
                 </span>
                 
                 {myRSVP !== "yes" ? (
                   <div className="h-32 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 text-sm font-medium">
-                    RSVP "I'm In" to unlock voting!
+                    {t('gameNights.rsvpUnlock')}
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -320,7 +311,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{game.name}</h4>
-                            <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1"><Users size={10}/> Up to {game.maxPlayers} players</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1"><Users size={10}/> {t('gameNights.upTo', { count: game.maxPlayers })}</p>
                           </div>
                           <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-xs font-black ${hasMyVote ? "bg-indigo-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-500"}`}>
                             {votes}

@@ -1,5 +1,6 @@
 "use client";
 
+import "@/lib/i18n"; // Initializes multi-language support
 import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";

@@ -5,9 +5,12 @@ import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Sparkles, Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next"; // NEW
 
 export function RecommendationsTab({ userGames }: { userGames: any[] }) {
   const { user, userNickname } = useAuthGroup();
+  const { t } = useTranslation(); // NEW
+
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState<string | null>(null);
@@ -60,39 +63,41 @@ export function RecommendationsTab({ userGames }: { userGames: any[] }) {
         maxPlayers: game.maxPlayers, 
         playTime: game.playTime, 
         groupIds: [], 
-        isExpansion: game.isExpansion || false, // NEW FIELD
-        baseGameId: game.baseGameId || null,    // NEW FIELD
+        isExpansion: game.isExpansion || false,
+        baseGameId: game.baseGameId || null,
         addedAt: serverTimestamp() 
       });
-      toast.success("Added!"); setRecommendations(prev => prev.filter(g => g.bggId !== game.bggId));
-    } catch (err) { toast.error("Failed."); } finally { setAddingId(null); }
+      toast.success(t('recommendations.added')); setRecommendations(prev => prev.filter(g => g.bggId !== game.bggId));
+    } catch (err) { toast.error(t('recommendations.failed')); } finally { setAddingId(null); }
   };
 
-  if (loading) return <div className="flex flex-col items-center justify-center h-64 text-slate-500 dark:text-slate-400 space-y-4"><Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" /><p className="font-bold">Analyzing your library...</p></div>;
+  if (loading) return <div className="flex flex-col items-center justify-center h-64 text-slate-500 dark:text-slate-400 space-y-4"><Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" /><p className="font-bold">{t('recommendations.analyzing')}</p></div>;
 
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-2xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden">
         <Sparkles size={120} className="absolute -right-6 -top-6 text-white/10" />
-        <h2 className="text-2xl font-black mb-2 relative z-10">Smart Discover</h2>
-        <p className="text-indigo-100 font-medium max-w-xl relative z-10">Matches for <strong className="text-white">{avgPlayers} players</strong> and <strong className="text-white">~{avgTime} mins</strong>.</p>
+        <h2 className="text-2xl font-black mb-2 relative z-10">{t('recommendations.smartDisc')}</h2>
+        <p className="text-indigo-100 font-medium max-w-xl relative z-10">
+          {t('recommendations.matchesFor')} <strong className="text-white">{avgPlayers} {t('recommendations.players')}</strong> {t('recommendations.and')} <strong className="text-white">~{avgTime} {t('recommendations.mins')}</strong>
+        </p>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5">
         {recommendations.map((game, index) => (
           <div key={game.bggId} className="bg-white dark:bg-slate-800 rounded-2xl md:shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow flex flex-col group">
             <div className="h-48 sm:h-56 w-full overflow-hidden bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
-              {game.image ? <Image src={game.image} alt={game.name} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized priority={index < 8} /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>}
+              {game.image ? <Image src={game.image} alt={game.name} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized priority={index < 8} /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('search.noImage')}</div>}
             </div>
             <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight mb-1 line-clamp-2 min-h-[45px]">{game.name}</h3>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">{game.year || 'Unknown Year'}</p>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">{game.year || t('recommendations.unknownYear')}</p>
                 <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2.5 rounded-lg mb-4">
-                  <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} Players</span><span>{game.playTime || '?'} Mins</span>
+                  <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} {t('search.players')}</span><span>{game.playTime || '?'} {t('search.mins')}</span>
                 </div>
               </div>
               <button onClick={() => handleAddRec(game)} disabled={addingId === game.bggId} className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl text-sm border border-indigo-100 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition shadow-sm disabled:opacity-50">
-                {addingId === game.bggId ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />} Add to Library
+                {addingId === game.bggId ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />} {t('recommendations.addToLib')}
               </button>
             </div>
           </div>

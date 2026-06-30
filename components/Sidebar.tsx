@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Library, Sparkles, BarChart3, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck, CalendarDays } from "lucide-react";
+import { Library, Sparkles, BarChart3, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck, CalendarDays, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
     currentView: string;
@@ -17,37 +18,52 @@ interface SidebarProps {
 
 export function Sidebar({ currentView, isSidebarOpen, setIsSidebarOpen, selectGroupMobile, selectTab, handleCreateGroup, handleDeleteGroup, handleExport, handleImport }: SidebarProps) {
     const { user, userNickname, activeGroup, userGroups } = useAuthGroup();
+    const { t, i18n } = useTranslation();
+
     if (!user) return null;
 
     const systemGroups = userGroups.filter(g => g.isSystem);
     const customGroups = userGroups.filter(g => !g.isSystem);
 
+    const toggleLanguage = () => {
+        const newLang = i18n.language.startsWith('en') ? 'th' : 'en';
+        i18n.changeLanguage(newLang);
+    };
+
     return (
         <aside className={`fixed inset-y-0 right-0 w-72 bg-white dark:bg-slate-800 border-l md:border-l-0 md:border-r border-slate-200 dark:border-slate-700 p-5 flex flex-col justify-between shadow-2xl md:shadow-sm z-50 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="overflow-y-auto">
+                {/* HEADER (Restored to original clean look) */}
                 <div className="flex items-center justify-between mb-8 md:block">
-                    <h1 className="hidden md:flex text-2xl font-black text-slate-900 dark:text-white items-center gap-3"><Library size={28} className="text-indigo-600 dark:text-indigo-400" /> BG Tracker</h1>
-                    <button className="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg" onClick={() => setIsSidebarOpen(false)}><X size={24} /></button>
+                    <button
+                        onClick={() => { selectGroupMobile(null); selectTab("library"); }}
+                        className="flex text-2xl font-black text-slate-900 dark:text-white items-center gap-3 hover:opacity-80 transition-opacity outline-none text-left"
+                    >
+                        <Library size={28} className="text-indigo-600 dark:text-indigo-400 shrink-0" /> BG Tracker
+                    </button>
+                    <button className="md:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg" onClick={() => setIsSidebarOpen(false)}>
+                        <X size={24} />
+                    </button>
                 </div>
 
                 <div className="space-y-6">
                     <div className="space-y-1">
-                        <button onClick={() => { selectGroupMobile(null); selectTab("library"); }} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${activeGroup === null && currentView === "library" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Library size={20} className={activeGroup === null && currentView === "library" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> All My Games</button>
-                        <button onClick={() => selectTab("recommendations")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "recommendations" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Sparkles size={20} className={currentView === "recommendations" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> For You</button>
-                        <button onClick={() => selectTab("analytics")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "analytics" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><BarChart3 size={20} className={currentView === "analytics" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> Analytics</button>
-                        <button onClick={() => selectTab("friends")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "friends" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><UserCheck size={20} className={currentView === "friends" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> Friends</button>
-                        <button onClick={() => selectTab("events")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "events" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><CalendarDays size={20} className={currentView === "events" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> Game Nights</button>
+                        <button onClick={() => { selectGroupMobile(null); selectTab("library"); }} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${activeGroup === null && currentView === "library" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Library size={20} className={activeGroup === null && currentView === "library" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.allGames')}</button>
+                        <button onClick={() => selectTab("recommendations")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "recommendations" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Sparkles size={20} className={currentView === "recommendations" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.forYou')}</button>
+                        <button onClick={() => selectTab("analytics")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "analytics" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><BarChart3 size={20} className={currentView === "analytics" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.analytics')}</button>
+                        <button onClick={() => selectTab("friends")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "friends" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><UserCheck size={20} className={currentView === "friends" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.friends')}</button>
+                        <button onClick={() => selectTab("events")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "events" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><CalendarDays size={20} className={currentView === "events" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.gameNights')}</button>
                     </div>
 
                     <div>
-                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Personal Lists</h2>
+                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">{t('sidebar.personalLists')}</h2>
                         <div className="space-y-1">
                             {systemGroups.map(group => <button key={group.id} onClick={() => selectGroupMobile(group)} className={`w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors ${activeGroup?.id === group.id && currentView === "library" ? 'bg-slate-800 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700'}`}><FolderOpen size={18} className={activeGroup?.id === group.id && currentView === "library" ? "text-slate-300" : "text-slate-400"} /> {group.name}</button>)}
                         </div>
                     </div>
 
                     <div>
-                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Friend Groups</h2>
+                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">{t('sidebar.friendGroups')}</h2>
                         <div className="space-y-1">
                             {customGroups.map(group => (
                                 <div key={group.id} className="relative group/btn">
@@ -55,22 +71,43 @@ export function Sidebar({ currentView, isSidebarOpen, setIsSidebarOpen, selectGr
                                     <button onClick={(e) => handleDeleteGroup(e, group.id, group.name)} className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 transition-all rounded ${activeGroup?.id === group.id && currentView === "library" ? 'text-indigo-300 hover:text-white' : 'md:opacity-0 md:group-hover/btn:opacity-100 text-slate-400 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-slate-700'}`} title="Delete Group"><Trash2 size={16} /></button>
                                 </div>
                             ))}
-                            <button onClick={handleCreateGroup} className="w-full text-left p-3 mt-2 text-sm text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-2 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-xl transition"><Plus size={18} /> Create New Group</button>
+                            <button onClick={handleCreateGroup} className="w-full text-left p-3 mt-2 text-sm text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-2 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-xl transition"><Plus size={18} /> {t('sidebar.createNewGroup')}</button>
                         </div>
                     </div>
 
                     <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">App Tools</h2>
-                        <button onClick={handleExport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700"><Copy size={18} className="text-slate-400 dark:text-slate-500" /> Copy Export Data</button>
-                        <button onClick={handleImport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700"><ClipboardPaste size={18} className="text-slate-400 dark:text-slate-500" /> Import from Clipboard</button>
+                        <h2 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">{t('sidebar.appTools')}</h2>
+                        <button onClick={handleExport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700"><Copy size={18} className="text-slate-400 dark:text-slate-500" /> {t('sidebar.copyExport')}</button>
+                        <button onClick={handleImport} className="w-full text-left p-2.5 rounded-xl flex items-center gap-3 transition-colors text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700"><ClipboardPaste size={18} className="text-slate-400 dark:text-slate-500" /> {t('sidebar.importClipboard')}</button>
                     </div>
                 </div>
             </div>
 
-            <div className="flex items-center gap-3 pt-5 mt-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
-                <div className="relative w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 overflow-hidden">{user.photoURL && <Image src={user.photoURL} alt="Avatar" fill className="object-cover" unoptimized />}</div>
-                <div className="flex-1 truncate"><p className="text-sm font-bold text-slate-900 dark:text-white truncate">{userNickname}</p></div>
-                <button onClick={() => auth.signOut()} className="text-slate-400 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30" title="Sign Out"><LogOut size={20} /></button>
+            {/* FOOTER: Profile, Language Switcher, and Logout */}
+            <div className="flex items-center gap-2 pt-5 mt-4 border-t border-slate-200 dark:border-slate-700 shrink-0">
+                <div className="relative w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 overflow-hidden shrink-0">
+                    {user.photoURL && <Image src={user.photoURL} alt="Avatar" fill className="object-cover" unoptimized />}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{userNickname}</p>
+                </div>
+
+                <button
+                    onClick={toggleLanguage}
+                    className="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors rounded-lg flex items-center gap-1 text-xs font-bold uppercase shrink-0"
+                    title="Switch Language"
+                >
+                    <Globe size={18} /> <span>{i18n.language.substring(0, 2)}</span>
+                </button>
+
+                <button
+                    onClick={() => auth.signOut()}
+                    className="text-slate-400 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 shrink-0"
+                    title={t('sidebar.signOut')}
+                >
+                    <LogOut size={20} />
+                </button>
             </div>
         </aside>
     );
