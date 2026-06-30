@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { collection, query, where, onSnapshot, orderBy, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Info, X, Loader2, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
+import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +21,11 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [isEditingThaiDesc, setIsEditingThaiDesc] = useState(false);
   const [thaiDescInput, setThaiDescInput] = useState(game.description_th || "");
   const [useThai, setUseThai] = useState(!!game.description_th);
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatHistory, setChatHistory] = useState<{ role: "user" | "ai", text: string }[]>([]);
+  const [isChatLoading, setIsChatLoading] = useState(false);
 
   useEffect(() => {
     async function fetchFullDetails() {
@@ -60,6 +65,35 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
       if (thaiDescInput.trim()) setUseThai(true);
       toast.success("Thai translation updated!");
     } catch (err) { toast.error("Failed to save translation."); }
+  };
+
+  const handleAskGuru = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const newHistory = [...chatHistory, { role: "user" as const, text: chatInput }];
+    setChatHistory(newHistory);
+    setChatInput("");
+    setIsChatLoading(true);
+
+    try {
+      const res = await fetch("/api/rule-bot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gameName: liveData.name, question: chatInput })
+      });
+
+      const data = await res.json();
+      if (data.answer) {
+        setChatHistory([...newHistory, { role: "ai", text: data.answer }]);
+      } else {
+        throw new Error("No answer");
+      }
+    } catch (err) {
+      setChatHistory([...newHistory, { role: "ai", text: "ขออภัยครับ ระบบ AI เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง" }]);
+    } finally {
+      setIsChatLoading(false);
+    }
   };
 
   const timeDisplay = liveData.minPlayTime !== liveData.maxPlayTime ? `${liveData.minPlayTime}–${liveData.maxPlayTime}` : liveData.playTime;
@@ -230,7 +264,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           {/* NEW: VIDEO TUTORIALS SHELF */}
           <div className="md:col-span-2 border-t border-slate-200 dark:border-slate-700 pt-6">
             <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <BookOpen size={16} className="text-indigo-500" /> 
+              <BookOpen size={16} className="text-indigo-500" />
               {t('gameDetails.rulesAndVideos')}
             </h4>
 
@@ -248,10 +282,10 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                     {t('gameDetails.bggVideoDesc')}
                   </p>
                 </div>
-                <a 
-                  href={`https://boardgamegeek.com/boardgame/${game.bggId}/${slugifiedName}/videos/all`} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={`https://boardgamegeek.com/boardgame/${game.bggId}/${slugifiedName}/videos/all`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-4 w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl border border-slate-200 dark:border-slate-600 text-center transition block shadow-2xs"
                 >
                   {t('gameDetails.openBggVideos')}
@@ -271,10 +305,10 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                     {t('gameDetails.youtubeDesc')}
                   </p>
                 </div>
-                <a 
-                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(game.name + " วิธีเล่น")}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(game.name + " วิธีเล่น")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-4 w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl border border-slate-200 dark:border-slate-600 text-center transition block shadow-2xs"
                 >
                   {t('gameDetails.openYoutube')}
@@ -283,6 +317,62 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
             </div>
           </div>
           {/* END NEW VIDEO SHELF */}
+
+          {/* AI GURU CHATBOT TRIGGER */}
+          <div className="mt-4">
+            <button
+              onClick={() => setIsChatOpen(!isChatOpen)}
+              className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-sm border ${isChatOpen ? 'bg-indigo-600 text-white border-indigo-700' : 'bg-gradient-to-r from-indigo-50 dark:from-indigo-900/30 to-purple-50 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:shadow-md'}`}
+            >
+              <Bot size={18} /> {isChatOpen ? "Close AI Guru" : "💬 ถามกติกา AI (Ask Rule Guru)"}
+            </button>
+
+            {/* EXPANDING CHAT INTERFACE */}
+            {isChatOpen && (
+              <div className="mt-3 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 rounded-xl overflow-hidden shadow-inner flex flex-col h-80 animate-in slide-in-from-top-2 duration-200">
+
+                {/* Chat History Area */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                  {chatHistory.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center opacity-60">
+                      <Bot size={32} className="text-indigo-500 mb-2" />
+                      <p className="text-sm font-bold text-slate-500 dark:text-slate-400">AI ผู้ช่วยกติกาสำหรับ {liveData.name}</p>
+                      <p className="text-xs font-medium text-slate-400 mt-1">พิมพ์คำถามที่คุณสงสัยได้เลย เช่น "เซ็ตอัปเกมเล่น 3 คนยังไง?"</p>
+                    </div>
+                  ) : (
+                    chatHistory.map((msg, i) => (
+                      <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-[85%] p-3 rounded-2xl text-sm font-medium leading-relaxed ${msg.role === "user" ? "bg-indigo-600 text-white rounded-br-sm shadow-sm" : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-sm border border-slate-200 dark:border-slate-700"}`}>
+                          {msg.text}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                  {isChatLoading && (
+                    <div className="flex justify-start">
+                      <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl rounded-bl-sm flex items-center gap-2 text-indigo-500">
+                        <Loader2 size={16} className="animate-spin" /> <span className="text-xs font-bold">กำลังค้นหากฎ...</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Input Area */}
+                <form onSubmit={handleAskGuru} className="p-3 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="พิมพ์คำถามกติกาที่นี่..."
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    className="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-white"
+                  />
+                  <button type="submit" disabled={isChatLoading || !chatInput.trim()} className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white p-2 rounded-lg transition shadow-sm">
+                    <Send size={18} />
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
 
         </div>
       </div>
