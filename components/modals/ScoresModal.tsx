@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { collection, query, where, onSnapshot, getDocs, doc, getDoc, serverTimestamp, orderBy, writeBatch, deleteDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, getDocs, doc, getDoc, serverTimestamp, orderBy, writeBatch, deleteDoc, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Trophy, X, Calculator, History, Calendar, Plus, Users, Image as ImageIcon, CheckCircle, XCircle, Trash2, Mic, MicOff, UserCheck } from "lucide-react";
 import { calculateScoreString } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next"; // NEW
+import { useTranslation } from "react-i18next";
 
 export function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
-  const { t } = useTranslation(); // NEW
+  const { t } = useTranslation();
   
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
   const [history, setHistory] = useState<any[]>([]);
@@ -26,14 +26,17 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   
   const [players, setPlayers] = useState([{ name: userNickname || "Player 1", scoreInput: "" }]);
   const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
+  const [recentPlayerNames, setRecentPlayerNames] = useState<string[]>([]); // NEW: Global Recent Plays
   const [focusedPlayerIdx, setFocusedPlayerIdx] = useState<number | null>(null);
 
+  // 1. Fetch History for the specific game
   useEffect(() => {
     const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId), orderBy("playedAt", "desc"));
     const unsub = onSnapshot(q, (snap) => setHistory(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
     return () => unsub();
   }, [game.bggId]);
 
+  // 2. Fetch User's Friends
   useEffect(() => {
     if (!user) return;
     const fetchFriendsForAutocomplete = async () => {
@@ -51,6 +54,20 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       }
     };
     fetchFriendsForAutocomplete();
+  }, [user]);
+
+  // 3. NEW: Fetch Global Recent Players (Last 10 games)
+  useEffect(() => {
+    if (!user) return;
+    const fetchRecentPlayers = async () => {
+      try {
+        const q = query(collection(db, "gamePlays"), where("userId", "==", user.uid), orderBy("playedAt", "desc"), limit(10));
+        const snap = await getDocs(q);
+        const names = snap.docs.flatMap(d => d.data().players?.map((p: any) => p.name) || []);
+        setRecentPlayerNames(Array.from(new Set(names)));
+      } catch (err) { }
+    };
+    fetchRecentPlayers();
   }, [user]);
 
   const addPlayerRow = () => setPlayers([...players, { name: "", scoreInput: "" }]);
@@ -224,6 +241,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     catch (err) { toast.error("Failed to delete record."); }
   };
 
+  // --- NEW: Combine all player name sources ---
+  const friendNames = friendsList.map(f => f.nickname);
+  const historyNames = history.flatMap(h => h.players?.map((p: any) => p.name) || []);
+  const allSuggestions = Array.from(new Set([...friendNames, ...recentPlayerNames, ...historyNames]))
+    .filter(name => name && name.trim() !== "" && name !== userNickname && name !== "Anonymous");
+
   return (
     <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh]">
@@ -260,11 +283,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                 <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{isCoop ? t('scores.playersInvolved') : t('scores.playerScores')}</h3>
                 
                 {players.map((player, idx) => {
-                  const matches = friendsList.filter(f => 
+                  // NEW: Match against combined suggestions array
+                  const matches = allSuggestions.filter(name => 
                     player.name.length > 0 && 
-                    f.nickname.toLowerCase().includes(player.name.toLowerCase()) && 
-                    f.nickname.toLowerCase() !== player.name.toLowerCase()
-                  );
+                    name.toLowerCase().includes(player.name.toLowerCase()) && 
+                    name.toLowerCase() !== player.name.toLowerCase()
+                  ).slice(0, 5); // Max 5 suggestions to keep UI clean
 
                   return (
                     <div key={idx} className="bg-white dark:bg-slate-800 p-3 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -283,16 +307,28 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                           
                           {focusedPlayerIdx === idx && matches.length > 0 && (
                             <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
-                              {matches.map(m => (
-                                <button 
-                                  key={m.uid}
-                                  type="button"
-                                  onClick={() => updatePlayer(idx, "name", m.nickname)}
-                                  className="w-full text-left px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center gap-2 transition"
-                                >
-                                  <UserCheck size={14} className="text-indigo-500" /> {m.nickname}
-                                </button>
-                              ))}
+                              {matches.map((matchName, i) => {
+                                const isFriend = friendNames.includes(matchName);
+                                return (
+                                  <button 
+                                    key={i}
+                                    type="button"
+                                    onMouseDown={(e) => e.preventDefault()} // Prevents blur before click registers
+                                    onClick={() => {
+                                      updatePlayer(idx, "name", matchName);
+                                      setFocusedPlayerIdx(null);
+                                    }}
+                                    className="w-full text-left px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center gap-2 transition"
+                                  >
+                                    {isFriend ? (
+                                      <UserCheck size={14} className="text-emerald-500" title="Registered Friend" />
+                                    ) : (
+                                      <History size={14} className="text-indigo-500" title="Recent Player" />
+                                    )}
+                                    {matchName}
+                                  </button>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
