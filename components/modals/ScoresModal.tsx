@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 export function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
   const { t } = useTranslation();
-  
+
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
   const [history, setHistory] = useState<any[]>([]);
   const [isCoop, setIsCoop] = useState(false);
@@ -20,12 +20,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const [teamScore, setTeamScore] = useState("");
   const [memoryPhoto, setMemoryPhoto] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [listeningIdx, setListeningIdx] = useState<number | null>(null);
-  
+
   const [players, setPlayers] = useState([{ name: userNickname || "Player 1", scoreInput: "" }]);
-  const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
+  const [friendsList, setFriendsList] = useState<{ uid: string, nickname: string }[]>([]);
   const [recentPlayerNames, setRecentPlayerNames] = useState<string[]>([]); // NEW: Global Recent Plays
   const [focusedPlayerIdx, setFocusedPlayerIdx] = useState<number | null>(null);
 
@@ -42,7 +42,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     const fetchFriendsForAutocomplete = async () => {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (!userDoc.exists()) return;
-      
+
       const data = userDoc.data();
       const uidsToFetch = data.friendsList || [];
       if (data.isCouple && data.partnerId) uidsToFetch.push(data.partnerId);
@@ -93,12 +93,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const handleVoiceInput = (index: number) => {
     const windowSupported = typeof window !== "undefined";
     const SpeechRecognition = windowSupported && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
-    
+
     if (!SpeechRecognition) return toast.error("Speech input unsupported on this browser.");
     if (listeningIdx === index) return setListeningIdx(null);
 
     const recognition = new SpeechRecognition();
-    recognition.lang = "th-TH"; 
+    recognition.lang = "th-TH";
     recognition.interimResults = false;
 
     recognition.onstart = () => {
@@ -112,15 +112,15 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
         .replace(/บวก|และ|และก็|กับ|แถม|plus|and/g, "+")
         .replace(/ลบ|หักออก|minus/g, "-")
         .replace(/เท่ากับ|ได้|equals/g, "")
-        .replace(/\s+/g, ""); 
-      
+        .replace(/\s+/g, "");
+
       if (!/[0-9+\-*/]/.test(mathExpression)) {
         toast.error(`Couldn't resolve numbers from: "${transcript}"`);
         return;
       }
 
       const currentText = players[index].scoreInput.trim();
-      const updatedString = currentText 
+      const updatedString = currentText
         ? `${currentText}${mathExpression.startsWith("+") || mathExpression.startsWith("-") ? "" : "+"}${mathExpression}`
         : mathExpression;
 
@@ -154,7 +154,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(bitmap, 0, 0, width, height);
-      setMemoryPhoto(canvas.toDataURL("image/jpeg", 0.7)); 
+      setMemoryPhoto(canvas.toDataURL("image/jpeg", 0.7));
     } catch (err) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -166,7 +166,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
           canvas.height = img.height * scaleSize;
           const ctx = canvas.getContext("2d");
           ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-          setMemoryPhoto(canvas.toDataURL("image/jpeg", 0.7)); 
+          setMemoryPhoto(canvas.toDataURL("image/jpeg", 0.7));
         };
         img.src = event.target?.result as string;
       };
@@ -177,7 +177,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const handleSavePlay = async () => {
     if (!user) return;
     setSaving(true);
-    
+
     const finalScores = players.map(p => ({
       name: p.name.trim() || "Anonymous",
       score: isCoop ? 0 : calculateScoreString(p.scoreInput),
@@ -185,10 +185,10 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     }));
 
     const playPayload = {
-      gameId: game.id || null, 
-      bggId: game.bggId || null, 
-      gameName: game.name, 
-      players: finalScores, 
+      gameId: game.id || null,
+      bggId: game.bggId || null,
+      gameName: game.name,
+      players: finalScores,
       isCoop,
       coopResult: isCoop ? coopResult : null,
       teamScore: isCoop ? calculateScoreString(teamScore) : null,
@@ -204,13 +204,13 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       if (namesToSearch.length > 0) {
         const chunks = [];
         for (let i = 0; i < namesToSearch.length; i += 30) chunks.push(namesToSearch.slice(i, i + 30));
-        
+
         for (const chunk of chunks) {
           const q = query(collection(db, "users"), where("nickname", "in", chunk));
           const snap = await getDocs(q);
           snap.forEach(docSnap => {
-             const matchUid = docSnap.data().uid;
-             if (matchUid && matchUid !== user.uid) matchedUids.add(matchUid);
+            const matchUid = docSnap.data().uid;
+            if (matchUid && matchUid !== user.uid) matchedUids.add(matchUid);
           });
         }
       }
@@ -228,16 +228,16 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
       if (matchedUids.size > 0) toast.success(`Saved and synced to ${matchedUids.size} linked accounts!`);
       else toast.success("Game play session logged!");
-      
+
       onClose();
     } catch (err) { toast.error("Failed to save match scoring details."); }
-    
+
     setSaving(false);
   };
 
   const handleDeletePlay = async (playId: string) => {
     if (!confirm("Are you sure you want to permanently delete this match record?")) return;
-    try { await deleteDoc(doc(db, "gamePlays", playId)); toast.success("Match deleted!"); } 
+    try { await deleteDoc(doc(db, "gamePlays", playId)); toast.success("Match deleted!"); }
     catch (err) { toast.error("Failed to delete record."); }
   };
 
@@ -250,14 +250,14 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   return (
     <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh]">
-        
+
         <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 rounded-t-2xl shrink-0">
           <h2 className="font-black text-slate-900 dark:text-white text-lg flex items-center gap-2 truncate max-w-[320px]">
             <Trophy className="text-amber-500 shrink-0" size={20} /> {game.name}
           </h2>
           <button onClick={onClose}><X size={20} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
         </div>
-        
+
         <div className="flex border-b dark:border-slate-700 text-sm font-bold text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 shrink-0">
           <button onClick={() => setActiveTab("log")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "log" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50"}`}><Calculator size={16} /> {t('scores.logMatch')}</button>
           <button onClick={() => setActiveTab("history")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "history" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50"}`}><History size={16} /> {t('scores.historyTab', { count: history.length })}</button>
@@ -266,7 +266,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
         <div className="p-4 overflow-y-auto flex-1 bg-slate-50 dark:bg-slate-900/50">
           {activeTab === "log" ? (
             <div className="space-y-5">
-              
+
               <div className="flex bg-slate-200 dark:bg-slate-700 p-1 rounded-xl">
                 <button onClick={() => setIsCoop(false)} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${!isCoop ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>{t('scores.competitive')}</button>
                 <button onClick={() => setIsCoop(true)} className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isCoop ? "bg-indigo-600 text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>{t('scores.coop')}</button>
@@ -281,36 +281,36 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
               <div className="space-y-3">
                 <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{isCoop ? t('scores.playersInvolved') : t('scores.playerScores')}</h3>
-                
+
                 {players.map((player, idx) => {
                   // NEW: Match against combined suggestions array
-                  const matches = allSuggestions.filter(name => 
-                    player.name.length > 0 && 
-                    name.toLowerCase().includes(player.name.toLowerCase()) && 
+                  const matches = allSuggestions.filter(name =>
+                    player.name.length > 0 &&
+                    name.toLowerCase().includes(player.name.toLowerCase()) &&
                     name.toLowerCase() !== player.name.toLowerCase()
                   ).slice(0, 5); // Max 5 suggestions to keep UI clean
 
                   return (
                     <div key={idx} className="bg-white dark:bg-slate-800 p-3 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                      
+
                       <div className="flex gap-2 items-center">
                         <div className="flex-1 relative">
-                          <input 
-                            type="text" 
-                            placeholder={t('scores.playerName')} 
-                            value={player.name} 
+                          <input
+                            type="text"
+                            placeholder={t('scores.playerName')}
+                            value={player.name}
                             onFocus={() => setFocusedPlayerIdx(idx)}
                             onBlur={() => setTimeout(() => setFocusedPlayerIdx(null), 200)}
-                            onChange={(e) => updatePlayer(idx, "name", e.target.value)} 
-                            className="w-full border border-slate-200 dark:border-slate-700 bg-transparent p-2 text-sm rounded-lg text-slate-900 dark:text-white font-bold outline-none focus:ring-2 focus:ring-indigo-600" 
+                            onChange={(e) => updatePlayer(idx, "name", e.target.value)}
+                            className="w-full border border-slate-200 dark:border-slate-700 bg-transparent p-2 text-sm rounded-lg text-slate-900 dark:text-white font-bold outline-none focus:ring-2 focus:ring-indigo-600"
                           />
-                          
+
                           {focusedPlayerIdx === idx && matches.length > 0 && (
                             <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
                               {matches.map((matchName, i) => {
                                 const isFriend = friendNames.includes(matchName);
                                 return (
-                                  <button 
+                                  <button
                                     key={i}
                                     type="button"
                                     onMouseDown={(e) => e.preventDefault()} // Prevents blur before click registers
@@ -320,38 +320,39 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                                     }}
                                     className="w-full text-left px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center gap-2 transition"
                                   >
-                                    {isFriend ? (
-                                      <UserCheck size={14} className="text-emerald-500" title="Registered Friend" />
-                                    ) : (
-                                      <History size={14} className="text-indigo-500" title="Recent Player" />
-                                    )}
-                                    {matchName}
+                                    <span title={isFriend ? "Registered Friend" : "Recent Player"} className="shrink-0 flex items-center">
+                                      {isFriend ? (
+                                        <UserCheck size={14} className="text-emerald-500" />
+                                      ) : (
+                                        <History size={14} className="text-indigo-500" />
+                                      )}
+                                    </span>
                                   </button>
                                 );
                               })}
                             </div>
                           )}
                         </div>
-                        
+
                         {!isCoop && (
                           <div className="flex gap-1.5 items-center shrink-0">
-                            <button 
+                            <button
                               type="button"
                               onClick={() => handleVoiceInput(idx)}
                               className={`p-2 rounded-lg border text-sm transition-all shadow-xs shrink-0 ${listeningIdx === idx ? "bg-red-500 border-red-600 text-white animate-pulse" : "bg-slate-50 hover:bg-slate-100 border-slate-200 dark:bg-slate-700 dark:border-slate-600 text-slate-500 dark:text-slate-300 dark:hover:bg-slate-600"}`}
                               title="Dictate score via voice"
                             >
-                              {listeningIdx === idx ? <MicOff size={16}/> : <Mic size={16} />}
+                              {listeningIdx === idx ? <MicOff size={16} /> : <Mic size={16} />}
                             </button>
 
                             <div className="relative w-32">
-                              <input 
-                                type="text" 
+                              <input
+                                type="text"
                                 inputMode="decimal"
-                                placeholder={t('scores.scoreMath')} 
-                                value={player.scoreInput} 
-                                onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)} 
-                                className="w-full border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" 
+                                placeholder={t('scores.scoreMath')}
+                                value={player.scoreInput}
+                                onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)}
+                                className="w-full border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600"
                               />
                               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/50 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-800 shadow-sm">
                                 ={calculateScoreString(player.scoreInput)}
@@ -387,7 +388,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                   );
                 })}
               </div>
-              
+
               <button onClick={addPlayerRow} className="w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition"><Plus size={16} /> {t('scores.addPlayer')}</button>
 
               <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
@@ -395,7 +396,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                 {memoryPhoto ? (
                   <div className="relative w-full h-36 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm group bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center">
                     <img src={memoryPhoto} alt="Memory" className="w-full max-h-36 object-contain" />
-                    <button onClick={() => setMemoryPhoto(null)} className="absolute top-2 right-2 p-1.5 bg-slate-900/70 hover:bg-red-600 text-white rounded-full shadow transition-all"><X size={16}/></button>
+                    <button onClick={() => setMemoryPhoto(null)} className="absolute top-2 right-2 p-1.5 bg-slate-900/70 hover:bg-red-600 text-white rounded-full shadow transition-all"><X size={16} /></button>
                   </div>
                 ) : (
                   <button onClick={() => fileInputRef.current?.click()} className="w-full py-3.5 border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition">
@@ -409,17 +410,17 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
               {history.length === 0 ? <div className="text-center py-8 text-slate-500 dark:text-slate-400 font-medium">{t('scores.noMatches')}</div> : history.map((record) => {
                 const maxScore = Math.max(...record.players.map((p: any) => Number(p.score || 0)));
                 const sortedPlayers = [...record.players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
-                
+
                 return (
                   <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3 relative group/card">
                     <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold border-b dark:border-slate-700 pb-2 border-slate-100">
                       <span className="flex items-center gap-1"><Calendar size={14} /> {record.playedAt?.toDate() ? new Date(record.playedAt.toDate()).toLocaleDateString() : "Just now"}</span>
-                      
+
                       <div className="flex items-center gap-2">
                         <span>{t('scores.loggedBy', { name: record.loggedBy || "Friend" })}</span>
                         {user && record.userId === user.uid && (
-                          <button 
-                            onClick={() => handleDeletePlay(record.id)} 
+                          <button
+                            onClick={() => handleDeletePlay(record.id)}
                             className="text-slate-400 hover:text-red-500 transition-colors p-0.5 md:opacity-0 group-hover/card:opacity-100"
                             title="Delete Match History Instance"
                           >
@@ -432,18 +433,18 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                     {record.isCoop ? (
                       <div className="text-center py-2 border-b dark:border-slate-700 border-slate-100">
                         {record.coopResult === "win" ? (
-                          <span className="text-emerald-600 dark:text-emerald-400 font-black flex items-center justify-center gap-1.5"><CheckCircle size={16}/> {t('scores.coopVictory')}</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-black flex items-center justify-center gap-1.5"><CheckCircle size={16} /> {t('scores.coopVictory')}</span>
                         ) : (
-                          <span className="text-red-600 dark:text-red-400 font-black flex items-center justify-center gap-1.5"><XCircle size={16}/> {t('scores.coopDefeat')}</span>
+                          <span className="text-red-600 dark:text-red-400 font-black flex items-center justify-center gap-1.5"><XCircle size={16} /> {t('scores.coopDefeat')}</span>
                         )}
                       </div>
                     ) : null}
 
                     <div className="space-y-1.5">
                       {record.isCoop ? (
-                         <div className="text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2 flex-wrap">
-                           <Users size={14} /> {record.players.map((p:any) => p.name).join(", ")}
-                         </div>
+                        <div className="text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2 flex-wrap">
+                          <Users size={14} /> {record.players.map((p: any) => p.name).join(", ")}
+                        </div>
                       ) : (
                         sortedPlayers.map((p: any, pIdx: number) => (
                           <div key={pIdx} className="flex justify-between items-center text-sm font-semibold">
@@ -456,13 +457,13 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                         ))
                       )}
                     </div>
-                    
+
                     {record.memoryPhoto && (
                       <div className="mt-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center">
-                        <img 
-                          src={record.memoryPhoto} 
-                          alt="Memory" 
-                          className="w-full max-h-60 object-contain" 
+                        <img
+                          src={record.memoryPhoto}
+                          alt="Memory"
+                          className="w-full max-h-60 object-contain"
                         />
                       </div>
                     )}
@@ -472,12 +473,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
             </div>
           )}
         </div>
-        
+
         <div className="p-4 border-t dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 rounded-b-2xl flex justify-end gap-2 shrink-0">
           <button onClick={onClose} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-medium transition">{t('scores.close')}</button>
           {activeTab === "log" && (
-            <button 
-              onClick={handleSavePlay} 
+            <button
+              onClick={handleSavePlay}
               disabled={saving}
               className="px-5 py-2 bg-indigo-600 disabled:bg-indigo-400 text-white rounded-xl font-bold hover:bg-indigo-700 transition shadow-sm"
             >

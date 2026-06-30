@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { collection, query, where, onSnapshot, orderBy, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Info, X, Loader2, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages } from "lucide-react";
+import { Info, X, Loader2, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next"; // NEW
+import { useTranslation } from "react-i18next";
 
 export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => void }) {
-  const { t } = useTranslation(); // NEW
+  const { t } = useTranslation();
 
   const [liveData, setLiveData] = useState<any>(game);
   const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           <button onClick={onClose}><X size={24} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1 space-y-8">
+        <div className="p-6 overflow-y-auto flex-1 space-y-8 custom-scrollbar">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-56 h-56 md:h-auto rounded-xl overflow-hidden shadow-md shrink-0 relative bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
               {liveData.image ? <Image src={liveData.image} alt={liveData.name} fill className="object-cover" unoptimized /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>}
@@ -148,7 +148,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest">{t('gameDetails.pubDesc')}</h4>
@@ -227,6 +226,63 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               </div>
             </div>
           </div>
+
+          {/* NEW: VIDEO TUTORIALS SHELF */}
+          <div className="md:col-span-2 border-t border-slate-200 dark:border-slate-700 pt-6">
+            <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <BookOpen size={16} className="text-indigo-500" /> 
+              {t('gameDetails.rulesAndVideos')}
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* English Official Tutorial Box */}
+              <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col justify-between hover:border-indigo-400 transition shadow-xs">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 px-2 py-0.5 rounded-md">
+                    {t('gameDetails.englishGuide')}
+                  </span>
+                  <h5 className="font-bold text-base text-slate-900 dark:text-white mt-2">
+                    {t('gameDetails.bggVideoHub')}
+                  </h5>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {t('gameDetails.bggVideoDesc')}
+                  </p>
+                </div>
+                <a 
+                  href={`https://boardgamegeek.com/boardgame/${game.bggId}/${slugifiedName}/videos/all`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="mt-4 w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl border border-slate-200 dark:border-slate-600 text-center transition block shadow-2xs"
+                >
+                  {t('gameDetails.openBggVideos')}
+                </a>
+              </div>
+
+              {/* Thai Tutorial Search Box */}
+              <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col justify-between hover:border-rose-400 transition shadow-xs">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 px-2 py-0.5 rounded-md">
+                    {t('gameDetails.thaiGuide')}
+                  </span>
+                  <h5 className="font-bold text-base text-slate-900 dark:text-white mt-2">
+                    {t('gameDetails.youtubeSearch')}
+                  </h5>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {t('gameDetails.youtubeDesc')}
+                  </p>
+                </div>
+                <a 
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(game.name + " วิธีเล่น")}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="mt-4 w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl border border-slate-200 dark:border-slate-600 text-center transition block shadow-2xs"
+                >
+                  {t('gameDetails.openYoutube')}
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* END NEW VIDEO SHELF */}
 
         </div>
       </div>
