@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { collection, query, where, onSnapshot, orderBy, doc, updateDoc } from "firebase/firestore";
+// Removed orderBy from imports as we won't need it
+import { collection, query, where, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
@@ -41,8 +42,18 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   }, [game]);
 
   useEffect(() => {
-    const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId), orderBy("playedAt", "desc"));
-    const unsub = onSnapshot(q, (snap) => setHistory(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+    // FIX: Removed orderBy() to prevent Firebase Composite Index errors on fresh loads!
+    const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId));
+    
+    const unsub = onSnapshot(q, (snap) => {
+      const fetchedHistory = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Sort client-side instead of relying on the Firestore server
+      fetchedHistory.sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+      
+      setHistory(fetchedHistory);
+    });
+    
     return () => unsub();
   }, [game.bggId]);
 
@@ -261,7 +272,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
             </div>
           </div>
 
-          {/* NEW: VIDEO TUTORIALS SHELF */}
           <div className="md:col-span-2 border-t border-slate-200 dark:border-slate-700 pt-6">
             <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
               <BookOpen size={16} className="text-indigo-500" />
@@ -269,7 +279,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* English Official Tutorial Box */}
               <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col justify-between hover:border-indigo-400 transition shadow-xs">
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 px-2 py-0.5 rounded-md">
@@ -292,7 +301,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                 </a>
               </div>
 
-              {/* Thai Tutorial Search Box */}
               <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col justify-between hover:border-rose-400 transition shadow-xs">
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 px-2 py-0.5 rounded-md">
@@ -316,9 +324,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               </div>
             </div>
           </div>
-          {/* END NEW VIDEO SHELF */}
 
-          {/* AI GURU CHATBOT TRIGGER */}
           <div className="mt-4">
             <button
               onClick={() => setIsChatOpen(!isChatOpen)}
@@ -327,11 +333,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               <Bot size={18} /> {isChatOpen ? "Close AI Guru" : "💬 ถามกติกา AI (Ask Rule Guru)"}
             </button>
 
-            {/* EXPANDING CHAT INTERFACE */}
             {isChatOpen && (
               <div className="mt-3 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 rounded-xl overflow-hidden shadow-inner flex flex-col h-80 animate-in slide-in-from-top-2 duration-200">
-
-                {/* Chat History Area */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
                   {chatHistory.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center opacity-60">
@@ -357,7 +360,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                   )}
                 </div>
 
-                {/* Input Area */}
                 <form onSubmit={handleAskGuru} className="p-3 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 flex gap-2">
                   <input
                     type="text"
