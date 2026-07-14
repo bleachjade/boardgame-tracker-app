@@ -27,7 +27,7 @@ import { InviteModal } from "@/components/modals/InviteModal";
 import { AddFromLibraryModal } from "@/components/modals/AddFromLibraryModal";
 
 export default function Home() {
-  const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup } = useAuthGroup();
+  const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup, userGroups } = useAuthGroup();
   const { t } = useTranslation(); // NEW
 
   const [games, setGames] = useState<any[]>([]);
@@ -278,6 +278,7 @@ export default function Home() {
                                 iOwnIt={hasEditPermission}
                                 activeGroup={activeGroup} index={index}
                                 expansions={gameExpansions}
+                                userLists={userGroups}
                                 onToggleBulk={toggleBulkSelection} onOpenDetails={setDetailsGame} onDelete={handleDeleteGame}
                                 onLogScore={(e, g) => { e.stopPropagation(); setScoringGame(g); }}
                                 onAssign={(e, g) => { e.stopPropagation(); setAssigningGame(g); }}

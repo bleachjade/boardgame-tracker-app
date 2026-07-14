@@ -1,17 +1,46 @@
 import Image from "next/image";
 import { Check, Trash2, Trophy, FolderPlus, Puzzle } from "lucide-react";
-import { useTranslation } from "react-i18next"; // NEW
+import { useTranslation } from "react-i18next";
 
 interface GameCardProps {
   game: any; userUid: string; isBulkMode: boolean; isSelected: boolean; iOwnIt: boolean;
   activeGroup: any; index: number;
   expansions?: any[];
+  userLists?: any[]; // Added prop
   onToggleBulk: (id: string) => void; onOpenDetails: (game: any) => void; onDelete: (e: React.MouseEvent, game: any) => void;
   onLogScore: (e: React.MouseEvent, game: any) => void; onAssign: (e: React.MouseEvent, game: any) => void;
 }
 
-export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign }: GameCardProps) {
-  const { t } = useTranslation(); // NEW
+export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign }: GameCardProps) {
+  const { t, i18n } = useTranslation();
+
+  // DYNAMIC STATUS BADGE LOGIC
+  let computedStatus = 'owned';
+  if (userLists && game.groupIds && game.groupIds.length > 0) {
+    const listNames = game.groupIds.map((id: string) => {
+      const found = userLists.find(l => l.id === id);
+      return found ? (found.name || "").toLowerCase() : '';
+    });
+    
+    if (listNames.some((n: string) => n.includes('pre-order') || n.includes('preorder') || n.includes('พรีออเดอร์'))) {
+      computedStatus = 'preordered';
+    } else if (listNames.some((n: string) => n.includes('wishlist') || n.includes('want') || n.includes('buy') || n.includes('อยากได้'))) {
+      computedStatus = 'wishlist';
+    }
+  }
+
+  const statusStyles: Record<string, string> = {
+    owned: "bg-emerald-100/90 text-emerald-700 border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-400 dark:border-emerald-800",
+    preordered: "bg-amber-100/90 text-amber-700 border-amber-200 dark:bg-amber-950/80 dark:text-amber-400 dark:border-amber-800",
+    wishlist: "bg-indigo-100/90 text-indigo-700 border-indigo-200 dark:bg-indigo-950/80 dark:text-indigo-400 dark:border-indigo-800"
+  };
+  
+  const isThai = i18n.language.startsWith('th');
+  const statusLabels: Record<string, string> = {
+    owned: isThai ? "มีแล้ว" : "Owned",
+    preordered: isThai ? "พรีออเดอร์" : "Pre-ordered",
+    wishlist: isThai ? "อยากได้" : "Want to buy"
+  };
 
   return (
     <div 
@@ -19,12 +48,12 @@ export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, active
       className={`bg-white dark:bg-slate-800 rounded-2xl md:shadow-sm overflow-hidden border transition-all flex flex-col group relative ${!isBulkMode ? 'cursor-pointer hover:shadow-lg dark:hover:border-slate-500' : isBulkMode && iOwnIt ? 'cursor-pointer hover:shadow-md' : ''} ${isSelected ? 'border-indigo-500 ring-4 ring-indigo-500/20' : 'border-slate-200 dark:border-slate-700'}`}
     >
       {isBulkMode && iOwnIt && (
-        <div className="absolute top-3 left-3 z-20 pointer-events-none">
+        <div className="absolute top-3 left-3 z-10 pointer-events-none">
           <div className={`w-6 h-6 rounded flex items-center justify-center border-2 transition-colors ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-white/80 dark:bg-slate-800/80 border-slate-400 dark:border-slate-500'}`}>{isSelected && <Check size={16} strokeWidth={3} />}</div>
         </div>
       )}
       {isBulkMode && !iOwnIt && (
-        <div className="absolute inset-0 bg-slate-100/60 dark:bg-slate-900/60 z-20 flex items-center justify-center backdrop-blur-[1px]">
+        <div className="absolute inset-0 bg-slate-100/60 dark:bg-slate-900/60 z-10 flex items-center justify-center backdrop-blur-[1px]">
           <span className="bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">{t('gameCard.notOwner')}</span>
         </div>
       )}
@@ -33,6 +62,14 @@ export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, active
         {!isBulkMode && game.userId === userUid && (
           <button onClick={(e) => onDelete(e, game)} className="absolute top-2 right-2 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-full shadow-sm md:opacity-0 group-hover:opacity-100 transition-all z-10" title={activeGroup === null ? t('gameCard.deleteLibrary') : t('gameCard.removeGroup')}><Trash2 size={16} /></button>
         )}
+        
+        {/* Status Badge */}
+        <div className="absolute bottom-2 left-2 z-10 pointer-events-none">
+          <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md border backdrop-blur-md shadow-sm ${statusStyles[computedStatus]}`}>
+            {statusLabels[computedStatus]}
+          </span>
+        </div>
+
         {game.image ? <Image src={game.image} alt={game.name} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-300" unoptimized priority={index < 8} /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameCard.noImage')}</div>}
       </div>
       
