@@ -8,6 +8,7 @@ import { Trophy, X, Calculator, History, Calendar, Plus, Users, Image as ImageIc
 import { calculateScoreString } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import confetti from "canvas-confetti"; // NEW: Confetti import
 
 export function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
@@ -16,14 +17,14 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
   const [history, setHistory] = useState<any[]>([]);
   
-  // Updated Play Mode States
   const [playMode, setPlayMode] = useState<"score" | "winner" | "coop">("score");
-  const [winnerIndex, setWinnerIndex] = useState<number>(0); // Tracks who is selected as Winner
+  const [winnerIndex, setWinnerIndex] = useState<number>(0); 
   const [coopResult, setCoopResult] = useState<"win" | "loss">("win");
   const [teamScore, setTeamScore] = useState("");
   
   const [memoryPhoto, setMemoryPhoto] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [showWinnerBounce, setShowWinnerBounce] = useState(false); // NEW: Trophy bounce state
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [listeningIdx, setListeningIdx] = useState<number | null>(null);
@@ -70,6 +71,24 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     };
     fetchRecentPlayers();
   }, [user]);
+
+  // NEW: Trigger celebration effects
+  const triggerCelebration = () => {
+    setShowWinnerBounce(true);
+    setTimeout(() => setShowWinnerBounce(false), 1200);
+
+    confetti({
+      particleCount: 70,
+      spread: 60,
+      origin: { y: 0.6 },
+      colors: ['#4f46e5', '#fbbf24', '#10b981', '#f43f5e']
+    });
+
+    setTimeout(() => {
+      confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#4f46e5', '#fbbf24'] });
+      confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#10b981', '#f43f5e'] });
+    }, 150);
+  };
 
   const addPlayerRow = () => setPlayers([...players, { name: "", scoreInput: "" }]);
   
@@ -185,7 +204,6 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     if (!user) return;
     setSaving(true);
     
-    // Auto-calculate outputs based on selected mode
     const finalScores = players.map((p, idx) => ({
       name: p.name.trim() || "Anonymous",
       score: playMode === "coop" ? 0 : playMode === "winner" ? (winnerIndex === idx ? 1 : 0) : calculateScoreString(p.scoreInput),
@@ -235,6 +253,9 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
       await batch.commit();
 
+      // Trigger visual celebrations!
+      triggerCelebration();
+
       if (matchedUids.size > 0) toast.success(`Saved and synced to ${matchedUids.size} linked accounts!`);
       else toast.success("Round saved! Ready for the next one.");
       
@@ -264,19 +285,20 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     .filter(name => name && name.trim() !== "" && name !== userNickname && name !== "Anonymous");
 
   return (
-    <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh]">
+    <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh] animate-in zoom-in-95 duration-200">
         
         <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 rounded-t-2xl shrink-0">
           <h2 className="font-black text-slate-900 dark:text-white text-lg flex items-center gap-2 truncate max-w-[320px]">
-            <Trophy className="text-amber-500 shrink-0" size={20} /> {game.name}
+            {/* NEW: Dynamic bouncing trophy class */}
+            <Trophy className={`text-amber-500 shrink-0 transition-transform ${showWinnerBounce ? "animate-bounce scale-125" : ""}`} size={20} /> {game.name}
           </h2>
-          <button onClick={onClose}><X size={20} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
+          <button onClick={onClose} className="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-90 transition-all"><X size={20} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
         </div>
         
         <div className="flex border-b dark:border-slate-700 text-sm font-bold text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 shrink-0">
-          <button onClick={() => setActiveTab("log")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "log" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50"}`}><Calculator size={16} /> {t('scores.logMatch')}</button>
-          <button onClick={() => setActiveTab("history")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "history" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50"}`}><History size={16} /> {t('scores.historyTab', { count: history.length })}</button>
+          <button onClick={() => setActiveTab("log")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "log" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50 active:bg-slate-100"}`}><Calculator size={16} /> {t('scores.logMatch')}</button>
+          <button onClick={() => setActiveTab("history")} className={`flex-1 py-3 text-center border-b-2 flex items-center justify-center gap-2 transition-colors ${activeTab === "history" ? "border-indigo-600 text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30" : "border-transparent hover:bg-slate-50 dark:hover:bg-slate-700/50 active:bg-slate-100"}`}><History size={16} /> {t('scores.historyTab', { count: history.length })}</button>
         </div>
 
         <div className="p-4 overflow-y-auto flex-1 bg-slate-50 dark:bg-slate-900/50">
@@ -284,15 +306,15 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
             <div className="space-y-5">
               
               <div className="flex bg-slate-200 dark:bg-slate-700 p-1 rounded-xl">
-                <button onClick={() => setPlayMode("score")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "score" ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>{t('scores.competitive')}</button>
-                <button onClick={() => setPlayMode("winner")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "winner" ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>{t('scores.singleWinner')}</button>
-                <button onClick={() => setPlayMode("coop")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "coop" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>{t('scores.coop')}</button>
+                <button onClick={() => setPlayMode("score")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "score" ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 active:scale-95"}`}>{t('scores.competitive')}</button>
+                <button onClick={() => setPlayMode("winner")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "winner" ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 active:scale-95"}`}>{t('scores.singleWinner')}</button>
+                <button onClick={() => setPlayMode("coop")} className={`flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all ${playMode === "coop" ? "bg-indigo-600 text-white shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 active:scale-95"}`}>{t('scores.coop')}</button>
               </div>
 
               {playMode === "coop" && (
                 <div className="flex gap-3">
-                  <button onClick={() => setCoopResult("win")} className={`flex-1 py-3 rounded-xl border-2 font-black flex flex-col items-center justify-center gap-1.5 transition-all shadow-sm ${coopResult === "win" ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 ring-2 ring-emerald-500/20" : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400"}`}><CheckCircle size={22} /> <span>{t('scores.victory')}</span></button>
-                  <button onClick={() => setCoopResult("loss")} className={`flex-1 py-3 rounded-xl border-2 font-black flex flex-col items-center justify-center gap-1.5 transition-all shadow-sm ${coopResult === "loss" ? "border-red-500 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 ring-2 ring-red-500/20" : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400"}`}><XCircle size={22} /> <span>{t('scores.defeat')}</span></button>
+                  <button onClick={() => setCoopResult("win")} className={`flex-1 py-3 rounded-xl border-2 font-black flex flex-col items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 ${coopResult === "win" ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 ring-2 ring-emerald-500/20" : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400"}`}><CheckCircle size={22} /> <span>{t('scores.victory')}</span></button>
+                  <button onClick={() => setCoopResult("loss")} className={`flex-1 py-3 rounded-xl border-2 font-black flex flex-col items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 ${coopResult === "loss" ? "border-red-500 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 ring-2 ring-red-500/20" : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400"}`}><XCircle size={22} /> <span>{t('scores.defeat')}</span></button>
                 </div>
               )}
 
@@ -318,11 +340,11 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                             onFocus={() => setFocusedPlayerIdx(idx)}
                             onBlur={() => setTimeout(() => setFocusedPlayerIdx(null), 200)}
                             onChange={(e) => updatePlayer(idx, "name", e.target.value)} 
-                            className="w-full border border-slate-200 dark:border-slate-700 bg-transparent p-2 text-sm rounded-lg text-slate-900 dark:text-white font-bold outline-none focus:ring-2 focus:ring-indigo-600" 
+                            className="w-full border border-slate-200 dark:border-slate-700 bg-transparent p-2 text-sm rounded-lg text-slate-900 dark:text-white font-bold outline-none focus:ring-2 focus:ring-indigo-600 transition-shadow" 
                           />
                           
                           {focusedPlayerIdx === idx && matches.length > 0 && (
-                            <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden">
+                            <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in slide-in-from-top-1">
                               {matches.map((matchName, i) => {
                                 const isFriend = friendNames.includes(matchName);
                                 return (
@@ -334,7 +356,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                                       updatePlayer(idx, "name", matchName);
                                       setFocusedPlayerIdx(null);
                                     }}
-                                    className="w-full text-left px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center gap-2 transition"
+                                    className="w-full text-left px-3 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 active:bg-indigo-100 flex items-center gap-2 transition"
                                   >
                                     <span title={isFriend ? "Registered Friend" : "Recent Player"} className="shrink-0 flex items-center">
                                       {isFriend ? <UserCheck size={14} className="text-emerald-500" /> : <History size={14} className="text-indigo-500" />}
@@ -353,7 +375,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                             <button 
                               type="button"
                               onClick={() => handleVoiceInput(idx)}
-                              className={`p-2 rounded-lg border text-sm transition-all shadow-xs shrink-0 ${listeningIdx === idx ? "bg-red-500 border-red-600 text-white animate-pulse" : "bg-slate-50 hover:bg-slate-100 border-slate-200 dark:bg-slate-700 dark:border-slate-600 text-slate-500 dark:text-slate-300 dark:hover:bg-slate-600"}`}
+                              className={`p-2 rounded-lg border text-sm transition-all shadow-xs shrink-0 active:scale-95 ${listeningIdx === idx ? "bg-red-500 border-red-600 text-white animate-pulse" : "bg-slate-50 hover:bg-slate-100 border-slate-200 dark:bg-slate-700 dark:border-slate-600 text-slate-500 dark:text-slate-300 dark:hover:bg-slate-600"}`}
                               title="Dictate score via voice"
                             >
                               {listeningIdx === idx ? <MicOff size={16}/> : <Mic size={16} />}
@@ -366,7 +388,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                                 placeholder={t('scores.scoreMath')} 
                                 value={player.scoreInput} 
                                 onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)} 
-                                className="w-full border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600" 
+                                className="w-full border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600 transition-shadow" 
                               />
                               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/50 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-800 shadow-sm">
                                 ={calculateScoreString(player.scoreInput)}
@@ -381,15 +403,15 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                             <button
                               type="button"
                               onClick={() => setWinnerIndex(idx)}
-                              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-bold text-sm transition-all ${winnerIndex === idx ? 'bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-900/50 dark:border-amber-700 dark:text-amber-400 shadow-sm' : 'bg-slate-50 text-slate-400 border border-slate-200 hover:bg-slate-100 dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800'}`}
+                              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-bold text-sm transition-all active:scale-95 ${winnerIndex === idx ? 'bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-900/50 dark:border-amber-700 dark:text-amber-400 shadow-sm' : 'bg-slate-50 text-slate-400 border border-slate-200 hover:bg-slate-100 dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-800'}`}
                             >
-                              {winnerIndex === idx ? <Trophy size={16} /> : <Circle size={16} />}
+                              {winnerIndex === idx ? <Trophy size={16} className="animate-in zoom-in" /> : <Circle size={16} />}
                               {winnerIndex === idx ? t('scores.winner') : t('scores.loser')}
                             </button>
                           </div>
                         )}
 
-                        {players.length > 1 && <button onClick={() => removePlayerRow(idx)} className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 p-1 shrink-0"><X size={18} /></button>}
+                        {players.length > 1 && <button onClick={() => removePlayerRow(idx)} className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 p-1 shrink-0 transition-colors active:scale-90"><X size={18} /></button>}
                       </div>
 
                       {playMode === "score" && (
@@ -399,17 +421,17 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                           ) : <div className="mr-auto"></div>}
 
                           <div className="flex items-center gap-1 bg-indigo-50 dark:bg-indigo-900/30 p-1 rounded-lg border border-indigo-100 dark:border-indigo-800/50">
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '+')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center">+</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '-')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center">-</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '*')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center">*</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '+')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">+</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '-')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">-</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '*')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">*</button>
                           </div>
 
                           <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1"></div>
 
                           <div className="flex items-center gap-1">
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 1)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs">+1</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 5)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs">+5</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 10)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs">+10</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 1)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+1</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 5)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+5</button>
+                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 10)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+10</button>
                           </div>
                         </div>
                       )}
@@ -418,17 +440,17 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                 })}
               </div>
               
-              <button onClick={addPlayerRow} className="w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition"><Plus size={16} /> {t('scores.addPlayer')}</button>
+              <button onClick={addPlayerRow} className="w-full py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98]"><Plus size={16} /> {t('scores.addPlayer')}</button>
 
               <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" />
                 {memoryPhoto ? (
-                  <div className="relative w-full h-36 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm group bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center">
+                  <div className="relative w-full h-36 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm group bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center animate-in zoom-in-95">
                     <img src={memoryPhoto} alt="Memory" className="w-full max-h-36 object-contain" />
-                    <button onClick={() => setMemoryPhoto(null)} className="absolute top-2 right-2 p-1.5 bg-slate-900/70 hover:bg-red-600 text-white rounded-full shadow transition-all"><X size={16}/></button>
+                    <button onClick={() => setMemoryPhoto(null)} className="absolute top-2 right-2 p-1.5 bg-slate-900/70 hover:bg-red-600 text-white rounded-full shadow transition-all active:scale-90"><X size={16}/></button>
                   </div>
                 ) : (
-                  <button onClick={() => fileInputRef.current?.click()} className="w-full py-3.5 border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition">
+                  <button onClick={() => fileInputRef.current?.click()} className="w-full py-3.5 border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition active:scale-[0.98]">
                     <ImageIcon size={18} /> {t('scores.attachPhoto')}
                   </button>
                 )}
@@ -441,7 +463,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                 const sortedPlayers = [...record.players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
                 
                 return (
-                  <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3 relative group/card">
+                  <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3 relative group/card transition-all hover:shadow-md">
                     <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold border-b dark:border-slate-700 pb-2 border-slate-100">
                       <span className="flex items-center gap-1"><Calendar size={14} /> {record.playedAt?.toDate() ? new Date(record.playedAt.toDate()).toLocaleDateString() : "Just now"}</span>
                       
@@ -450,7 +472,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                         {user && record.userId === user.uid && (
                           <button 
                             onClick={() => handleDeletePlay(record.id)} 
-                            className="text-slate-400 hover:text-red-500 transition-colors p-0.5 md:opacity-0 group-hover/card:opacity-100"
+                            className="text-slate-400 hover:text-red-500 transition-colors p-0.5 md:opacity-0 group-hover/card:opacity-100 active:scale-90"
                             title="Delete Match History Instance"
                           >
                             <Trash2 size={14} />
@@ -464,7 +486,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                         {sortedPlayers.map((p: any, pIdx: number) => (
                           <div key={pIdx} className="flex justify-between items-center text-sm font-semibold">
                             <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
-                              {p.rawExpression === "Win" && <Trophy className="text-amber-500 shrink-0" size={14} />} {p.name}
+                              {p.rawExpression === "Win" && <Trophy className="text-amber-500 shrink-0 animate-in zoom-in" size={14} />} {p.name}
                             </span>
                             <div className="text-right">
                               <span className={`font-black ${p.rawExpression === "Win" ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-slate-500"}`}>
@@ -520,12 +542,12 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
         </div>
         
         <div className="p-4 border-t dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 rounded-b-2xl flex justify-end gap-2 shrink-0">
-          <button onClick={onClose} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-medium transition">{t('scores.close')}</button>
+          <button onClick={onClose} className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-medium transition active:scale-95">{t('scores.close')}</button>
           {activeTab === "log" && (
             <button 
               onClick={handleSavePlay} 
               disabled={saving}
-              className="px-5 py-2 bg-indigo-600 disabled:bg-indigo-400 text-white rounded-xl font-bold hover:bg-indigo-700 transition shadow-sm"
+              className="px-5 py-2 bg-indigo-600 disabled:bg-indigo-400 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm active:scale-95"
             >
               {saving ? t('scores.syncing') : t('scores.saveMatch')}
             </button>

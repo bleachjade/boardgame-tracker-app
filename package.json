@@ -11,6 +11,7 @@
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.19.10",
     "axios": "^1.18.1",
+    "canvas-confetti": "^1.9.4",
     "cheerio": "^1.1.0",
     "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
