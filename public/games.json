@@ -1,0 +1,5812 @@
+[
+  {
+    "bggId": "224517",
+    "name": "Brass: Birmingham",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__original/img/FpyxH41Y6_ROoePAilPNEhXnzO8=/0x0/filters:format(jpeg)/pic3490053.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.56117"
+  },
+  {
+    "bggId": "161936",
+    "name": "Pandemic Legacy: Season 1",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/-Qer2BBPG7qGGDu6KcVDIw__original/img/PlzAH7swN1nsFxOXbfUvE3TkE5w=/0x0/filters:format(png)/pic2452831.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "8.50152"
+  },
+  {
+    "bggId": "174430",
+    "name": "Gloomhaven",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/sZYp_3BTDGjh2unaZfZmuA__original/img/7d-lj5Gd1e8PFnD97LYFah2c45M=/0x0/filters:format(jpeg)/pic2437871.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.5351"
+  },
+  {
+    "bggId": "342942",
+    "name": "Ark Nova",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/SoU8p28Sk1s8MSvoM4N8pQ__original/img/g4S18szTdrXCdIwVKzMKrZrYAcM=/0x0/filters:format(jpeg)/pic6293412.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "150",
+    "rating": "8.53927"
+  },
+  {
+    "bggId": "233078",
+    "name": "Twilight Imperium: Fourth Edition",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/_Ppn5lssO5OaildSE-FgFA__original/img/kVpZ0Maa_LeQGWxOqsYKP3N4KUY=/0x0/filters:format(jpeg)/pic3727516.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "480",
+    "rating": "8.56063"
+  },
+  {
+    "bggId": "167791",
+    "name": "Terraforming Mars",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/wg9oOLcsKvDesSUdZQ4rxw__original/img/thIqWDnH9utKuoKVEUqveDixprI=/0x0/filters:format(jpeg)/pic3536616.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "8.33302"
+  },
+  {
+    "bggId": "316554",
+    "name": "Dune: Imperium",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/PhjygpWSo-0labGrPBMyyg__original/img/mZzaBAEEJpMlHWWmC0R6Su0OibQ=/0x0/filters:format(jpeg)/pic5666597.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.40882"
+  },
+  {
+    "bggId": "187645",
+    "name": "Star Wars: Rebellion",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/7SrPNGBKg9IIsP4UQpOi8g__original/img/GKueTbkCk2Ramf6ai8mDj-BP6cI=/0x0/filters:format(jpeg)/pic4325841.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "240",
+    "rating": "8.42361"
+  },
+  {
+    "bggId": "266192",
+    "name": "Wingspan",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/yLZJCVLlIx4c7eJEWUNJ7w__original/img/cI782Zis9cT66j2MjSHKJGnFPNw=/0x0/filters:format(jpeg)/pic4458123.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "70",
+    "rating": "7.99683"
+  },
+  {
+    "bggId": "162886",
+    "name": "Spirit Island",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/kjCm4ZvPjIZxS-mYgSPy1g__original/img/9uLd9C3XAvInLCLhAoXqKVk56zs=/0x0/filters:format(jpeg)/pic7013651.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.33983"
+  },
+  {
+    "bggId": "169786",
+    "name": "Scythe",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/7k_nOxpO9OGIjhLq2BUZdA__original/img/HlDb9F365w0tSP8uD1vf1pfniQE=/0x0/filters:format(jpeg)/pic3163924.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "115",
+    "rating": "8.0979"
+  },
+  {
+    "bggId": "295947",
+    "name": "Cascadia",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/MjeJZfulbsM1DSV3DrGJYA__original/img/B374C04Eip7fmQBGJzgiOTp-jyQ=/0x0/filters:format(jpeg)/pic5100691.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.88579"
+  },
+  {
+    "bggId": "312484",
+    "name": "Lost Ruins of Arnak",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__original/img/CXqwimJPonWy1oyXEMgPN_ZVmUI=/0x0/filters:format(jpeg)/pic5674958.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.08273"
+  },
+  {
+    "bggId": "173346",
+    "name": "7 Wonders Duel",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/zdagMskTF7wJBPjX74XsRw__original/img/Ju836WNSaW7Mab9Vjq2TJ_FqhWQ=/0x0/filters:format(jpeg)/pic2576399.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "8.07575"
+  },
+  {
+    "bggId": "230802",
+    "name": "Azul",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/aPSHJO0d0XOpQR5X-wJonw__original/img/AkbtYVc6xXJF3c9EUrakklcclKw=/0x0/filters:format(png)/pic6973671.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.71324"
+  },
+  {
+    "bggId": "199792",
+    "name": "Everdell",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/fjE7V5LNq31yVEW_yuqI-Q__original/img/HQ1ti16wT9lqja5_h3gUfHUIcVI=/0x0/filters:format(png)/pic3918905.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "80",
+    "rating": "7.97797"
+  },
+  {
+    "bggId": "237182",
+    "name": "Root",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/JUAUWaVUzeBgzirhZNmHHw__original/img/E0s2LvtFA1L5YKk-_44D4u2VD2s=/0x0/filters:format(jpeg)/pic4254509.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "8.07131"
+  },
+  {
+    "bggId": "205637",
+    "name": "Arkham Horror: The Card Game",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/B5F5ulz0UivNgrI9Ky0euA__original/img/guEKCewM_2e5ugltSN3dTSwdZJI=/0x0/filters:format(jpeg)/pic3122349.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "8.11831"
+  },
+  {
+    "bggId": "220308",
+    "name": "Gaia Project",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/hGWFm3hbMlCDsfCsauOQ4g__original/img/tjlflQtUPFiTpLpwk1NCVCS29Ic=/0x0/filters:format(png)/pic5375625.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "150",
+    "rating": "8.34886"
+  },
+  {
+    "bggId": "283355",
+    "name": "Dune",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/2fgPg6Be--w97zoycObUgg__original/img/7PyNxWs85_OKGOm_jYVFvPwAViE=/0x0/filters:format(jpeg)/pic4815198.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "180",
+    "rating": "7.91563"
+  },
+  {
+    "bggId": "167355",
+    "name": "Nemesis",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/4KSmlm59w0GwLIlgDnJDAQ__original/img/f0VmAKrPrMRQOUcOJHekRvuysDE=/0x0/filters:format(png)/pic8211747.png",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "180",
+    "rating": "8.24736"
+  },
+  {
+    "bggId": "124361",
+    "name": "Concordia",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/CzwSm8i7tkLz6cBnrILZBg__original/img/BhJ3sB3uk-eSdR1iW4EP3cu0Wi0=/0x0/filters:format(jpeg)/pic3453267.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "100",
+    "rating": "8.07586"
+  },
+  {
+    "bggId": "148228",
+    "name": "Splendor",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__original/img/rqcUdtu_N4v-SpI96XVmpYHnJww=/0x0/filters:format(png)/pic8234167.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "7.42072"
+  },
+  {
+    "bggId": "178900",
+    "name": "Codenames",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/nC6ifPCDnAItwoKSKXVrnw__original/img/Id-jjIer_61ZbvI2_RVRCeBZFY4=/0x0/filters:format(jpeg)/pic8907965.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "15",
+    "rating": "7.5242"
+  },
+  {
+    "bggId": "68448",
+    "name": "7 Wonders",
+    "year": "2010",
+    "image": "https://cf.geekdo-images.com/35h9Za_JvMMMtx_92kT0Jg__original/img/jt70jJDZ1y1FWJs4ZQf5FI8APVY=/0x0/filters:format(jpeg)/pic7149798.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "7",
+    "playTime": "30",
+    "rating": "7.66109"
+  },
+  {
+    "bggId": "9209",
+    "name": "Ticket to Ride",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/kdWYkW-7AqG63HhqPL6ekA__original/img/rWF8r4JXXCQQ7QhiWHhmT-rQ3Pc=/0x0/filters:format(jpeg)/pic8937637.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "60",
+    "rating": "7.38502"
+  },
+  {
+    "bggId": "13",
+    "name": "Catan",
+    "year": "1995",
+    "image": "https://cf.geekdo-images.com/0XODRpReiZBFUffEcqT5-Q__original/img/oRc0AomWA9ZtFqQDZiZbIyKE1j0=/0x0/filters:format(png)/pic9156909.png",
+    "minPlayers": "3",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.09041"
+  },
+  {
+    "bggId": "822",
+    "name": "Carcassonne",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/peUgu3A20LRmAXAMyDQfpQ__original/img/bP18m_PYjyFOv1IBGgMOteQUneA=/0x0/filters:format(jpeg)/pic8621446.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "7.4164"
+  },
+  {
+    "bggId": "30549",
+    "name": "Pandemic",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/S3ybV1LAp-8SnHIXLLjVqA__original/img/IsrvRLpUV1TEyZsO5rC-btXaPz0=/0x0/filters:format(jpeg)/pic1534148.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.51218"
+  },
+  {
+    "bggId": "170216",
+    "name": "Blood Rage",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/HkZSJfQnZ3EpS214xtuplg__original/img/Myy6IPDJDzLoPdXrPXVZcddBQoQ=/0x0/filters:format(jpeg)/pic2439223.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.89469"
+  },
+  {
+    "bggId": "266507",
+    "name": "Clank! Legacy: Acquisitions Incorporated",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/hc2NDafu5c24iLJh_IZmyg__original/img/1Fpyz7j7rTvMPRiDdPjn0Vf0m2k=/0x0/filters:format(png)/pic4885780.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.48871"
+  },
+  {
+    "bggId": "256960",
+    "name": "Pax Pamir: Second Edition",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/oSM_AuKYfGIwOtKbVEsoVg__original/img/7DlaMCmuoJzm9AzelmStYIDgutI=/0x0/filters:format(png)/pic4503733.png",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "8.12391"
+  },
+  {
+    "bggId": "284083",
+    "name": "The Crew: The Quest for Planet Nine",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/98LnQShydr11OBKS46xY-Q__original/img/Q-ZkgnuBu9OTBr7J3qnqPjqamAE=/0x0/filters:format(jpeg)/pic5687013.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "20",
+    "rating": "7.75228"
+  },
+  {
+    "bggId": "331131",
+    "name": "Super Fantasy Brawl: Art of War",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/bgDVlLOMwB-aV0UqwDws7g__original/img/gf9lRKytHUFIkyijhkovFsLDO9Q=/0x0/filters:format(png)/pic6009777.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.94488"
+  },
+  {
+    "bggId": "171623",
+    "name": "The Voyages of Marco Polo",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/n1G7_aWToLAAB7Mqt8iwyA__original/img/VQddnfi_QO0r4GmUU3M8_-nuO3Q=/0x0/filters:format(png)/pic2461346.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "100",
+    "rating": "7.763"
+  },
+  {
+    "bggId": "271324",
+    "name": "It&#039;s a Wonderful World",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/od4vDTdXGPSVc-kjLqM11w__original/img/sN8TnSkFGCzNM01b_drFxwYnqlM=/0x0/filters:format(jpeg)/pic4651175.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "7.62403"
+  },
+  {
+    "bggId": "120677",
+    "name": "Terra Mystica",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/bre12I1YiXkZr7elvriz4A__original/img/_dZS7fVfdc4DhJPbqnDpwTT4uF0=/0x0/filters:format(jpeg)/pic5375624.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "150",
+    "rating": "8.03195"
+  },
+  {
+    "bggId": "141791",
+    "name": "Piñata",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/WalpQzO0F1QjFBqPUiNyfg__original/img/8VtnkQyGeYJl5ogImxO92gumx0w=/0x0/filters:format(jpeg)/pic1473624.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "6.79875"
+  },
+  {
+    "bggId": "163412",
+    "name": "Patchwork",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/xNSaIHCKr_cc7Q2rQSSJPQ__original/img/HJJdVosBV35kj8pQ6wmQMiJRhVA=/0x0/filters:format(jpeg)/pic9273518.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "7.57792"
+  },
+  {
+    "bggId": "164153",
+    "name": "Star Wars: Imperial Assault",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/pIQ_MXvaoARRp1loCHJuHg__original/img/12Xvbw01hpsAjsO0xrajZt2b5HY=/0x0/filters:format(jpeg)/pic2247647.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "7.95184"
+  },
+  {
+    "bggId": "12333",
+    "name": "Twilight Struggle",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/pNCiUUphnoeWOYfsWq0kng__original/img/Iae47UtAd_RXVd5tJ3YzbDHOv4E=/0x0/filters:format(jpeg)/pic3530661.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "180",
+    "rating": "8.22732"
+  },
+  {
+    "bggId": "233867",
+    "name": "Welcome To...",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/g4XmxyKhNVdhC3QPd1purQ__original/img/pb6XFQZFUNOr6OPysOHB3usVDFk=/0x0/filters:format(jpeg)/pic3761012.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "100",
+    "playTime": "25",
+    "rating": "7.50533"
+  },
+  {
+    "bggId": "31260",
+    "name": "Agricola",
+    "year": "2007",
+    "image": "https://cf.geekdo-images.com/3L6ZtOll9W5O6-3-EwSMyw__original/img/V37KuMJlCzpxAilzN39BzeLvc9Q=/0x0/filters:format(jpeg)/pic1899157.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "150",
+    "rating": "7.85588"
+  },
+  {
+    "bggId": "172287",
+    "name": "Champions of Midgard",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/VJwOnMF5vwJg2Yaq6ozn3Q__original/img/iEgr80D4UtP0x_WQUYSB60JwGJ0=/0x0/filters:format(jpeg)/pic2869714.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.70227"
+  },
+  {
+    "bggId": "110279",
+    "name": "Zombie Dice 2: Double Feature",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/lalzQRylUH598EEZIA_CJQ__original/img/OGqAVvby2TXA5nbLqQej4uT9jCA=/0x0/filters:format(jpeg)/pic1130535.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "99",
+    "playTime": "20",
+    "rating": "6.61862"
+  },
+  {
+    "bggId": "136888",
+    "name": "Bruges",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/A8JeebUT3mu4zUmYs9clDQ__original/img/v5d03Jz4di-I6S6C1iihj6JEeoY=/0x0/filters:format(jpeg)/pic1652004.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "7.42475"
+  },
+  {
+    "bggId": "193738",
+    "name": "Great Western Trail",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/u1l0gH7sb_vnvDvoO_QHqA__original/img/2zv_XMQoPFWk9Dn0oS4JY1IeFzw=/0x0/filters:format(jpeg)/pic4887376.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "150",
+    "rating": "8.14581"
+  },
+  {
+    "bggId": "146021",
+    "name": "Eldritch Horror",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/oxdsZKIX5_3ovDo38EIaeg__original/img/vxK08kQAEn5qPbejK2CUTyWOsig=/0x0/filters:format(jpeg)/pic1872452.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "8",
+    "playTime": "240",
+    "rating": "7.74437"
+  },
+  {
+    "bggId": "1406",
+    "name": "Monopoly",
+    "year": "1935",
+    "image": "https://cf.geekdo-images.com/9nGoBZ0MRbi6rdH47sj2Qg__original/img/bA8irydTCNlE38QSzM9EhcUIuNU=/0x0/filters:format(jpeg)/pic5786795.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "180",
+    "rating": "4.36816"
+  },
+  {
+    "bggId": "36218",
+    "name": "Dominion",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__original/img/96COuakNiLRrjDLc1sM4Zxsw4WE=/0x0/filters:format(jpeg)/pic394356.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "7.59743"
+  },
+  {
+    "bggId": "40692",
+    "name": "Small World",
+    "year": "2009",
+    "image": "https://cf.geekdo-images.com/aoPM07XzoceB-RydLh08zA__original/img/bYLzrwZO9u-3h2wyU-PHc8aTOY4=/0x0/filters:format(jpeg)/pic428828.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "80",
+    "rating": "7.19037"
+  },
+  {
+    "bggId": "2651",
+    "name": "Power Grid",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/yd6LuatytHRhcFCxCf-EEg__original/img/OS13C6W4i1XW__wWVVVaqF7BV0c=/0x0/filters:format(jpeg)/pic4459753.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "7.79831"
+  },
+  {
+    "bggId": "54043",
+    "name": "Jaipur",
+    "year": "2009",
+    "image": "https://cf.geekdo-images.com/_LTujSe_o16nvjDC-J0seA__original/img/zUnAdsgt4dCxvtoRDc_9DHbic0M=/0x0/filters:format(jpeg)/pic5100947.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "7.47859"
+  },
+  {
+    "bggId": "121921",
+    "name": "Robinson Crusoe: Adventures on the Cursed Island",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/zvHPgrNb9mgkHQk-BwVemA__original/img/OUdMMPwYXTd5JIBG9skImPqa8bg=/0x0/filters:format(jpeg)/pic6026697.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.72072"
+  },
+  {
+    "bggId": "150376",
+    "name": "Dead of Winter: A Crossroads Game",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/g4mV4BH-ZrhMUVgil-yV1A__original/img/NjrnSg1aeia8I4eETDU3I1Br7a8=/0x0/filters:format(jpeg)/pic3016500.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "7.43753"
+  },
+  {
+    "bggId": "230914",
+    "name": "Carcassonne Big Box 6",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/RuVaR99haabPBv8xQP-K7g__original/img/EJcx2LOvZUbYiBULcC0vK6iqS6A=/0x0/filters:format(png)/pic6882456.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "35",
+    "rating": "8.05403"
+  },
+  {
+    "bggId": "181304",
+    "name": "Mysterium",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/1nQ3ZKudtDeAP7IiKE-kNg__original/img/6igmXolQesapNU9yEnexip6m9B8=/0x0/filters:format(jpeg)/pic8625343.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "7",
+    "playTime": "42",
+    "rating": "7.19005"
+  },
+  {
+    "bggId": "1198",
+    "name": "SET",
+    "year": "1988",
+    "image": "https://cf.geekdo-images.com/uEtWO_Ag8OxbG6NkSZbH6A__original/img/io2YlTwg9Be3eNt5BgWOsvpjPVU=/0x0/filters:format(png)/pic7627182.png",
+    "minPlayers": "1",
+    "maxPlayers": "20",
+    "playTime": "30",
+    "rating": "6.51232"
+  },
+  {
+    "bggId": "172225",
+    "name": "Exploding Kittens",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/N8bL53-pRU7zaXDTrEaYrw__original/img/0ciN1VZYifUd0qIDO0e8cGXmiss=/0x0/filters:format(png)/pic2691976.png",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "6.06896"
+  },
+  {
+    "bggId": "131357",
+    "name": "Coup",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/MWhSY_GOe2-bmlQ2rntSVg__original/img/ayAAWBK1rAEumARNmROsOtvqW-4=/0x0/filters:format(jpeg)/pic2016054.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "15",
+    "rating": "6.97483"
+  },
+  {
+    "bggId": "192135",
+    "name": "Too Many Bones",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/wKwRk0wYBcrtLAfgn4PCdg__original/img/Wpp0vzsVe4HxXGUqiZ1hDvwAHZU=/0x0/filters:format(png)/pic6624445.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.28492"
+  },
+  {
+    "bggId": "244521",
+    "name": "Quacks",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/B1bLRWzTASZ-xx9NoAE79A__original/img/HulJk6gFzp_bxl0wzc2XEMq8NLM=/0x0/filters:format(png)/pic8780293.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.80296"
+  },
+  {
+    "bggId": "246900",
+    "name": "Eclipse: Second Dawn for the Galaxy",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/Oh3kHw6lweg6ru71Q16h2Q__original/img/yW7d4RNfU1ndISCaPlfGYUyxnRU=/0x0/filters:format(jpeg)/pic5235277.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "200",
+    "rating": "8.38549"
+  },
+  {
+    "bggId": "205059",
+    "name": "Mansions of Madness: Second Edition",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/LIooA9bTdjnE9qmhjL-UFw__original/img/Go6c8-ZiXomS8E7X4MBCdDd-aZc=/0x0/filters:format(jpeg)/pic3118622.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "180",
+    "rating": "7.91346"
+  },
+  {
+    "bggId": "201808",
+    "name": "Clank!: A Deck-Building Adventure",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/DPjV1iI0ygo5Bl3XLNRiIg__original/img/cXqOdM3BLyIeRt0GP3M3V--gF1M=/0x0/filters:format(jpeg)/pic4449526.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "7.75905"
+  },
+  {
+    "bggId": "177736",
+    "name": "A Feast for Odin",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/s9oGMCo1fcfV4Dk3EnqLZw__original/img/N1X-0JB1GapFVhl98nP4tNFXMcM=/0x0/filters:format(png)/pic3146943.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "8.16071"
+  },
+  {
+    "bggId": "266810",
+    "name": "Paladins of the West Kingdom",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/4nhokcLdYoo6ulbZ1rmGgA__original/img/9ktZDu003VVVTw0RxD-ufLYV1HQ=/0x0/filters:format(png)/pic4462987.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.95356"
+  },
+  {
+    "bggId": "2511",
+    "name": "Sherlock Holmes Consulting Detective: The Thames Murders & Other Cases",
+    "year": "1981",
+    "image": "https://cf.geekdo-images.com/ptDZ2tJ6dSNiONAx3HH8Tw__original/img/iu21NR45DwHyFY-UPW0m7hwY_vw=/0x0/filters:format(jpeg)/pic3514298.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "8",
+    "playTime": "120",
+    "rating": "7.60076"
+  },
+  {
+    "bggId": "39856",
+    "name": "Dixit",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/J0PlHArkZDJ57H-brXW2Fw__original/img/jt3kFCHJ3HJ2079dMLwipFZqdQg=/0x0/filters:format(jpeg)/pic6738336.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "7.17963"
+  },
+  {
+    "bggId": "37111",
+    "name": "Battlestar Galactica: The Board Game",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/5Q2w2rFJiFI_uV89KP6ECg__original/img/MYuRAKLRAGlIQTph2XKWjzqT7sQ=/0x0/filters:format(jpeg)/pic354500.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "180",
+    "rating": "7.73081"
+  },
+  {
+    "bggId": "98778",
+    "name": "Hanabi",
+    "year": "2010",
+    "image": "https://cf.geekdo-images.com/JDVksMwfcqoem1k_xtZrOA__original/img/5vNHZiTEhK4aRDuGXv5KImp9cmQ=/0x0/filters:format(jpeg)/pic2007286.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "25",
+    "rating": "7.02825"
+  },
+  {
+    "bggId": "16992",
+    "name": "Tsuro",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/2V3d4ryhxkS3RoPtDrvpUw__original/img/TP5U-O2eujPBK9IVmmifdfkWwdQ=/0x0/filters:format(jpeg)/pic875761.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "20",
+    "rating": "6.66772"
+  },
+  {
+    "bggId": "172081",
+    "name": "Burgle Bros.",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/cPZZhbehOr-cXE1HRa6T3w__original/img/GAmiCfqQ1UdkVxYw4LAkryGW4dY=/0x0/filters:format(png)/pic2439102.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.39871"
+  },
+  {
+    "bggId": "204583",
+    "name": "Kingdomino",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/c0m3gwZTcfKoLI63ASio8g__original/img/HT6NQPT0cSFcZXjSewtjTO_NBAE=/0x0/filters:format(png)/pic8443569.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "25",
+    "rating": "7.28716"
+  },
+  {
+    "bggId": "209010",
+    "name": "Mechs vs. Minions",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/n4J5LebMj0DQD016qW7ABw__original/img/KDP4s1942J-T52OEytY2VpUWZC0=/0x0/filters:format(jpeg)/pic3184103.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.94735"
+  },
+  {
+    "bggId": "251247",
+    "name": "Barrage",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/jEPmWvvYpqkWrKOzqIHFsg__original/img/rkHKwkUqpQC7PAGG7n2gbrcQiUY=/0x0/filters:format(png)/pic4336469.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "180",
+    "rating": "8.1342"
+  },
+  {
+    "bggId": "118048",
+    "name": "Targi",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/wHg4fOf48cs1kw1PDOk1tQ__original/img/St4ABQhpauYiq4Mt6-f38JtLOjM=/0x0/filters:format(jpeg)/pic3958793.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "60",
+    "rating": "7.58551"
+  },
+  {
+    "bggId": "126163",
+    "name": "Tzolk&#039;in: The Mayan Calendar",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/kXf7mDyDYuHg6oe8yTUIEA__original/img/f6-Au0KTnNR4nugSu2U-wPNbZCU=/0x0/filters:format(jpeg)/pic4604439.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.84455"
+  },
+  {
+    "bggId": "84876",
+    "name": "The Castles of Burgundy",
+    "year": "2011",
+    "image": "https://cf.geekdo-images.com/sH2YTQ10dHj1ibfS-KKtGA__original/img/L_gsMsuhbAe0kyq1QLAmyeKOeSs=/0x0/filters:format(jpeg)/pic8745814.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "8.16258"
+  },
+  {
+    "bggId": "170416",
+    "name": "Vast: The Crystal Caverns",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/CeXtELC0X1xjwuend_7pTg__original/img/y-f2dDCvwurzjcgFPbkj00CbXN8=/0x0/filters:format(jpeg)/pic2962290.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "150",
+    "rating": "7.08462"
+  },
+  {
+    "bggId": "342900",
+    "name": "Earthborne Rangers",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/EVfMwPiHmxDUvY32BbghBg__original/img/5hdiPHjIRQIFtAJETm4biy3ZfrI=/0x0/filters:format(jpeg)/pic7378384.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "240",
+    "rating": "8.0486"
+  },
+  {
+    "bggId": "147020",
+    "name": "Star Realms",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/EsJqPL5CB_TMt0MYL-lnVg__original/img/QXgamCDRuBoRJyU1PQjeh58Pvr8=/0x0/filters:format(jpeg)/pic1903816.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "20",
+    "rating": "7.54994"
+  },
+  {
+    "bggId": "236457",
+    "name": "Architects of the West Kingdom",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/OAX7HfOz-9N60StgADzd0g__original/img/x2Y_DYWrzzleMETfnu7Jm3R8jPo=/0x0/filters:format(png)/pic3781944.png",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "80",
+    "rating": "7.7046"
+  },
+  {
+    "bggId": "209685",
+    "name": "Century: Spice Road",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/0_KEDk4lCvryf1Ju3YQJxA__original/img/zv58Iylm_N8nfVFgRkMVM0Q9Fh8=/0x0/filters:format(jpeg)/pic3339551.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "7.2875"
+  },
+  {
+    "bggId": "129622",
+    "name": "Love Letter",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/T1ltXwapFUtghS9A7_tf4g__original/img/xIAzJY7rl-mtPStRZSqnTVsAr8Y=/0x0/filters:format(jpeg)/pic1401448.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "7.22616"
+  },
+  {
+    "bggId": "255984",
+    "name": "Sleeping Gods",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Zdt8l4oTBpFICsMyNof7Jg__original/img/-okZ810RkA8fKKhIeZyX4cnqmbE=/0x0/filters:format(png)/pic5975244.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "1200",
+    "rating": "8.08527"
+  },
+  {
+    "bggId": "221194",
+    "name": "Dinosaur Island",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/hLJv1A1TwrMrLLIJhVpKVA__original/img/LXqkRZSyg3hRMJlUMm2m83gmi_s=/0x0/filters:format(png)/pic3429338.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.52389"
+  },
+  {
+    "bggId": "104162",
+    "name": "Descent: Journeys in the Dark (Second Edition)",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/ZN2rpiJ19lg5DZk_iYMMkQ__original/img/E7OjZXGfe2Vfj2qis30aXetbQJQ=/0x0/filters:format(jpeg)/pic1180640.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "7.59983"
+  },
+  {
+    "bggId": "262712",
+    "name": "Res Arcana",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/gcALy45JfcjyKUn6T3mBIQ__original/img/YLSAurBSWEGi3PHsuQWi8St_0Yg=/0x0/filters:format(jpeg)/pic4422847.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "7.60952"
+  },
+  {
+    "bggId": "203798",
+    "name": "Attack of the Killer Kittens",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/C0j-msmY4Xt45Rpxwsfi-g__original/img/AokJBGs04IAAjEvnO5QEnegBm0I=/0x0/filters:format(jpeg)/pic3115699.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "30",
+    "rating": "5.5"
+  },
+  {
+    "bggId": "226860",
+    "name": "Battle Kittens",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/RG-AxR6sSI7UuR2T7T1vIA__original/img/3EpkJ-Liir6wu-yg_af_ymyAcZM=/0x0/filters:format(jpeg)/pic3557576.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "15",
+    "rating": "6.02038"
+  },
+  {
+    "bggId": "30618",
+    "name": "Eat Poop You Cat",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/XMkoh0Iwise1NlrwQpdqHA__original/img/8_Kn8akS9cUDREE_1uTx10xRNr0=/0x0/filters:format(jpeg)/pic611630.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "99",
+    "playTime": "20",
+    "rating": "7.44979"
+  },
+  {
+    "bggId": "336610",
+    "name": "Cat Lady: Kittens",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/L52xV4k4iPRcyCuguTnAjQ__original/img/bsMu5y66K-Ept3vpSJ0zy3-S9vw=/0x0/filters:format(png)/pic6121178.png",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "7.47479"
+  },
+  {
+    "bggId": "455201",
+    "name": "Catch a Kitten",
+    "year": "2022",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "8"
+  },
+  {
+    "bggId": "7688",
+    "name": "Memory",
+    "year": "1900",
+    "image": "https://cf.geekdo-images.com/vDo4qdmjMC0KqHEVuahGng__original/img/bXCjKGJKD0ds_ghWrfSm3wG_WZ4=/0x0/filters:format(jpeg)/pic286567.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "4.80418"
+  },
+  {
+    "bggId": "352516",
+    "name": "Couch Skeletons",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/stuZcSKTAgTOYXB9vyfH7w__original/img/5BzzZV4pliUX3iSLRJYn3-Spxz8=/0x0/filters:format(jpeg)/pic8715497.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "10",
+    "rating": "6.43137"
+  },
+  {
+    "bggId": "358880",
+    "name": "Etherfields: Kittenburg Expansion",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/MuyXJ2FuhnJI7nX9Y7kebA__original/img/LQI6P0oskmAEN7OqsqMyN5S820s=/0x0/filters:format(jpeg)/pic6746347.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "60",
+    "rating": "8.44568"
+  },
+  {
+    "bggId": "356226",
+    "name": "Exploding Kittens: 2-Player Edition",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/YRNbOa7Wt0iNctlTI_ErPQ__original/img/O4YQvywonaHc5obE1qggup0AlaY=/0x0/filters:format(jpeg)/pic6664737.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "20",
+    "rating": "6.26474"
+  },
+  {
+    "bggId": "312667",
+    "name": "Exploding Kittens: Barking Kittens",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/Yu_WYc2puk9WVTN1xvUIoA__original/img/wEfM5YgGizWMRsgO_Bgm5eHn_S8=/0x0/filters:format(jpeg)/pic7344713.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "6.79805"
+  },
+  {
+    "bggId": "383201",
+    "name": "Exploding Kittens: Cat Burglar Edition",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/x1mf3zxuHbtIzhvvsCujuQ__original/img/AvGj7t3S27eJAvmx4COlv9veDOc=/0x0/filters:format(png)/pic7630976.png",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "30",
+    "rating": "6.15217"
+  },
+  {
+    "bggId": "435944",
+    "name": "Exploding Kittens: Duels",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/tw_D2ZRlucdAdJiGtrPrUw__original/img/6dMLMiqvzl3K7iK4rN8Pt2SzDp4=/0x0/filters:format(jpeg)/pic8615581.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "10",
+    "rating": "6.1"
+  },
+  {
+    "bggId": "395906",
+    "name": "Exploding Kittens: Good vs Evil",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/VwOSk5hqgFJLDPPbX0lqDQ__original/img/hRuMCnc1ltpFnqQwW1mdU1tNzM8=/0x0/filters:format(png)/pic7633899.png",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "6.67516"
+  },
+  {
+    "bggId": "430593",
+    "name": "Exploding Kittens: Grab & Game",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/GMQDAp1dsbWJjJ1I1Lea2w__original/img/NkHTFpFSDRk-7O00SiZA5Ea4OlQ=/0x0/filters:format(jpeg)/pic8699480.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "15",
+    "rating": "6.13529"
+  },
+  {
+    "bggId": "204053",
+    "name": "Exploding Kittens: Imploding Kittens",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/I5JSKlcAKikJ8GlcFRwD6w__original/img/ZpfgFS7Ru7C6N6EZ4OlIzfT_EvU=/0x0/filters:format(jpeg)/pic3518497.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "6.97636"
+  },
+  {
+    "bggId": "246398",
+    "name": "Exploding Kittens: Newbie Edition",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/BAJPie6KN5cg6cbotqIJ0g__original/img/9m2G19IYzex-OREMqvyRlUoWO58=/0x0/filters:format(jpeg)/pic7583400.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "5.29833"
+  },
+  {
+    "bggId": "172242",
+    "name": "Exploding Kittens: NSFW Edition",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/_9v_15rJjapltOr0I74uJQ__original/img/5-sylqMMDS3r8RelWDrcNQJiUSE=/0x0/filters:format(png)/pic9005066.png",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "20",
+    "rating": "6.23043"
+  },
+  {
+    "bggId": "256804",
+    "name": "Exploding Kittens: Party Pack",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/TTsbFSWQjf6ALCmct9Q02g__original/img/X5tRRwzB7DK-hkna5VocAS6Kx0w=/0x0/filters:format(png)/pic5940391.png",
+    "minPlayers": "2",
+    "maxPlayers": "10",
+    "playTime": "15",
+    "rating": "7.04534"
+  },
+  {
+    "bggId": "343282",
+    "name": "Exploding Kittens: Recipes for Disaster",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/gbw-3lRou0Xa3hXhGmxLyw__original/img/WoPpM4Wc9MK-wgC8kNyMV-RrESg=/0x0/filters:format(jpeg)/pic6305890.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "7.0102"
+  },
+  {
+    "bggId": "260214",
+    "name": "Exploding Kittens: Streaking Kittens",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/NTKDuf6oQOXTYLP56elQ7w__original/img/5KNUp6geyom1XMopini-QYwSRZ0=/0x0/filters:format(jpeg)/pic4385457.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "7.14497"
+  },
+  {
+    "bggId": "447244",
+    "name": "Exploding Kittens: The Board Game",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/3oiMV9BNAqWX0boEUWw3bg__original/img/zEWd1JMRhNLyRThG2KDQAX6gnlU=/0x0/filters:format(jpeg)/pic8905009.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "20",
+    "rating": "5.83359"
+  },
+  {
+    "bggId": "314070",
+    "name": "Fairy, Unicorn, Mermaid, Princess, Kitten",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/TsxPy7Gn8agqo5jYR0jyBQ__original/img/0Va03toHYUtEAUwL3gAnEwQEC1o=/0x0/filters:format(jpeg)/pic5536924.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "6.90909"
+  },
+  {
+    "bggId": "62854",
+    "name": "Humpty Dumpty&#039;s Wall Game",
+    "year": "2009",
+    "image": "https://cf.geekdo-images.com/C8WBFqCLS1mO7RQ_Wbvujw__original/img/NL_ONltDJLwtamS2q5xEKUlX9jc=/0x0/filters:format(jpeg)/pic647921.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "10",
+    "playTime": "5",
+    "rating": "5.21119"
+  },
+  {
+    "bggId": "232697",
+    "name": "Hidden Compartment Pack: Expansion for Cards Against Humanity and Exploding Kittens",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/wlNZX9t9HDR7k4JI3_qXZw__original/img/ls5u6UCfv90w8OgWNAnrfOv-xIw=/0x0/filters:format(jpeg)/pic3996185.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "20",
+    "playTime": "0",
+    "rating": "6.42382"
+  },
+  {
+    "bggId": "199026",
+    "name": "Neko-in",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/CutPZbAe7iOuRWS3TQu1hg__original/img/z8_dK8LgHbR3uiBDsb-tbwGvqWA=/0x0/filters:format(png)/pic3005720.png",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "5.55"
+  },
+  {
+    "bggId": "338020",
+    "name": "The Isle of Cats: Kittens + Beasts",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/To5yybE-ENxNSAuKcNFZjQ__original/img/mBGjkD2h4YbUsgvcXVFTpuQTduo=/0x0/filters:format(jpeg)/pic6156031.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "8.23875"
+  },
+  {
+    "bggId": "290794",
+    "name": "Jungle Rumble: Meowtopia – Promo Personal Board & Kitten Tiles",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/URxHm49o9hMuzDif8m7n_A__original/img/qOqhJ-7TSgsNkfR2EY_QjEEbW54=/0x0/filters:format(jpeg)/pic4982660.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "10"
+  },
+  {
+    "bggId": "454141",
+    "name": "K-pop Kittens",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/gQbuOckoXpwgmHWCl0FlCQ__original/img/H9Dm3mk292QE8ON1JhmQfmWYx_c=/0x0/filters:format(jpeg)/pic9104442.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "6.5"
+  },
+  {
+    "bggId": "453863",
+    "name": "Kitten Apocalypse WAR",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/nweF8pF9nmAVKXQVtEulhA__original/img/ka5n0L2WRjUZ4EFZ8FKrGjZjiKI=/0x0/filters:format(jpeg)/pic9109201.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "10",
+    "playTime": "15",
+    "rating": "8"
+  },
+  {
+    "bggId": "356870",
+    "name": "Kitten Box",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/nxEar2OxodoHwsxyX1r_-Q__original/img/Q3KJkfHxP8Nwo6TnFc7f65eahWk=/0x0/filters:format(jpeg)/pic6696067.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "7.45714"
+  },
+  {
+    "bggId": "202564",
+    "name": "Cookie Box",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/SYxaVBHoKAAh_S_lRS3kVA__original/img/o3ls9idmJNMu9P06toQSX_WidJA=/0x0/filters:format(jpeg)/pic3165677.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "6.6852"
+  },
+  {
+    "bggId": "342634",
+    "name": "Kitten Caboodle",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/5K-PzpPeTMYpGMEODjSH2w__original/img/wlR_q18u7q_hT6mxcw3lGMdzy2o=/0x0/filters:format(jpeg)/pic8875426.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "15",
+    "rating": "6"
+  },
+  {
+    "bggId": "386174",
+    "name": "Kitten Capers",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/fJsNrY2Rhfqw9-OhzRXGAA__original/img/WO2suYXpwuRBw21ITm1aS-f3pQ0=/0x0/filters:format(png)/pic7490657.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "0"
+  },
+  {
+    "bggId": "232162",
+    "name": "Kitten Casualty",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/OtnpZtZxoW0JEwUb6-qAUA__original/img/K3uMQn_A1WzCgRRDo05cIpILnQ4=/0x0/filters:format(png)/pic3674378.png",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "30",
+    "rating": "6.375"
+  },
+  {
+    "bggId": "374519",
+    "name": "Kitten Dinner",
+    "year": "2024",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "30",
+    "rating": "0"
+  },
+  {
+    "bggId": "35814",
+    "name": "Katzenbande",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/2PxmM4mbEvJTQ6sUtwB8Zw__original/img/g81fv1cpQP2LfsMrksag2A4eZLM=/0x0/filters:format(jpeg)/pic591610.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "6.24074"
+  },
+  {
+    "bggId": "384190",
+    "name": "Kitten Kingdoms",
+    "year": "2024",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "0"
+  },
+  {
+    "bggId": "228740",
+    "name": "Kitten Klash",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/GN1XM16xuRchlQ8KnjKzsg__original/img/E-5wBNYdXCVqJMc_Ktl_J5JMx5c=/0x0/filters:format(jpeg)/pic3584346.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "2",
+    "rating": "5.70515"
+  },
+  {
+    "bggId": "192457",
+    "name": "Cry Havoc",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/OaKLFUgTVdUYvGxLT5QjsQ__original/img/9hr6b_e0WOJJZKLBcuBfuZ0wBuE=/0x0/filters:format(jpeg)/pic3090929.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.08308"
+  },
+  {
+    "bggId": "280239",
+    "name": "Royal Marriage",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/2eUNeq0j5p4OJKJRLhh94Q__original/img/qzJVGrldbMzR1wJt-mWTEMEHRck=/0x0/filters:format(jpeg)/pic9190030.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "20",
+    "rating": "6.16667"
+  },
+  {
+    "bggId": "266193",
+    "name": "Monopoly Cash Grab",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/lCKrSykCuxXv-A2P_XvpXw__original/img/eJyF1RAugbJ1k9j6IXw_DhdF4uE=/0x0/filters:format(png)/pic7611733.png",
+    "minPlayers": "3",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "4.53333"
+  },
+  {
+    "bggId": "310877",
+    "name": "The Year of Liberty",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/R27x8dG21lWtLs9Unlfjqw__original/img/S8ybUZ6_hpm8msGMb88cOjv2d4s=/0x0/filters:format(png)/pic5461370.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "9"
+  },
+  {
+    "bggId": "295770",
+    "name": "Frosthaven",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/cwUgf-f-qwri8UHBUnifuQ__original/img/Tk7wFDJuaU8RPjNkmyC3AWYOPpU=/0x0/filters:format(png)/pic5092291.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "180",
+    "rating": "8.72521"
+  },
+  {
+    "bggId": "285984",
+    "name": "Last Bastion",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/eL5ZK9gerP9D3cld4xXjxQ__original/img/ICX8lnG3G_APxLGcwpM3EXeb96Y=/0x0/filters:format(png)/pic4882123.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.44264"
+  },
+  {
+    "bggId": "366013",
+    "name": "Heat: Pedal to the Metal",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/-vOrd4bOspibyohYExLqWg__original/img/iXU8a9WaVlwrkiEiOxWN06y9y5g=/0x0/filters:format(png)/pic6940449.png",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "7.99394"
+  },
+  {
+    "bggId": "170042",
+    "name": "Raiders of the North Sea",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/hXdfAhgZ8OeyWLunt36wlw__original/img/f5wjooKB2dGPBlBzws5cDsuuJ-k=/0x0/filters:format(jpeg)/pic3578101.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "80",
+    "rating": "7.71826"
+  },
+  {
+    "bggId": "224037",
+    "name": "Codenames: Duet",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/VG31TvBpKngZ8ztV-N4Dcg__original/img/w-FZ84fzPZSNCI1HtrsTOfLT2B4=/0x0/filters:format(png)/pic8911183.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "7.40644"
+  },
+  {
+    "bggId": "173380",
+    "name": "Papilio",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/Ki8pGYrNGtJL4PiBrytGrw__original/img/f6KI6-Aej7fmDh6DrIBDsrdhFb0=/0x0/filters:format(jpeg)/pic2427087.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "0",
+    "rating": "6.42857"
+  },
+  {
+    "bggId": "180263",
+    "name": "The 7th Continent",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/OYne8uBCHv5oEgRfpOrV0A__original/img/jcTlhpYG2496xQtuQ277bFTIldY=/0x0/filters:format(jpeg)/pic2648303.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "1000",
+    "rating": "7.72592"
+  },
+  {
+    "bggId": "102794",
+    "name": "Caverna: The Cave Farmers",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/EAqbd46lFxo-7GumlO8U4w__original/img/oNM6bkDbjww-7nKZX-WYYmPxRws=/0x0/filters:format(jpeg)/pic5598833.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "7",
+    "playTime": "210",
+    "rating": "7.91968"
+  },
+  {
+    "bggId": "103185",
+    "name": "Walnut Grove",
+    "year": "2011",
+    "image": "https://cf.geekdo-images.com/nN7C0Z1gm6ZtYR1W75INfQ__original/img/Gf2dG3ofggYj86w1E2PNL_T_YoI=/0x0/filters:format(jpeg)/pic1132162.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "6.96189"
+  },
+  {
+    "bggId": "108745",
+    "name": "Seasons",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/awmZ9rYy-hTgea6Vdp_OoQ__original/img/bQ_yFa_JI_B8y3N4nfXcXYU_tE0=/0x0/filters:format(jpeg)/pic1299390.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "7.33099"
+  },
+  {
+    "bggId": "110308",
+    "name": "7 Wonders: Catan",
+    "year": "2011",
+    "image": "https://cf.geekdo-images.com/F99j2tOu97d_ekn3D1GGAQ__original/img/9A9TM0ILcWcu-ArlVKJ_8HPikV8=/0x0/filters:format(jpeg)/pic1115825.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "7",
+    "playTime": "30",
+    "rating": "7.09741"
+  },
+  {
+    "bggId": "111708",
+    "name": "Merchant&#039;s Bazaar",
+    "year": "2011",
+    "image": "https://cf.geekdo-images.com/-UZkcG1moj1iZQQSj-wY7w__original/img/I_eU7yzBPY2pCkjy2fcejhD6gCU=/0x0/filters:format(jpeg)/pic1143698.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "118174",
+    "name": "Compounded",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/y8JfVb35fNbp2vVREDtMBg__original/img/Ftg1jZeQ-OmHmMDSRBH7UHZDAOM=/0x0/filters:format(jpeg)/pic1322957.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "90",
+    "rating": "6.68557"
+  },
+  {
+    "bggId": "121408",
+    "name": "Trains",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/8K9Syz49KOY0nJLR4GB0eg__original/img/UIyVorQES8tTFRj4eDNCfGP7i5o=/0x0/filters:format(jpeg)/pic1606346.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.1147"
+  },
+  {
+    "bggId": "124708",
+    "name": "Mice and Mystics",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/pZFrbWXBzrkxqOotg05D9Q__original/img/2cwA1euTZ-Lm7hMBEJTBkrRl1dQ=/0x0/filters:format(jpeg)/pic1312072.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.2011"
+  },
+  {
+    "bggId": "125153",
+    "name": "The Gallerist",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/ie1GSt1XV04sXQXt-3O1UQ__original/img/59dZRZePEgtcupkRSA2zohZuHpM=/0x0/filters:format(png)/pic2503200.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "150",
+    "rating": "7.99774"
+  },
+  {
+    "bggId": "127023",
+    "name": "Kemet",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/RmZjhy7_6REp8IaXh9Zqwg__original/img/kRFfkVnQRsBDcbO46TKS6PcT6aE=/0x0/filters:format(jpeg)/pic3979527.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "7.62163"
+  },
+  {
+    "bggId": "128882",
+    "name": "The Resistance: Avalon",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/LPa6rsGcv8S0-OeNjCOAEQ__original/img/AF8HHaIad1re-eg3kd9mlm2j_ss=/0x0/filters:format(jpeg)/pic1398895.jpg",
+    "minPlayers": "5",
+    "maxPlayers": "10",
+    "playTime": "30",
+    "rating": "7.4909"
+  },
+  {
+    "bggId": "131835",
+    "name": "Boss Monster: The Dungeon Building Card Game",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/VBwaHyx-NWL3VLcCWKRA0w__original/img/izAmJ81QELl5DoK3y2bzJw55lhA=/0x0/filters:format(jpeg)/pic1732644.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "6.26946"
+  },
+  {
+    "bggId": "134352",
+    "name": "Two Rooms and a Boom",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/jmf0M01DsReKLByori6OGg__original/img/GwiB4vBd89GU_aF57BGP-QBnQQc=/0x0/filters:format(png)/pic2335221.png",
+    "minPlayers": "6",
+    "maxPlayers": "30",
+    "playTime": "20",
+    "rating": "6.98096"
+  },
+  {
+    "bggId": "137408",
+    "name": "Amerigo",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/CPTCRbcUGvW-gepKwTvjSg__original/img/s0CSe2HK5xYB5aFR3WUqJAZRAn8=/0x0/filters:format(jpeg)/pic1824151.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.43309"
+  },
+  {
+    "bggId": "137811",
+    "name": "Galactic Strike Force",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/y6zQYlx3IMlgFlEIjG9gUw__original/img/mpZXZIwGpum8Dd9uqBL2k2lp-W8=/0x0/filters:format(png)/pic1991953.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "5.66613"
+  },
+  {
+    "bggId": "140889",
+    "name": "Caveman Rocks",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "142012",
+    "name": "Vivian of Aquitane",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/7Q6i5RHKGe4WtLC6iUAw5w__original/img/tXaIzNcKMBm0TyCn9m1VNKdQjBQ=/0x0/filters:format(jpeg)/pic1643772.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "143884",
+    "name": "Machi Koro",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/_lI2eUDHfesfe5SswJiFAg__original/img/H4XHVffQ4SOxgWoG396I9LUrwg8=/0x0/filters:format(png)/pic4783831.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "6.59144"
+  },
+  {
+    "bggId": "144733",
+    "name": "Russian Railroads",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/B0oEVgeqs4_rT8oyb1_Juw__original/img/EnBmUkDKSbcBusI6nVRczadYs0M=/0x0/filters:format(jpeg)/pic1772936.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.72036"
+  },
+  {
+    "bggId": "146508",
+    "name": "T.I.M.E Stories",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/XmwCsjQ3C1Ul53ZN2o8Q-Q__original/img/sUuboe9L4_nrIokyjAE74uklCjE=/0x0/filters:format(png)/pic2617634.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.34066"
+  },
+  {
+    "bggId": "147151",
+    "name": "Concept",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/hHFs0_KRoW_FJ0cMIVgZcw__original/img/vbR7Wrdlq4fPcwUE1Ck9CowlJHY=/0x0/filters:format(jpeg)/pic4991925.jpg",
+    "minPlayers": "4",
+    "maxPlayers": "12",
+    "playTime": "40",
+    "rating": "6.73878"
+  },
+  {
+    "bggId": "148949",
+    "name": "Istanbul",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/PHH9Mreen2sBcxV6ZsE3ew__original/img/pHIJibqf-DmlOQD3CfT_rAjGmc0=/0x0/filters:format(jpeg)/pic1885326.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "60",
+    "rating": "7.53422"
+  },
+  {
+    "bggId": "150145",
+    "name": "Skull King",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/1qvA21HdRaPYwrn4tGDNaQ__original/img/Vn6PK_Ue5TX14oQ5uau4XICHEJU=/0x0/filters:format(jpeg)/pic8689185.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "30",
+    "rating": "7.52823"
+  },
+  {
+    "bggId": "153359",
+    "name": "World Wonders Supplemental Volume 3: Structures",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/Nglm5jMrvSaOsy_qpMfKSA__original/img/thC3leZs1XEwYTWYgEd4h39-h-g=/0x0/filters:format(jpeg)/pic1892631.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "155122",
+    "name": "1066, Tears to Many Mothers: The Battle of Hastings",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/lUM58zOOq18nocyVi548vQ__original/img/COBaRqsMDsILepjsTkdbF5Avkn4=/0x0/filters:format(jpeg)/pic4200779.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "60",
+    "rating": "6.99336"
+  },
+  {
+    "bggId": "155426",
+    "name": "Castles of Mad King Ludwig",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/jVAMlNeDMVZakxJPy-lDrQ__original/img/J4J6wVMItmWj4Yxt8JmuO1g76PE=/0x0/filters:format(jpeg)/pic7229993.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.49581"
+  },
+  {
+    "bggId": "155821",
+    "name": "Inis",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/6QE8mnPFmauoj2THsyUYPA__original/img/6bZdn1SNbpIqU7n5pwtncvdNE_U=/0x0/filters:format(jpeg)/pic4739757.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.81461"
+  },
+  {
+    "bggId": "157354",
+    "name": "Five Tribes: The Djinns of Naqala",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/dmo-WD6HZHVUPrbVHunaTw__original/img/PS9HXrThM8Pepbd-cuA1tX8KCYU=/0x0/filters:format(jpeg)/pic2055255.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "80",
+    "rating": "7.76393"
+  },
+  {
+    "bggId": "158899",
+    "name": "Colt Express",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/2HKX0QANk_DY7CIVK5O5fQ__original/img/okv8rhQupsrXsEJsovQ_BJV5hKA=/0x0/filters:format(jpeg)/pic2869710.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "40",
+    "rating": "7.09727"
+  },
+  {
+    "bggId": "161023",
+    "name": "Hired Guns Archetypes",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/-rpV_a8Lx99HEJWIm3-buQ__original/img/ZjPwmIiID_3bx0jLi_Q0nnKoh9c=/0x0/filters:format(jpeg)/pic2277442.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "162082",
+    "name": "Deus",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/NOz3xJ-N5ptlq3rP9m5Wug__original/img/gtzP1OE-ifZdnSHoX1pmVwpF0mY=/0x0/filters:format(png)/pic2219643.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "7.26061"
+  },
+  {
+    "bggId": "163098",
+    "name": "Nod",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/hwY-A630DgbVYBbUfgIx9g__original/img/hic4zYsC6uSHr8d1cj3J0sJvYKs=/0x0/filters:format(png)/pic2320248.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "9"
+  },
+  {
+    "bggId": "164808",
+    "name": "El Switcher",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/8NR_KApQxNX9gZx6M3GMww__original/img/qz4N-J_tV3kDL5y6sqP_ahuod7I=/0x0/filters:format(jpeg)/pic8567498.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "6.63231"
+  },
+  {
+    "bggId": "165801",
+    "name": "NHL 15",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/t6Jx96cdONK_WtkvEUOXKA__original/img/ECX11eeokE_qMcYJRD8mvO1u0NI=/0x0/filters:format(jpeg)/pic9233532.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "6.6"
+  },
+  {
+    "bggId": "166328",
+    "name": "Family Bingo",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/APC7v2OG2ro3c52w1GH-jA__original/img/q-ovAXp6lt4m5di_u5LFCYPqXwM=/0x0/filters:format(png)/pic2312839.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "40",
+    "rating": "4.68182"
+  },
+  {
+    "bggId": "167584",
+    "name": "Hel Rising",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/pQZe5e688vYOByoCC98oLA__original/img/8Ir06DXqhlVPcbbl_GLeOyzUGqA=/0x0/filters:format(jpeg)/pic2556100.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "169255",
+    "name": "A Game of Thrones: The Card Game (Second Edition)",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/2gP4Uti9RPquZVlweeapLw__original/img/BBz4zQ1fTrQtAs_lr39MF6ia-Og=/0x0/filters:format(jpeg)/pic2783386.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.4841"
+  },
+  {
+    "bggId": "170258",
+    "name": "The Secrets of the Divine: Adventure, Earth, Magic, & Water",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/h8vMKvM0FaStqf6Gk30J0A__original/img/Bs-4DIYwiRlT2qvkaueLerWMRkk=/0x0/filters:format(jpeg)/pic2334645.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "171123",
+    "name": "Monopoly: Doctor Who – Regeneration Edition",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/lVkboWiwcgBNO8Mkp4s_Lw__original/img/SL6DsjzK1csMeESRHAGjT1GPCC8=/0x0/filters:format(png)/pic2479497.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "4.55909"
+  },
+  {
+    "bggId": "174023",
+    "name": "Warband",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/xxtY8XT3h1_CKaOABTE3wg__original/img/_qESFSi6WH87iz4yEyZr3qt2gNI=/0x0/filters:format(jpeg)/pic2432775.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "7.09524"
+  },
+  {
+    "bggId": "176023",
+    "name": "Vileheart Reavers",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/Fn1TZmZyUSyQI7Lk6gQQbQ__original/img/VjTcrfFgWHp7Jhxe7nOUxEEqm7I=/0x0/filters:format(jpeg)/pic2481304.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "177023",
+    "name": "Dwarven Paladin",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/PxlsmYSK5H0YRi1y5VIDmw__original/img/Mxk7hti65PFmQuKEwv9Q_G2gqOI=/0x0/filters:format(jpeg)/pic2505303.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "178082",
+    "name": "Far Away Land Quick Start Rules",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/1Hxti7SASlLfbD2W_x45Xw__original/img/NSoedNE1f1-MDAm5QX95Uv5z4qw=/0x0/filters:format(jpeg)/pic2528131.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "8.5"
+  },
+  {
+    "bggId": "179023",
+    "name": "Snowdonia: Card 31 of 30",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/pdF4jrtzhYgokOejg23QXg__original/img/vi1L5cqdAtvc_sOK0FPwCujZ90U=/0x0/filters:format(jpeg)/pic2704784.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "90",
+    "rating": "7.52083"
+  },
+  {
+    "bggId": "180023",
+    "name": "Crítico: La revista de rol (nº 7 - Summer 2015)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/ZyRKOJUhd0-sYG5_DDk23g__original/img/RpO5Baz0w1UXdAxWpBLGl-DgGqQ=/0x0/filters:format(jpeg)/pic2572428.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "182023",
+    "name": "Eternal Glory",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/ga-y13JMc3WBnwTQyhrMsw__original/img/sUEuDJANj5X4agi7XRjWUbRcA94=/0x0/filters:format(jpeg)/pic2728584.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "40",
+    "rating": "9.4"
+  },
+  {
+    "bggId": "183023",
+    "name": "Attack on Delrakkin",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/nXKlntZo1XUCJPDUbxA5EA__original/img/wCy_opeGFpc0ZQ7S83hfhS-AsFw=/0x0/filters:format(jpeg)/pic2643855.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "184023",
+    "name": "Thief & Policeman",
+    "year": "1985",
+    "image": "https://cf.geekdo-images.com/hBK7EKqiTI1QAg6RxY9JvA__original/img/_RntSYxWSUgOma0Q6voiAlZdAjk=/0x0/filters:format(jpeg)/pic2668394.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "25",
+    "rating": "10"
+  },
+  {
+    "bggId": "185023",
+    "name": "Spooky&#039;s House of Jump Scares",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "3.66667"
+  },
+  {
+    "bggId": "187023",
+    "name": "誰も出てこない。 (Everyone Does Not Come Out)",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/p3nx-1zxwDQmH28UijFYVg__original/img/GHuGsNX-1eUVyogdH7NXNGfZ7RA=/0x0/filters:format(png)/pic2725925.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "6.03333"
+  },
+  {
+    "bggId": "188023",
+    "name": "Gears of War: Ultimate Edition",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/8JB_qePWYVMJ_FI90abVfg__original/img/WECZah3JUNBcIWtJShdLyHyBvv4=/0x0/filters:format(jpeg)/pic7172432.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "7.22222"
+  },
+  {
+    "bggId": "189023",
+    "name": "Brutal GM Screen",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/mfc2gzTSnzCcmfKfBD0HJA__original/img/sBVEVjfL-sJaoZBTg_0-Gl-hlQk=/0x0/filters:format(jpeg)/pic2777528.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "191023",
+    "name": "Tetris Ultimate",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/waBXWkNcjE12ib3fOnJgtw__original/img/zIqPsTsiAXVLb8aTunf5HXdWQZs=/0x0/filters:format(png)/pic6015913.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "192023",
+    "name": "Demyansk Shield: the Frozen Fortress, February-May 1942",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/1qHLN00SrW8MVXJgznV3YQ__original/img/z9aPjgIie90W-0xHjGZjrMEeYcU=/0x0/filters:format(jpeg)/pic3749193.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "240",
+    "rating": "7.57308"
+  },
+  {
+    "bggId": "193023",
+    "name": "Empires Of Creation",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "194023",
+    "name": "Zooloretto Würfelspiel: Affenstall",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/Lxe7fksOubvqe7ZAkyEI-w__original/img/c4XalVJeKey5o8jm_82OJSTO8H8=/0x0/filters:format(jpeg)/pic2683864.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "7.28456"
+  },
+  {
+    "bggId": "195023",
+    "name": "Unspeakable Cults: The Starry Wisdom",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/dH2WOidd7UEyEqDzxbIcYw__original/img/N_dRySY7weTUq9aiBaVcwKLT8ao=/0x0/filters:format(jpeg)/pic2922217.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "6.5"
+  },
+  {
+    "bggId": "196023",
+    "name": "Lord of the Dark Castle",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "8"
+  },
+  {
+    "bggId": "197023",
+    "name": "The Long Night",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/SM9-ryXOYobqM92iQnDw-g__original/img/iKpsKBFQGugMhs__AbWP6kjkAg4=/0x0/filters:format(jpeg)/pic2958070.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "198023",
+    "name": "Roleplaying Tips (Issue 679)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/8SIp8o2xgh97qeRwLOmpsg__original/img/i4OERio4JlRph9mKZrWBIgB1GEo=/0x0/filters:format(jpeg)/pic2983867.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "199023",
+    "name": "Epistory",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/s252qdV4Oi_U6fTnUwHpQA__original/img/NPXILpMc59JsX1oc25RBlIXoilY=/0x0/filters:format(jpeg)/pic3172232.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "7.25962"
+  },
+  {
+    "bggId": "200023",
+    "name": "Storyge",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/VuV4JKrpGmiHWJNaQCl1RQ__original/img/PEybqcPeLHulUynPoC60RJYSZ2Q=/0x0/filters:format(png)/pic3015541.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "201023",
+    "name": "Camp Nightmare",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/1osClm11bQUKByfu26iLPQ__original/img/i47P-GTgEkHJKYHtzUC4LEACf7c=/0x0/filters:format(jpeg)/pic3110662.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "7.83333"
+  },
+  {
+    "bggId": "202023",
+    "name": "Barbaria: Race to Valhalla",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/HlpMmDCa-m0KNPMSeWqqlA__original/img/vowEGArDs1nzKWwfvkM4ZLS6k9w=/0x0/filters:format(jpeg)/pic3058843.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.17368"
+  },
+  {
+    "bggId": "203023",
+    "name": "Primus (2014)",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/xfN3i78oT3OaZvCUdUkphw__original/img/0fAYYYVFGp6oUvdxBwM5IXxPbX8=/0x0/filters:format(jpeg)/pic3078053.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "204023",
+    "name": "Monks (3PP)",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/3URNBZbwnV8HCR7zjSSyaw__original/img/YVUx23vR7EDncllWlvrEVrdOWTI=/0x0/filters:format(jpeg)/pic3097066.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "205023",
+    "name": "Roomscale Tower",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "206023",
+    "name": "Wallenstein: Office – Expansion Module 4",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/vO0cLGvx1-wBRfgtyct-5g__original/img/VWusn60JYGoFaK5DjcSaksgd0LA=/0x0/filters:format(jpeg)/pic3311748.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "120",
+    "rating": "8.525"
+  },
+  {
+    "bggId": "208023",
+    "name": "Justice League: Dawn of Heroes",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/X3PmApU3S3K1jSIPoaNazg__original/img/_oTkzZ5k7ipJ7KRYuyX3xN-eUcI=/0x0/filters:format(jpeg)/pic3630399.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "6.42399"
+  },
+  {
+    "bggId": "209023",
+    "name": "Let&#039;s Play Ball!",
+    "year": "1996",
+    "image": "https://cf.geekdo-images.com/W1BgolREVncRm2OHUv_g8A__original/img/9X2Q7gltcAcxyLMHz3O_2n3tNDw=/0x0/filters:format(jpeg)/pic3180979.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "210023",
+    "name": "The World at War: Europe",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/GTl9G9ceYtYsFOLmJoZmew__original/img/u_8XYFyx5Ph1FztG61V5AR0pozc=/0x0/filters:format(png)/pic5581556.png",
+    "minPlayers": "1",
+    "maxPlayers": "3",
+    "playTime": "480",
+    "rating": "6.4875"
+  },
+  {
+    "bggId": "211023",
+    "name": "Carcassonne: The Watchtowers",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/DY0Fsa4KDhcFKV2o29jDKQ__original/img/NFS9HFhQoSCRVTGs9EsfVXqyeXQ=/0x0/filters:format(jpeg)/pic8188657.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "6.78872"
+  },
+  {
+    "bggId": "212023",
+    "name": "Noctum Mutilated Edition",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/BIi0u3wa7ndsITiYmjvT6g__original/img/pg5Mh6mrYPlIrQ18zDPP-ZGjoXg=/0x0/filters:format(jpeg)/pic3233381.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "213023",
+    "name": "(Fun) Wild Magic Surge Table Volume 3",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/tgxPtNIIzhDca-xpFSNCJA__original/img/4gS1FagHm2a2AOGLrg89iZ7Dkr8=/0x0/filters:format(jpeg)/pic3251256.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "214023",
+    "name": "Spellburst Savant",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/2mmU8vLP9_Exw_yyexfqNQ__original/img/_5doCqO3fz-YjvdSqpvrTSAA5Fg=/0x0/filters:format(jpeg)/pic3268595.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "215023",
+    "name": "Estarion: The City of Knives",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/7Bbs6q1I295FmL6kncXr7A__original/img/ZR4SERmClipkeKy7D5UOJ1EwwX0=/0x0/filters:format(jpeg)/pic3284361.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "216023",
+    "name": "Alignment Creator&#039;s Kit: A Basic Fantasy RPG Supplement",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/YFRVOhMv90jRaYhbPA-SXw__original/img/CMUViKgo4FtifrxJGrsTmvX71HA=/0x0/filters:format(png)/pic4610934.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "5"
+  },
+  {
+    "bggId": "217023",
+    "name": "Naval Engagement",
+    "year": "1870",
+    "image": "https://cf.geekdo-images.com/Xi9DxiqnlrLPpQDZUOVFjw__original/img/hpK5AkyO7wDl2crgbqo6Oqn5apA=/0x0/filters:format(jpeg)/pic3341880.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "5.33333"
+  },
+  {
+    "bggId": "218023",
+    "name": "Sorcerer/Wizard Spells VII (PRD)",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/nmCTtmxKKi888mRTP8hSnw__original/img/dBqLGPdaju_RNdF44Ko_tn87bI4=/0x0/filters:format(jpeg)/pic3341430.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "219023",
+    "name": "Slug",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "220023",
+    "name": "Dust Tactics: Panzerspähläufer I-D (Laser) – \"Hermann (Trop)\"",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/2xsvXBdV9v3FsX27TS7-Qg__original/img/hlBPXHOBnYXd4fYPTU9LjyL1WdA=/0x0/filters:format(jpeg)/pic3401301.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "7.5"
+  },
+  {
+    "bggId": "221023",
+    "name": "InQuest Gamer (Issue 140 - Dec 2006)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/jVjaIZq603LOZFUO9Nvfow__original/img/39AvSnM7z0kFC6WChqzxSTzQMLI=/0x0/filters:format(jpeg)/pic3424486.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "222023",
+    "name": "The Bride of Visbek",
+    "year": "2010",
+    "image": "https://cf.geekdo-images.com/ad8WfCXGKT6TjWLtp0ceiQ__original/img/2csxyWliS2mZOqZbTX7UMfcjQW8=/0x0/filters:format(jpeg)/pic3443438.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "223023",
+    "name": "Into the Hurricane",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/u-dhXsxkuIuRWKESSMt7nw__original/img/0ZOq26MvNl3oYydKLrhRScay1Xk=/0x0/filters:format(jpeg)/pic3458823.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "224023",
+    "name": "New Recruits: A Super Kids Adventure",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/ei7z3HBBdC4rODYlnyPwew__original/img/TQuFahREnG5boTW-4st-S_niDeo=/0x0/filters:format(jpeg)/pic3480673.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "225023",
+    "name": "Through the Breach: Core Rules (2nd Ed.)",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/zwJhPW6iJLGyXIf1nNvW9Q__original/img/ZzW4sHyyOnAVRggdusIiqvDc1sA=/0x0/filters:format(png)/pic4419144.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "7.08333"
+  },
+  {
+    "bggId": "226023",
+    "name": "Hard Bay (System Neutral Edition)",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/lccXm1HNaTar66X6LrGgmg__original/img/G20j0wSxOD1l7lSmyjA6TXnqy_Q=/0x0/filters:format(jpeg)/pic3523505.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "227023",
+    "name": "Dragonfire: Adventures – Shadows Over Dragonspear Castle",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/eymxQopuo4B0I5dA3vcbQw__original/img/1UDI1TAd30UOOEleFQzU04ELvn4=/0x0/filters:format(jpeg)/pic3817066.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "7.30523"
+  },
+  {
+    "bggId": "228023",
+    "name": "The Tomb of Dreams: A Jumpstart for Exalted Third Edition",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/rwHa4o95hojN9uUZhqCS4g__original/img/UA7byflEfuaDCQcYzksXmfN4BiI=/0x0/filters:format(jpeg)/pic3566860.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "229023",
+    "name": "The Value of a Miracle",
+    "year": "1998",
+    "image": "https://cf.geekdo-images.com/hNP2aS-77iY1esTqtb6Urg__original/img/m1-u2TJURk3B8xvfjNlZLi-w8BI=/0x0/filters:format(jpeg)/pic3588603.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "230023",
+    "name": "Magus (Issue 16 - Jun 1993)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/bdf1EMi0CYJm3mbPGnYAMg__original/img/-n2HlnG-D_O_aNnDEMrHOIoCHYk=/0x0/filters:format(jpeg)/pic3610259.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "232023",
+    "name": "Alarums & Excursions (Issue 254 - Oct 1996)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/JPNv9AQjcD2yPZE7XhZq-w__original/img/ywc03-LGq3NcUWRVBfeBJ1Tz0Jg=/0x0/filters:format(jpeg)/pic3667276.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "233023",
+    "name": "Classes of the Soul",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/O4eoWyd33coxGQfZSpsIOg__original/img/2V1NXIwEpP26qRICyyGgHzEoTXA=/0x0/filters:format(jpeg)/pic3690638.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "234023",
+    "name": "Forest Giant",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/EIuF_KD6dD5MgV5q8BE7Fg__original/img/TwcLdRLk56XUGNQFqCrStgSlQU8=/0x0/filters:format(png)/pic3710333.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "235023",
+    "name": "Rikrak&#039;s Revenge",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/tmWUQ5mlGitaXSa0zid4Bw__original/img/3ilIZ7yi9mhUYeLYwtFh4G4LFfc=/0x0/filters:format(jpeg)/pic3733500.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "236023",
+    "name": "Hart Plaza (Pathfinder)",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/_5owPDhjrHVJYUQL3FvI1A__original/img/NY6HpFRKVfwxf2zV7NoojLtS3Yo=/0x0/filters:format(jpeg)/pic3756195.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "237023",
+    "name": "Era of Kingdoms",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/cFlRf5tpT2lKhEmjDoQyRQ__original/img/ccQGEcnudMqHeNuiLlLz_5XjxGE=/0x0/filters:format(jpeg)/pic3784270.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.17347"
+  },
+  {
+    "bggId": "238023",
+    "name": "Lighthouse",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/Em8Dd94j6oc9xMnRI5l5dQ__original/img/6dLWEX8e3KmBp0xmJzm3Z3Q2uuU=/0x0/filters:format(jpeg)/pic3796851.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "239023",
+    "name": "To Wake the Soul",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/6Q8dSZLE6u6hKX4LPXm56w__original/img/uz7FCAi61SwQDVUHKBATiwS7P0M=/0x0/filters:format(jpeg)/pic3817250.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "240023",
+    "name": "Arena of Death",
+    "year": "1980",
+    "image": "https://cf.geekdo-images.com/Xin3XCTWZdDywrlkkG7-_Q__original/img/lEj4jV-NzSftKgolJ5V4RQGmI-8=/0x0/filters:format(jpeg)/pic3867945.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "241023",
+    "name": "The Employment Game",
+    "year": "1984",
+    "image": "https://cf.geekdo-images.com/SnJONTXrPtaTAMdCGrrUFw__original/img/NDtBkD5XGRBiMPNYuCDKbVWPQHs=/0x0/filters:format(jpeg)/pic3879463.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "242023",
+    "name": "Pokémon TCG: Mysterious Mountains Expansion",
+    "year": "2002",
+    "image": "https://cf.geekdo-images.com/ZyPaKWUxNDClTGOosITBCQ__original/img/gsn21QZhCUgsq2fCchRBRe1bfJo=/0x0/filters:format(jpeg)/pic6486981.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "2"
+  },
+  {
+    "bggId": "243023",
+    "name": "Ships Encounters",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/tBE_b2uJkdpBf1M-vQtWGg__original/img/uNkbK-4IDuwhAySvkMh7yDG7Hao=/0x0/filters:format(jpeg)/pic3903017.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "8"
+  },
+  {
+    "bggId": "244023",
+    "name": "Don&#039;t Starve: Hamlet",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "246023",
+    "name": "Lovable Monster Match Memory Game",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/HAt_bUKu0x5KSRaXHy23Yw__original/img/hfULriYJgX1JmANM29VFbzmdGEY=/0x0/filters:format(jpeg)/pic5438921.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "5.33333"
+  },
+  {
+    "bggId": "247023",
+    "name": "Wings of Glory: ACE Hawker Hurricane Squadron Flight Stands",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/scKY6Jw585wwbACySJ8XXg__original/img/H407zfhZB2ZD5DbKIQ0_5cYV8jQ=/0x0/filters:format(jpeg)/pic4072606.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "248023",
+    "name": "The Seagate Times (Issue 39 - 2003)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/r0smrnSdMzJpbC-UBF1STw__original/img/BOhAZuFnfQVMNasGq3tlrRaQKRI=/0x0/filters:format(jpeg)/pic4022179.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "249023",
+    "name": "Operation Warcade VR",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "250023",
+    "name": "100 Male Tribal Native Names and their Meanings",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/hwmn6AZBsQOpXEfsfybhew__original/img/XYoX78RDfmBVr7hV-qmMB6N36fk=/0x0/filters:format(jpeg)/pic4063977.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "251023",
+    "name": "Virtualities: Journal of Virtual Realities, Interactive Dramas, and Literary Constructs (Vol. 9, No. 2 - Jun 2016)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/WWU7kmDvnPrJZbsOgVgj8g__original/img/dR_v0KgCGGcPbOKsKdNl_rG6IVw=/0x0/filters:format(jpeg)/pic4083622.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "252023",
+    "name": "Psykozone",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "253023",
+    "name": "Snow Field RPG Encounter Map",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/MiAMiE0dERDOL5nvyfguXg__original/img/qQKUDbkacg0NvZyL3qyZHWLu1o0=/0x0/filters:format(jpeg)/pic4124853.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "254023",
+    "name": "Dragon Sinker",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "255023",
+    "name": "Back to BasiX (Issue #5 - Jun 2018)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/b2dW8pPBdeMiZ80wTXPQ1g__original/img/lyE12RNP4MrOGaG9uc3ZiveyeyI=/0x0/filters:format(png)/pic4174151.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "256023",
+    "name": "Sea Wall: Volume 5 of the Cities of Wonder",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/9pD2lbRoJdSP5yPbTT2cIw__original/img/HHtlmYBNbzILGAIJUVZMv92_yM8=/0x0/filters:format(png)/pic4206240.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "257023",
+    "name": "Wayfinder&#039;s Guide to Eberron",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/uWJhbNH3yB1Kq9BmlUj4Gw__original/img/W2h3JXReri08wh5ENaCWcDZ1wU0=/0x0/filters:format(jpeg)/pic4233472.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "7.35"
+  },
+  {
+    "bggId": "259023",
+    "name": "100 Flowers",
+    "year": "2013",
+    "image": "https://cf.geekdo-images.com/Ndn2N-WhZ8NxEPlI1NppIg__original/img/MEpcaNVUhy59ZJOARvJTv195Rio=/0x0/filters:format(jpeg)/pic4275475.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "260023",
+    "name": "Hyperdrome",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "261023",
+    "name": "Warden: A New Base Class for Pathfinder",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/t7iTxlfE8oJ9N82gpqlZHw__original/img/miZ5NqswITyQqkXjJjkwuFVFosc=/0x0/filters:format(png)/pic4316301.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "262023",
+    "name": "Deep Madness: Dimension Rift Epic Monster",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/Whndgn0e1WidxqWer0O4tg__original/img/-TnxokKqFSkY6Azt2LqHkvMUddQ=/0x0/filters:format(jpeg)/pic4333097.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "8.25"
+  },
+  {
+    "bggId": "263023",
+    "name": "Green Box of Games: The Meeple Mini Expansion",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/MUJQu8-P3oan-_PpQjhJng__original/img/GvnLTWWv7bUaeU3Y937zdAn7Rmw=/0x0/filters:format(jpeg)/pic4456872.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "10",
+    "playTime": "120",
+    "rating": "8.57143"
+  },
+  {
+    "bggId": "264023",
+    "name": "Witless Wizards: Druid Deck Mini Expansion",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/-gE-zFHsxuTIEbO8li6hgQ__original/img/QSrT58sJZTnuVUFTpgMBVZ9YUug=/0x0/filters:format(jpeg)/pic6467667.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "25",
+    "rating": "7.5625"
+  },
+  {
+    "bggId": "265023",
+    "name": "CardsLab Countries (Third Edition)",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/2LdFAv2UCtcHT70GZeDTIQ__original/img/GJjDtKS2XifbRMiM8Y-rtpriC4Q=/0x0/filters:format(png)/pic4426714.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "6.875"
+  },
+  {
+    "bggId": "266023",
+    "name": "Hyper Armor",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/42Trf2YO7g8yP8OWBOKhRQ__original/img/MP9lFv4yfqGCrfflKxX2RfCQDVs=/0x0/filters:format(png)/pic4430183.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "267023",
+    "name": "Santorini",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/8MZwQzU6dsoZ5cV8jwlt3w__original/img/1bA8_km4VvSP03hjO7IcW-JR1zQ=/0x0/filters:format(jpeg)/pic4463830.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "9"
+  },
+  {
+    "bggId": "268023",
+    "name": "11-09-2018",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/YYs289_tUMKZha4MZrQlrA__original/img/boE5GnBlFbJVaAWP4WeyuC7KiVw=/0x0/filters:format(jpeg)/pic4488875.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "269023",
+    "name": "The Seal of Rhydaas",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/2bZv1ZOOZudynJu9A4foEg__original/img/hOzCp66ktKif8_hzFuYfqFBvYmg=/0x0/filters:format(jpeg)/pic4504584.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "270023",
+    "name": "Jigsaw Collection Kids App",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "271023",
+    "name": "Ford Simulator 6.0",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "272023",
+    "name": "Halaster&#039;s Hoard",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/LCIoZujKQxK9__t3lkzmSw__original/img/tHw4qMyKBTyV7h9GwAnDrlutSjw=/0x0/filters:format(jpeg)/pic4570976.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "273023",
+    "name": "Jenus: Il Gioco",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/ET_nX3GLI7OSgBgYgLuksQ__original/img/yhD168XpOehtUwAAJCV8VYF2yds=/0x0/filters:format(gif)/pic3983523.gif",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "40",
+    "rating": "5.116"
+  },
+  {
+    "bggId": "274023",
+    "name": "Best Act",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/6PX_mRvFrPLV52X81q5MCw__original/img/0PG49OyQV6XZyCIDPJ0d_z5j2Ms=/0x0/filters:format(png)/pic8171604.png",
+    "minPlayers": "3",
+    "maxPlayers": "8",
+    "playTime": "15",
+    "rating": "5.8"
+  },
+  {
+    "bggId": "275023",
+    "name": "Legendary: A Marvel Deck Building Game – Legendary Organizer – Extra Dividers",
+    "year": "2016",
+    "image": "https://cf.geekdo-images.com/D9AcvtPIdyXMHeq9RAuChQ__original/img/jJWw6uVz82tn03Nw44uQnlUJDyo=/0x0/filters:format(jpeg)/pic6494388.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "276023",
+    "name": "Shadows of Macao",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/dr5iwdzj3y-VfbK2ys-M4g__original/img/QabcMZEgH2MJCaNbzkKV4Oio-D8=/0x0/filters:format(jpeg)/pic4919299.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "6.32712"
+  },
+  {
+    "bggId": "278023",
+    "name": "Ancient Theatre",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/OrgCMV-OEfCuRxxluqTTAA__original/img/cTtx7pitV1peSWDmr6xj-WiYHbM=/0x0/filters:format(jpeg)/pic4694147.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "279023",
+    "name": "Unravel Cyndy",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/JXpdxONZNRUhNjaDZ1Kx9Q__original/img/XzIxrufBIZSNI5j-eF9ciKXJsm4=/0x0/filters:format(png)/pic4806861.png",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "6"
+  },
+  {
+    "bggId": "282023",
+    "name": "Serpent&#039;s Bones Fortress",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/c9x5kY7yhBmecpcFPsO88g__original/img/sSgetXyXkDBdFTtNGd76NNma-U8=/0x0/filters:format(jpeg)/pic4783235.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "283023",
+    "name": "Name it",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/wDp89BvWXT3LLre6pI3VQg__original/img/MkcXIkfHpoFYs1ML6vJH6ALQE40=/0x0/filters:format(jpeg)/pic4816810.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "0",
+    "playTime": "60",
+    "rating": "6.6"
+  },
+  {
+    "bggId": "284023",
+    "name": "Expanded Classes #4: The Elocator",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/MB8lxK22C8Qu1fVtsJFDrA__original/img/cH7bKEsDQ2HQuxiAHeIZYUQOzng=/0x0/filters:format(png)/pic4833791.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "285023",
+    "name": "D(Liberation)20",
+    "year": "2001",
+    "image": "https://cf.geekdo-images.com/kvPAad0_QgcjIs13IpI7EQ__original/img/_Homvch3C6_wirrTWVqyYSiurQg=/0x0/filters:format(jpeg)/pic4859228.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "286023",
+    "name": "Toxic Terror",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "287023",
+    "name": "OVERWHELM",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/RAefkqqeXSk6m1sVVHvlWA__original/img/N2lFwUpepkAorzTRisIjUMCw6JY=/0x0/filters:format(png)/pic5012347.png",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "288023",
+    "name": "Zombies!: Need more Brains",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/wO_WFvz4JDL3MHGlTLKnyQ__original/img/1EPg7Q0bcs27xvsOCtNkcmHj26c=/0x0/filters:format(jpeg)/pic4947052.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "8.6"
+  },
+  {
+    "bggId": "289023",
+    "name": "Imagineers: Have More Fun",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/T-LzemBjn7TldgNBoHjMiQ__original/img/G05VG3Fb3UGJq3wTRGkVWprkDtI=/0x0/filters:format(jpeg)/pic4975211.jpg",
+    "minPlayers": "5",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "7.18462"
+  },
+  {
+    "bggId": "290023",
+    "name": "Snakes Zombie Apocalypse",
+    "year": "2019",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "0"
+  },
+  {
+    "bggId": "291023",
+    "name": "Shipyard: Insert Here Insert",
+    "year": "0",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "292023",
+    "name": "Rituale des Wahnsinns",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/aEUh053iGNmPrgtCx7nalw__original/img/5m4sPYhEeew92bQJmuod659tbQw=/0x0/filters:format(jpeg)/pic5443451.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "5.88235"
+  },
+  {
+    "bggId": "293023",
+    "name": "The Broken Dam",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/ETBA3B2ykAL_mXfQxPejSQ__original/img/np8A0cMbwuelgu2D1B6bCE9q-nQ=/0x0/filters:format(jpeg)/pic5028156.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "294023",
+    "name": "Creature Spirits Pack 03",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/qQ3bB8siQxQlKxuFYWWFaw__original/img/akRdcB_ZFvMd-S09L5EdrS4RGEk=/0x0/filters:format(jpeg)/pic5048817.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "295023",
+    "name": "Nyx and Scion",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/oAXxTAoaAZfV0ylUyI3Hrg__original/img/6HvtAH8cxvJhbnyCV_1JNQjU7VM=/0x0/filters:format(png)/pic5070169.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "296023",
+    "name": "Dragon Ball Jumpchain CYOA",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/D2byU4_4_1XqGLjEfAcWPQ__original/img/grvGIG4DRDoKtoa3hwOp8RTOm9I=/0x0/filters:format(jpeg)/pic5102278.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "297023",
+    "name": "Galaxy Challenge Board Game",
+    "year": "2014",
+    "image": "https://cf.geekdo-images.com/0WvaRU9qvuLg0DSsNIf_3g__original/img/1Ctc8XxbRcNW-51PohUeUW-eXZE=/0x0/filters:format(png)/pic5134491.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "10"
+  },
+  {
+    "bggId": "298023",
+    "name": "Bob Morane: Science Fiction",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "299023",
+    "name": "Rising Dusk",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/z8ftf4S7umpqswKLs1IhWg__original/img/OhacVR4hPbVgZlEBT2rec19T8vo=/0x0/filters:format(jpeg)/pic5958718.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "300023",
+    "name": "Die verlassene Bibliothek",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/lPBv96zhMjqdSZQRkDLUpQ__original/img/D5gmJLoavetNXAB3YqBRlSJTXjs=/0x0/filters:format(jpeg)/pic5242636.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "75",
+    "rating": "5.93946"
+  },
+  {
+    "bggId": "302023",
+    "name": "Fantasy Crusaders Chess",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/qy85m0rMz-nQISLJh9O3Vw__original/img/lSYH6VPERJyJx7GOTs8cQbFForM=/0x0/filters:format(jpeg)/pic5326339.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "303023",
+    "name": "Red Thorn Dedicants",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/qi4jh_qHk1TbTbFkaXRZdQ__original/img/YzkVlYVcQwGw0bkxpjqRD5Xknuo=/0x0/filters:format(jpeg)/pic5252782.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "304023",
+    "name": "Wings of Glory: Tripods & Triplanes – Energy Cubes",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/VB3e3MbXw01LiyyAja13DA__original/img/ZWfwZ6GmpWGpAkGocb75YvzMOqk=/0x0/filters:format(jpeg)/pic5498868.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "306023",
+    "name": "Cearnage",
+    "year": "1983",
+    "image": "https://cf.geekdo-images.com/LQFA5MK7Y6Brg-2k-lH0tA__original/img/W4qAHyf24pXsU2TzNncEzvhgOvA=/0x0/filters:format(jpeg)/pic5314628.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "307023",
+    "name": "I Ain&#039;t Been Shot, Mum: Blitzkrieg in the West – Part One: The Armies of France",
+    "year": "2018",
+    "image": "https://cf.geekdo-images.com/GCsAaMsqujFoIcYmXJKccg__original/img/fNlgs-tNYq9BzTZDbkWHyAjfFK0=/0x0/filters:format(jpeg)/pic5343732.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "0"
+  },
+  {
+    "bggId": "308023",
+    "name": "Europe Divided: EuRubel Metal Coins Set",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/eTvDNV_0YmoyuFrLqGKlrA__original/img/d4zyJXn6sRbueqUIrwxT2n0FV-0=/0x0/filters:format(jpeg)/pic5365637.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "309023",
+    "name": "Chevalerie & Sodomie",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/d5deK-q3mm2KZF1W9lCrAg__original/img/O4OR02omeMqsGDuO22Eh5N5IhJ4=/0x0/filters:format(jpeg)/pic5396854.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "310023",
+    "name": "Welcome to the Island",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/3vXBZrhKXRQm1CcsR9vbTw__original/img/t4OTLd6rXH5ZF9W7Wn1-HeSVK-Q=/0x0/filters:format(jpeg)/pic5422352.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "9"
+  },
+  {
+    "bggId": "311023",
+    "name": "Idle Factory Tycoon",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "312023",
+    "name": "Surgeon Simulator 2",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "313023",
+    "name": "Patata Burgesa",
+    "year": "2020",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "50",
+    "rating": "0"
+  },
+  {
+    "bggId": "314023",
+    "name": "Cyberwolves",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/tt4CXJ5L1LjyJz5MxCYL0A__original/img/0m3Q2Kx-7R8ZCTGZtd92lnadwcE=/0x0/filters:format(png)/pic5629468.png",
+    "minPlayers": "2",
+    "maxPlayers": "7",
+    "playTime": "30",
+    "rating": "8.5"
+  },
+  {
+    "bggId": "315023",
+    "name": "Fuel Priest",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/be--2D2wtIfmbouyPnZ4qw__original/img/ZzFw-9PYgp_pz2rP_54xcBTvbTU=/0x0/filters:format(jpeg)/pic5558780.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "6"
+  },
+  {
+    "bggId": "316023",
+    "name": "Diskwars: Broken Shadows – The Banner of the Raven",
+    "year": "2001",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "45",
+    "rating": "0"
+  },
+  {
+    "bggId": "317023",
+    "name": "Down and Out in Dredgeburg",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/IyXLJuNn32TeBliOdML7gQ__original/img/3nkVtcJgvxzmN5IC40FaTd9haxo=/0x0/filters:format(jpeg)/pic5616749.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "5.5"
+  },
+  {
+    "bggId": "318023",
+    "name": "Arkham Horror: The Card Game – Devil Reef: Mythos Pack",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/uaStemuWlE8ZdnJj6_cadg__original/img/g8bXP2TEi04Qs43xf3Xw0eMuNZI=/0x0/filters:format(png)/pic5942130.png",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "8.49128"
+  },
+  {
+    "bggId": "319023",
+    "name": "36 Wondrous Artefacts Inspired by the Bible",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/NwWMdQmXIN_fTlFHOCoxRA__original/img/YJWYGH9l4MdwpiO9ePFnqvBTVVw=/0x0/filters:format(png)/pic5640471.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "321023",
+    "name": "The Fairy Tale Files: The Cinderella Murders",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/v_48B_pAfIyKFDxnJP_n3Q__original/img/6ZN8c61Xhp3Tau4mDw2ZNQdAeIo=/0x0/filters:format(jpeg)/pic7848173.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.23"
+  },
+  {
+    "bggId": "322023",
+    "name": "Good Cop Bad Cop: Promotion Pack #1",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/f9ZK4U9sEbVDqDKjKqXEFA__original/img/xZswG2YrH4Ou-cgEXkThH7QYW2E=/0x0/filters:format(png)/pic5722253.png",
+    "minPlayers": "4",
+    "maxPlayers": "8",
+    "playTime": "45",
+    "rating": "8"
+  },
+  {
+    "bggId": "323023",
+    "name": "Other Minds (Issue 22 - Apr 2020)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/91zU0XwRb8e6yT6oEKmqJw__original/img/MMpvWGncf48OLE4wN0nP6uRUs6E=/0x0/filters:format(png)/pic5741988.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "324023",
+    "name": "Tavern Battle Map (32x24)",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/H0h-zHcQxzzpDdkqUwbKsQ__original/img/f8MzzC2UIDCCjWKpWfaPxRbwHi0=/0x0/filters:format(jpeg)/pic5764368.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "325023",
+    "name": "化けドラ～化け物對化け物ドラフトゲーム～ (BAKEDORA- The Monster War Draft Game)",
+    "year": "2020",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "25",
+    "rating": "0"
+  },
+  {
+    "bggId": "326023",
+    "name": "Upload 2019-2020",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/Kh7biNQJ1RU0JufNHo0Ftw__original/img/zUOr5ccOEPhNd0uRzayv7V-JwFY=/0x0/filters:format(jpeg)/pic5831535.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "327023",
+    "name": ".hack//Link",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "328023",
+    "name": "klym",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "329023",
+    "name": "Temple of the Bastard Elves (And Other Outstanding Issues)",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/q7Ixz1Nt5WZbENW8DU_b6Q__original/img/VVWxQMhFs5yP5XJITvGlqQR1hZs=/0x0/filters:format(jpeg)/pic6701466.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "330023",
+    "name": "Furnace: Playmat",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/jWKkZTGCOJ5VtGKyT4D2Dw__original/img/I75m2KzP48v5Yctt_Z45Lw-NL9w=/0x0/filters:format(png)/pic6009259.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "8.43333"
+  },
+  {
+    "bggId": "2629",
+    "name": "Ramses II",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/yxQEArd3dlbHjUXYdDZ7Ww__original/img/BPKZdmGlH_O6YQpfHoq82IY1_wU=/0x0/filters:format(jpeg)/pic950545.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "30",
+    "rating": "5.80209"
+  },
+  {
+    "bggId": "5751",
+    "name": "Operation Mercury: The German Airborne Assault on Crete, 1941",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/rVirfyAH6LGecGJyb5qlOg__original/img/tLhbwXwlnLaWhLtHNT1bah7d4Sc=/0x0/filters:format(jpeg)/pic45031.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "360",
+    "rating": "7.236"
+  },
+  {
+    "bggId": "7255",
+    "name": "Soldiers: Man-to-Man Combat in World War II",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/W75P2mO9pCs2RO_M9m9Yvw__original/img/7mpKANACvaqhkW6w6nufj4Jsclw=/0x0/filters:format(jpeg)/pic214263.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "90",
+    "rating": "6.88785"
+  },
+  {
+    "bggId": "7515",
+    "name": "ID: The Identity Game",
+    "year": "1988",
+    "image": "https://cf.geekdo-images.com/Yb5coa0cCt9_AIM66_SI8Q__original/img/IpkEWqUCNMPaLMqOPpLen9hQDr4=/0x0/filters:format(jpeg)/pic100013.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "0",
+    "playTime": "120",
+    "rating": "4.67391"
+  },
+  {
+    "bggId": "9612",
+    "name": "Pathfinder",
+    "year": "1954",
+    "image": "https://cf.geekdo-images.com/Eh-_iepFx1kWHqBTLR3g8g__original/img/5Ju0TcaCWvCWtdMT7bJ9bE8wJik=/0x0/filters:format(jpeg)/pic9169254.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "10",
+    "rating": "6.6"
+  },
+  {
+    "bggId": "4855",
+    "name": "Crazy Race",
+    "year": "1994",
+    "image": "https://cf.geekdo-images.com/fOuKNMFQscPyPIhO40k7sg__original/img/WbphBcQcJPbzEtI3K8f8dPaL4pU=/0x0/filters:format(jpeg)/pic1052937.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "5.99875"
+  },
+  {
+    "bggId": "20847",
+    "name": "Take Stock",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/tNytUeaWeivNe-ltp92t5Q__original/img/Y3KfFXIl7VzYX-zJwsuNIYfbZwY=/0x0/filters:format(jpeg)/pic125357.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "5.83446"
+  },
+  {
+    "bggId": "26156",
+    "name": "Ausgerechnet Uppsala",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/5WwZtWEhB_xE-Dg3lcd9TA__original/img/yzNYz4n6Nl0mneT45fzQ6-dJhiM=/0x0/filters:format(png)/pic7282686.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "20",
+    "rating": "6.47101"
+  },
+  {
+    "bggId": "27001",
+    "name": "X Factor",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/qyNe3yGS_RcCoA45CY7pkQ__original/img/QP4gF8eG_0krqbDGEu6R3dGzdLI=/0x0/filters:format(jpeg)/pic189322.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "4.5"
+  },
+  {
+    "bggId": "25076",
+    "name": "Scoreboard Cricket",
+    "year": "1976",
+    "image": "https://cf.geekdo-images.com/3_VU6c3BvnCHfc7sWNapWg__original/img/nblyk4pzbQjWwwYjpxavd7QsBXA=/0x0/filters:format(jpeg)/pic145166.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "22",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "25298",
+    "name": "Wooden Shoes & Iron Monsters",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/inRAaHJEyenWJxInUzaEAg__original/img/-N8emn6qDVcSprIV8wNCiRJegVU=/0x0/filters:format(jpeg)/pic144359.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "5",
+    "playTime": "150",
+    "rating": "7.43036"
+  },
+  {
+    "bggId": "26702",
+    "name": "Aussie Rules Super Subsistence Farmer",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/rYxp9oe9dAmTWam9Q_hGcQ__original/img/cTi-QtvnMpSJrqZOUh6sw9ZK9Mk=/0x0/filters:format(jpeg)/pic163381.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "25",
+    "rating": "5.66667"
+  },
+  {
+    "bggId": "26772",
+    "name": "Kentucky Jones",
+    "year": "1965",
+    "image": "https://cf.geekdo-images.com/H_iUX3YPShe6KzwrRk93kA__original/img/bVW4ZZcexNnNf9yg1MjGYdPQAuM=/0x0/filters:format(jpeg)/pic164826.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "6"
+  },
+  {
+    "bggId": "26988",
+    "name": "Labans spökspel",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/gn94A2mJiRyCELgi7GSiXw__original/img/ARdAZ8zNjdwmwQQPDHWV6DDtNEc=/0x0/filters:format(jpeg)/pic1111196.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "7"
+  },
+  {
+    "bggId": "10384",
+    "name": "Fleece the Flock",
+    "year": "1989",
+    "image": "https://cf.geekdo-images.com/dzLZ3jk7rmnoLw9msdV77Q__original/img/vCxQRDKDU726l7a1qbNdUksurtQ=/0x0/filters:format(jpeg)/pic55286.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "60",
+    "rating": "5"
+  },
+  {
+    "bggId": "14934",
+    "name": "Mr. Lincoln&#039;s War: Army of the Potomac",
+    "year": "1983",
+    "image": "https://cf.geekdo-images.com/pwzpNJZKk60T0VYfnW-Qyw__original/img/lM64-rbFlGoZxixTPqlZ24LaVzk=/0x0/filters:format(jpeg)/pic442471.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "6.47273"
+  },
+  {
+    "bggId": "18828",
+    "name": "Monopoly: Singapore",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/0glBd5_a3LlyUWzOGQA_vQ__original/img/e9ME4OMex2EXDSLfnAK272dngu8=/0x0/filters:format(jpeg)/pic1808342.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "60",
+    "rating": "4.9225"
+  },
+  {
+    "bggId": "23748",
+    "name": "Nice or Nasty?",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/rDUQC-5_sJ9y4jFY4qSK8Q__original/img/FIHTxUec8jmGrPcUxDKDZ-aHYA0=/0x0/filters:format(jpeg)/pic181658.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "24329",
+    "name": "Flits de Muis",
+    "year": "1991",
+    "image": "https://cf.geekdo-images.com/sY6KG0k_bW9mN4CUJm5BZA__original/img/S1GkOwUPUy77m0zv1QP9GWWqSa4=/0x0/filters:format(jpeg)/pic448028.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "5",
+    "playTime": "10",
+    "rating": "4.21429"
+  },
+  {
+    "bggId": "2167",
+    "name": "Jackpot Payoff",
+    "year": "1979",
+    "image": "https://cf.geekdo-images.com/K59I-ym1sCx5evE1_nvgSw__original/img/A16EACqsrTvVtbr2Dehg9ejabQs=/0x0/filters:format(jpeg)/pic473674.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "4.58333"
+  },
+  {
+    "bggId": "8992",
+    "name": "Millenniumopoly",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/vq5S3zju4hLQEYa2oXLP2w__original/img/uFRhxPbdeieUGKlrw5u5mkKLs0g=/0x0/filters:format(jpeg)/pic637649.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "4.375"
+  },
+  {
+    "bggId": "11652",
+    "name": "Round the World with Nellie Bly",
+    "year": "1890",
+    "image": "https://cf.geekdo-images.com/Crj0BGkrzfvU4bdsCi4C7g__original/img/SiKKuwMvojgQP_9o0b0AaRPAd5g=/0x0/filters:format(jpeg)/pic137686.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "4.45714"
+  },
+  {
+    "bggId": "23642",
+    "name": "Storm of Steel",
+    "year": "2007",
+    "image": "https://cf.geekdo-images.com/GO5xSfC8m1gsFWhRfyG5Vg__original/img/ZJ_Qp3g1e52Q8biGCRZR8cv6dnQ=/0x0/filters:format(jpeg)/pic213623.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "6.63375"
+  },
+  {
+    "bggId": "24362",
+    "name": "Alien Assault",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/-7C7PgnRMd8-PBO48ZjXZw__original/img/Y-VDOBenTa1lqBi98B7z84_bDKs=/0x0/filters:format(jpeg)/pic172420.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "4.66667"
+  },
+  {
+    "bggId": "15698",
+    "name": "Larry-Boy&#039;s Get Rid of the Fib! Game",
+    "year": "1998",
+    "image": "https://cf.geekdo-images.com/TCIbG7fcPs4HwF-cHl4bHw__original/img/JOgNpTt7kSLd6LP60boO5-tu1qo=/0x0/filters:format(jpeg)/pic235046.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "5.25833"
+  },
+  {
+    "bggId": "22516",
+    "name": "Snout! The Pass The Pigs Card Game",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/GFiAB9bFk1SXCfsBGV0QWQ__original/img/-Mv2Z0sansKL4NFZ3_R47uMfdmc=/0x0/filters:format(jpeg)/pic336865.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "15",
+    "rating": "4.06316"
+  },
+  {
+    "bggId": "25597",
+    "name": "Superchess",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/SpldXNY55JShMJFsme1YcQ__original/img/r84J_vBjMgCiKQ1cBZf4jsVU6cw=/0x0/filters:format(jpeg)/pic147354.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "6.84375"
+  },
+  {
+    "bggId": "27513",
+    "name": "Missionary Game 1: Simon kalastajan ihmeelliset seikkailut",
+    "year": "1995",
+    "image": "https://cf.geekdo-images.com/zlCxiWTYt_vTUal8dn4tfQ__original/img/ZunEYKc4RqdkqLPt4zf8rFLgb5c=/0x0/filters:format(jpeg)/pic318359.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "3.16667"
+  },
+  {
+    "bggId": "27623",
+    "name": "Acronymity",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/OEHZyO6Qkzm37eoGMigY8Q__original/img/8a3qBKukbmFIN2tCEEz_Is1YM0I=/0x0/filters:format(jpeg)/pic5347736.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "3.81818"
+  },
+  {
+    "bggId": "10772",
+    "name": "Guess Again",
+    "year": "1967",
+    "image": "https://cf.geekdo-images.com/LbCB-UcyzoTIPw7XyPOFnA__original/img/IMi7faIrpPFm3lcQ5r38A1J_xyE=/0x0/filters:format(jpeg)/pic44040.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "15",
+    "rating": "5"
+  },
+  {
+    "bggId": "15251",
+    "name": "Goose Green: Malvinas, 1982",
+    "year": "1993",
+    "image": "https://cf.geekdo-images.com/pszNWloYMG7xHBs0aoSkrQ__original/img/zbHU2SeLSR4_tfAkfQ59CRAKVac=/0x0/filters:format(jpeg)/pic65415.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "5.13333"
+  },
+  {
+    "bggId": "27332",
+    "name": "Rolly Poker",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/iVmImw5E01NGJ7hcIS0YHg__original/img/y0G7Femen1r58jNCO8qFigS0ZNc=/0x0/filters:format(jpeg)/pic172682.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "27858",
+    "name": "Locuras",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/O10x2AXM4Xvb7M-yiqr1Dw__original/img/iq6WcInEqooIX9g99mtLlXlqle8=/0x0/filters:format(jpeg)/pic189655.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "24",
+    "playTime": "75",
+    "rating": "5.07667"
+  },
+  {
+    "bggId": "15384",
+    "name": "Goats on Boats",
+    "year": "1995",
+    "image": "https://cf.geekdo-images.com/N6jRsjF_D0Z7nVrL7n0xvw__original/img/X1Crh6XK8ak5x3Em-MWuSpYahAg=/0x0/filters:format(jpeg)/pic72401.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "20",
+    "rating": "4"
+  },
+  {
+    "bggId": "22382",
+    "name": "Before I Was a Marshal I Was a Grenadier",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/OtYuBs9AkFxxQQ68TFi4hA__original/img/AIf7uMxGDU7DM71LM3Hiv3vd-4o=/0x0/filters:format(jpeg)/pic116294.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "0",
+    "playTime": "60",
+    "rating": "7"
+  },
+  {
+    "bggId": "24833",
+    "name": "Pandemonium",
+    "year": "2003",
+    "image": "https://cf.geekdo-images.com/fhG936c04O1wbeMaIqyA6Q__original/img/u42zo31TTv6whkHorz8yfPO_Yog=/0x0/filters:format(jpeg)/pic1918818.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "75",
+    "rating": "7"
+  },
+  {
+    "bggId": "25731",
+    "name": "Lock &#039;n Load: Swift and Bold",
+    "year": "2007",
+    "image": "https://cf.geekdo-images.com/pUS7XLNr_J5vf98zr_Fz4w__original/img/UN8YTdhgdDvU2axQCoVRFIcxQjM=/0x0/filters:format(jpeg)/pic198896.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "7.77684"
+  },
+  {
+    "bggId": "26712",
+    "name": "Reveal",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/p6IYRhlqTm_ryN4zjOMIjA__original/img/QYC-etWlkN37gmgvn2mCXhOJHLM=/0x0/filters:format(jpeg)/pic163427.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "0"
+  },
+  {
+    "bggId": "9477",
+    "name": "The Arabian Horse Game",
+    "year": "1984",
+    "image": "https://cf.geekdo-images.com/ngMkf_EfYW7920oXuTD0iA__original/img/dMmADzGpdlwhK6vRMLAoW93lS_8=/0x0/filters:format(jpeg)/pic40264.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "5.25"
+  },
+  {
+    "bggId": "21855",
+    "name": "Niagara: The Spirits of Niagara",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/HaAaZl0Ar3DDfv-TC85VHw__original/img/U0d4t6vjHIB0UJoRp7HCW3fTSzU=/0x0/filters:format(jpeg)/pic409747.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "6.82304"
+  },
+  {
+    "bggId": "23785",
+    "name": "Professor Noggin&#039;s Creatures of Myth & Legend",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/Xl5KdoVQigyM66NFWyl51w__original/img/sfB2negTGqjLbO9ZK9JUyG3j4ZY=/0x0/filters:format(jpeg)/pic127827.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "30",
+    "rating": "6.6"
+  },
+  {
+    "bggId": "27440",
+    "name": "Cinderella Glass Slipper Game",
+    "year": "2005",
+    "image": "https://cf.geekdo-images.com/aQDk4KLyMnGV_fLvLDH1NA__original/img/zGP2ri6gXdhnoyUk2u_xKetfXg0=/0x0/filters:format(jpeg)/pic177181.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "15",
+    "rating": "4.70455"
+  },
+  {
+    "bggId": "27727",
+    "name": "Fortress Illinois",
+    "year": "1993",
+    "image": "https://cf.geekdo-images.com/J20guWJ1nLLMGxFvYFqN4g__original/img/83HdIlDsb7T0Zpts0wCWcl4_XmQ=/0x0/filters:format(jpeg)/pic181326.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "180",
+    "rating": "7"
+  },
+  {
+    "bggId": "10439",
+    "name": "Oonie Moonie Goonie!",
+    "year": "1988",
+    "image": "https://cf.geekdo-images.com/xr5ISiZQ6oXWmc0j5irqZw__original/img/z41h2lbha6cIOJKeCIfkfioWNCw=/0x0/filters:format(jpeg)/pic43153.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "4.66667"
+  },
+  {
+    "bggId": "12165",
+    "name": "Professor Noggin&#039;s First Peoples of North America Card Game",
+    "year": "2003",
+    "image": "https://cf.geekdo-images.com/Ii3l_0ara79IGv12AehVtg__original/img/SlQv9Ae_fwZvgjHI8uWVKTOzE4w=/0x0/filters:format(jpeg)/pic49121.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "6.2"
+  },
+  {
+    "bggId": "17147",
+    "name": "Aces High: Blue Max",
+    "year": "1980",
+    "image": "https://cf.geekdo-images.com/cjtoJg0-igeyrCO1TzIfkg__original/img/xENvaASJ_wKviaKsCJIfAhwCMoI=/0x0/filters:format(jpeg)/pic5164013.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "90",
+    "rating": "6.48"
+  },
+  {
+    "bggId": "23850",
+    "name": "Hop Little Frog",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/JWSaoiGJY8qZPs7dRIWL6g__original/img/rGVDooeZjoVZhUAZURY0jWV8JeA=/0x0/filters:format(jpeg)/pic128086.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "5.83333"
+  },
+  {
+    "bggId": "6920",
+    "name": "The Omega War",
+    "year": "1983",
+    "image": "https://cf.geekdo-images.com/5VrufthkAfXxjw_zTPHr9Q__original/img/O7F_Q0EYzuVzUzcvH8LASF3IsYo=/0x0/filters:format(jpeg)/pic62553.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "45",
+    "rating": "6.82679"
+  },
+  {
+    "bggId": "15184",
+    "name": "Monopoly: Boston Red Sox 2004 World Series Champions",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/Z1BavlUsRB-H9uP4rzLlNg__original/img/ZZ4z1r1pp1sea4XLUosocNYfFrk=/0x0/filters:format(jpeg)/pic148383.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "3.44444"
+  },
+  {
+    "bggId": "17769",
+    "name": "Quatro gammon",
+    "year": "1982",
+    "image": "https://cf.geekdo-images.com/NX5RxFwnj52NdHFsaDRxMQ__original/img/gpxQwAl4-JIIQaFLK7vCxJstuEk=/0x0/filters:format(jpeg)/pic1015210.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "4.9375"
+  },
+  {
+    "bggId": "24571",
+    "name": "Polyp",
+    "year": "1977",
+    "image": "https://cf.geekdo-images.com/1GfPjE9leLaUex_IChhcDA__original/img/DYLvYmFRE6c-KWAFdLvUdUvQG0A=/0x0/filters:format(jpeg)/pic354580.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "4.5"
+  },
+  {
+    "bggId": "6124",
+    "name": "Waterloo: The Last Great Battle",
+    "year": "1981",
+    "image": "https://cf.geekdo-images.com/vpa0nb9qDNFJg8uvthYttg__original/img/MX4EdQjOZs6GdLHfKPxuH68FXXA=/0x0/filters:format(jpeg)/pic22900.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "3",
+    "playTime": "240",
+    "rating": "6.34821"
+  },
+  {
+    "bggId": "6615",
+    "name": "Napoleon at Austerlitz",
+    "year": "1981",
+    "image": "https://cf.geekdo-images.com/AC9ivvYnxdoiM9JT_T5GFw__original/img/YAcwflKYuH4P28ugA92AIDdjm8k=/0x0/filters:format(jpeg)/pic49752.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "300",
+    "rating": "6.14286"
+  },
+  {
+    "bggId": "13780",
+    "name": "In the Shadow of the Emperor",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/EPn4vnAgjIOOi-_a7vkb6A__original/img/HEq1T-tjySJhkN2acW19TuhGFzo=/0x0/filters:format(jpeg)/pic7244178.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "6.86302"
+  },
+  {
+    "bggId": "13886",
+    "name": "The Princess and the Pea",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/oiSFgAbrkQAW7CvswPF4zw__original/img/DYKA-pFy8JjvLUM2oy3vjvtZuxc=/0x0/filters:format(jpeg)/pic325904.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "5.29102"
+  },
+  {
+    "bggId": "18673",
+    "name": "Texas Politicos",
+    "year": "1979",
+    "image": "https://cf.geekdo-images.com/9Tzb10G_447FOJrz2-VC3Q__original/img/YI10nDzPUBT6X-oi0PsJK8bpVZA=/0x0/filters:format(jpeg)/pic126975.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "3"
+  },
+  {
+    "bggId": "1875",
+    "name": "Isolation",
+    "year": "1972",
+    "image": "https://cf.geekdo-images.com/f9BEsBbqppjDMBNclosU9g__original/img/3725chwRw7T6JjHVsP4UrZ8Le6o=/0x0/filters:format(jpeg)/pic371158.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "20",
+    "rating": "5.79389"
+  },
+  {
+    "bggId": "4981",
+    "name": "Sensationen",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/YZGiBfcfhx-T0htDnu6ttg__original/img/aIreCojLLkzrTYLsHFS-w3eyAYA=/0x0/filters:format(jpeg)/pic2628709.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "4.63125"
+  },
+  {
+    "bggId": "10126",
+    "name": "Spider Attack",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/aVkv9-W1Ahm-YXvn4xvtjQ__original/img/FVxFlU72OtWXCiW-zEzoObnBB6k=/0x0/filters:format(jpeg)/pic42030.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "4"
+  },
+  {
+    "bggId": "15023",
+    "name": "Le Dernier Amiral",
+    "year": "1989",
+    "image": "https://cf.geekdo-images.com/y0brP0YuCSJoenclXYuYbg__original/img/nsaMOt7V4AmkdUpECvpt7WycZdU=/0x0/filters:format(jpeg)/pic188222.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "2",
+    "rating": "5"
+  },
+  {
+    "bggId": "16867",
+    "name": "Axis Threat",
+    "year": "1981",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "360",
+    "rating": "0"
+  },
+  {
+    "bggId": "12388",
+    "name": "Boob Tube",
+    "year": "1962",
+    "image": "https://cf.geekdo-images.com/VBOIJfsuVZnUSiC4pILWMQ__original/img/9POd6rGJMU7USM3NfczuwUM7TJI=/0x0/filters:format(jpeg)/pic308820.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "20",
+    "playTime": "10",
+    "rating": "5.5"
+  },
+  {
+    "bggId": "14131",
+    "name": "Casanova",
+    "year": "2004",
+    "image": "https://cf.geekdo-images.com/3B0OIm_vUUr3xlWHaqbPOA__original/img/X8Y1kpZziesBh_ZQ8jg0qitAvqs=/0x0/filters:format(jpeg)/pic397547.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "4.76"
+  },
+  {
+    "bggId": "14232",
+    "name": "Hallo Taxi",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/YxNSoZV42zq9-4zJo11HzA__original/img/AbtYgylJOs-_jLD0tAswCRLnPFQ=/0x0/filters:format(png)/pic1463051.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "8"
+  },
+  {
+    "bggId": "20220",
+    "name": "Alfons Godnatt-spel",
+    "year": "1998",
+    "image": "https://cf.geekdo-images.com/PmMKZcjxAD_qz7nv4hidug__original/img/733RAGoYAM0YifQNkv4TMi5BfCQ=/0x0/filters:format(jpeg)/pic109479.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "15",
+    "rating": "2"
+  },
+  {
+    "bggId": "1969",
+    "name": "Point Of Law",
+    "year": "1972",
+    "image": "https://cf.geekdo-images.com/l6Fu5gWPgEhwiKMuQRQnfQ__original/img/3bTIoaDa8gMxGA_ZEXDgtnEh3VI=/0x0/filters:format(jpeg)/pic12010.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "12",
+    "playTime": "60",
+    "rating": "4.88246"
+  },
+  {
+    "bggId": "2644",
+    "name": "Who Framed Roger Rabbit?",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/-TAmxxno6XrOgLVmBzWoZw__original/img/k2Qo_HEJf47FsME6k_dJbYpwYek=/0x0/filters:format(jpeg)/pic3435184.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "5.06429"
+  },
+  {
+    "bggId": "5204",
+    "name": "Dimension Demons",
+    "year": "1981",
+    "image": "https://cf.geekdo-images.com/EISFUWic9-6hWhLiJSH4Gg__original/img/FHkgMYbL1HvP7xlQMtBEIv7ZOAI=/0x0/filters:format(jpeg)/pic17922.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "60",
+    "rating": "5.24583"
+  },
+  {
+    "bggId": "4854",
+    "name": "7th Fleet: Modern Naval Combat in the Far East",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/hVmabHQY8Udc-o8EOj48Cg__original/img/uV7UIXFjGmm0KlzCe14h694SVWc=/0x0/filters:format(jpeg)/pic522554.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "1200",
+    "rating": "7.25885"
+  },
+  {
+    "bggId": "6339",
+    "name": "Dying Lights",
+    "year": "2003",
+    "image": "https://cf.geekdo-images.com/JzTojexKJOc3XzrUiju9Cg__original/img/waoaQoJ2fjqrkkgy9EPD5Yfgkz8=/0x0/filters:format(jpeg)/pic58972.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "5.00847"
+  },
+  {
+    "bggId": "7573",
+    "name": "Mamoonia",
+    "year": "2003",
+    "image": "https://cf.geekdo-images.com/Lc4LR3Nk_n3giv-09Nd45g__original/img/GKBJBZvmwW5QbMG8xAI2ClDxFOQ=/0x0/filters:format(jpeg)/pic30758.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "180",
+    "rating": "4.53333"
+  },
+  {
+    "bggId": "10891",
+    "name": "Cat Burglar",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/Ybq1pqUD3uozLAO8RmtMUQ__original/img/2IMALtAKskurbBefw6izZt19jWQ=/0x0/filters:format(jpeg)/pic46720.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "60",
+    "rating": "6.33333"
+  },
+  {
+    "bggId": "10898",
+    "name": "Tricky Fingers",
+    "year": "1982",
+    "image": "https://cf.geekdo-images.com/LyVMtVSEzgCajCMdATmuyg__original/img/LajC05LeMfFfrCi-6_R5lbkg-40=/0x0/filters:format(jpeg)/pic145245.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "6.12923"
+  },
+  {
+    "bggId": "3944",
+    "name": "The Honeymooners Game",
+    "year": "1986",
+    "image": "https://cf.geekdo-images.com/P8v7bkji4SDHlCXNoh3VXg__original/img/sWCQzyqrUakg5_17X0lPn7aqIHg=/0x0/filters:format(jpeg)/pic11122.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "4.26389"
+  },
+  {
+    "bggId": "8405",
+    "name": "Hamburger Hill",
+    "year": "1990",
+    "image": "https://cf.geekdo-images.com/_k9H7IwKOoWoKQCyXc1n6g__original/img/_GU2e6EfkDyVHk6dl66FSIY3778=/0x0/filters:format(jpeg)/pic111312.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "6.33508"
+  },
+  {
+    "bggId": "9493",
+    "name": "Disc-Triangles",
+    "year": "1994",
+    "image": "https://cf.geekdo-images.com/njlwI8yhce6voL4AestLtw__original/img/iJhe9S-RJ4zXz3q0LyBp7CxdVog=/0x0/filters:format(jpeg)/pic122969.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "8"
+  },
+  {
+    "bggId": "13267",
+    "name": "Age of Heroes",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/-aMndh5dZRgWEB0QbM_C8w__original/img/er9Ej6n3UiiUzNEvexe-4uxI4Y4=/0x0/filters:format(jpeg)/pic54605.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "6.47059"
+  },
+  {
+    "bggId": "4261",
+    "name": "Odysseus: Role Play for the Homeric Age, Legendry & Mythology",
+    "year": "1980",
+    "image": "https://cf.geekdo-images.com/MCJhiLKIFYpBrNtB-LJzdQ__original/img/-v9Ft8hWmCeIwLlcRoS1MIROiWo=/0x0/filters:format(jpeg)/pic3710055.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "10",
+    "playTime": "120",
+    "rating": "3"
+  },
+  {
+    "bggId": "11475",
+    "name": "Kaissa",
+    "year": "1979",
+    "image": "https://cf.geekdo-images.com/2auyaek1Q2jKC1j5wC4s2Q__original/img/pabc4XYu17A9lDmmLI7PhUjaKCs=/0x0/filters:format(jpeg)/pic202714.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "14015",
+    "name": "Göring&#039;s War",
+    "year": "2002",
+    "image": "https://cf.geekdo-images.com/6I-iSipmDPy8sjoLUlTZlg__original/img/m9JpfluWLaVH1qjjMKl-vsAMG1Y=/0x0/filters:format(jpeg)/pic203066.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "4.75"
+  },
+  {
+    "bggId": "16650",
+    "name": "Security Station",
+    "year": "1980",
+    "image": "https://cf.geekdo-images.com/WA1IqbPNaF712FljuXUGWg__original/img/hLXRuPkobntB-taTeApSn3nGd8E=/0x0/filters:format(jpeg)/pic150582.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "180",
+    "rating": "6.64722"
+  },
+  {
+    "bggId": "3209",
+    "name": "Pennant Race",
+    "year": "1983",
+    "image": "https://cf.geekdo-images.com/aHJlfb9wTehYZ8BpztpbfQ__original/img/CiGiS72F-1fBjz0DTBfV8xY1bfk=/0x0/filters:format(jpeg)/pic21400.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "12",
+    "playTime": "10",
+    "rating": "5.628"
+  },
+  {
+    "bggId": "5718",
+    "name": "Cranium Cariboo",
+    "year": "1998",
+    "image": "https://cf.geekdo-images.com/mDJo3W5ozJ4mfjLA1e2sBQ__original/img/Q2V2-dJajBVuRbGelFZ_3Ps_M3Q=/0x0/filters:format(jpeg)/pic178412.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "6.07549"
+  },
+  {
+    "bggId": "5923",
+    "name": "Hell Hath No Fury",
+    "year": "1985",
+    "image": "https://cf.geekdo-images.com/jSr70uUYZNkaKU1df_bsYA__original/img/Pr7OvoI75TjnrZkgN-KlUJ07sxQ=/0x0/filters:format(jpeg)/pic80871.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "90",
+    "rating": "6.80611"
+  },
+  {
+    "bggId": "6305",
+    "name": "レムリカシリーズⅢ：アームズコレクション (Lemlican Series III: Arms Collection)",
+    "year": "1990",
+    "image": "https://cf.geekdo-images.com/4wpgsaw8U9jOumg77fOw4w__original/img/kqcVuuKi5lsMhubJdgKNnvCEDmg=/0x0/filters:format(jpeg)/pic24300.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "6"
+  },
+  {
+    "bggId": "7727",
+    "name": "Nuclear Armageddon",
+    "year": "1985",
+    "image": "https://cf.geekdo-images.com/b1L0rNnT8xkQnkjnS8oJmA__original/img/p1GEeFsVmdPLyLP1CbVYf_O9k8c=/0x0/filters:format(jpeg)/pic97475.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "5",
+    "playTime": "360",
+    "rating": "7.32143"
+  },
+  {
+    "bggId": "5064",
+    "name": "Grand Empire",
+    "year": "2002",
+    "image": "https://cf.geekdo-images.com/tw_nKx_GDeBOunPiLsZYHw__original/img/tgr2bHvWTNp45tYrArdFoLtXQkQ=/0x0/filters:format(jpeg)/pic879342.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "20",
+    "rating": "7"
+  },
+  {
+    "bggId": "5288",
+    "name": "Paratrooper: ASL Module 2",
+    "year": "1986",
+    "image": "https://cf.geekdo-images.com/FZ6UiSKLKVBeX_vYtDWLFA__original/img/yKPUcB7Tpf48DCtoz9O9d3Wr_Ig=/0x0/filters:format(jpeg)/pic479119.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "7.86956"
+  },
+  {
+    "bggId": "7699",
+    "name": "Big Bucks Baseball",
+    "year": "1987",
+    "image": "https://cf.geekdo-images.com/-x5umItNSLAcJ3AcWLd-5A__original/img/SlPAYT05XoJOwKWN7c8C_fqh8hE=/0x0/filters:format(jpeg)/pic31456.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "10",
+    "rating": "7"
+  },
+  {
+    "bggId": "5233",
+    "name": "The Great Battles of Alexander",
+    "year": "1991",
+    "image": "https://cf.geekdo-images.com/bw1FsvCh5mJzMfXNo9a0yQ__original/img/_YugC9osa-8hWBkGIinr_xK4Bfo=/0x0/filters:format(jpeg)/pic774564.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "240",
+    "rating": "7.06391"
+  },
+  {
+    "bggId": "3311",
+    "name": "Challenge the Zodiac",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/FwaarabHkVlJxs8I-WVuLQ__original/img/xf0NSYDZWpX1CcOVDET1gwsTjDQ=/0x0/filters:format(jpeg)/pic301752.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "45",
+    "rating": "1.64286"
+  },
+  {
+    "bggId": "11013",
+    "name": "Railway Rivals Map CH: China",
+    "year": "1973",
+    "image": "https://cf.geekdo-images.com/qlwrGwR7es4juZDBtyXBIw__original/img/hz40xNsL6l0KWIOdH9y-rM2BnC4=/0x0/filters:format(jpeg)/pic45175.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "6.72727"
+  },
+  {
+    "bggId": "27384",
+    "name": "Strippopoly",
+    "year": "2006",
+    "image": "https://cf.geekdo-images.com/BhjTsfXIi-_ETd6LsGgIHg__original/img/qTD5-3DwZMgnTLCeHhiru4gq_jI=/0x0/filters:format(jpeg)/pic197819.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "360",
+    "rating": "6.7"
+  },
+  {
+    "bggId": "15025",
+    "name": "Constructopolis",
+    "year": "1989",
+    "image": "https://cf.geekdo-images.com/d1Wh0DJdZw29yjigjuCYKg__original/img/gYhQJ-0U9YQ0zy26K7_dM5pN1b4=/0x0/filters:format(jpeg)/pic187667.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "2",
+    "rating": "4"
+  },
+  {
+    "bggId": "5211",
+    "name": "Antiques Roadshow: The Game",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/N4luSNhkdxiv4cm36M1Y1Q__original/img/aC78n2iNEOSEEuxfyKPX_CnAAmc=/0x0/filters:format(jpeg)/pic772142.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "4.14333"
+  },
+  {
+    "bggId": "1690",
+    "name": "Unexploded Cow",
+    "year": "2001",
+    "image": "https://cf.geekdo-images.com/3gOT63ijN6IHeXQN7wMOmg__original/img/MWtvoNdrVD8Ailg_BZpCODO-x7s=/0x0/filters:format(jpeg)/pic1732698.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "25",
+    "rating": "6.0831"
+  },
+  {
+    "bggId": "3205",
+    "name": "Da geht was ab im Morgenland",
+    "year": "1999",
+    "image": "https://cf.geekdo-images.com/8kxAIqEn5drmkwQwX2pFVQ__original/img/P5bYwUvi_mPb2o388pu3wjSAxAg=/0x0/filters:format(jpeg)/pic76486.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "10",
+    "rating": "4.75789"
+  },
+  {
+    "bggId": "4742",
+    "name": "The Ultimate Trivia Game Presented by Newsweek",
+    "year": "1984",
+    "image": "https://cf.geekdo-images.com/u9vT5Vuvd64u4WMi5ItWow__original/img/4ArehX1qgzi27bPqPkL7KpbxIgk=/0x0/filters:format(jpeg)/pic20916.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "5.25"
+  },
+  {
+    "bggId": "5713",
+    "name": "Game of Politics",
+    "year": "1935",
+    "image": "https://cf.geekdo-images.com/KKR7K6i_EDVr3HWoCABrJA__original/img/zRkRnFrDlZekCXT-sFKnWOqoYpw=/0x0/filters:format(jpeg)/pic21316.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "5.70478"
+  },
+  {
+    "bggId": "8248",
+    "name": "Shoot the Moon",
+    "year": "1986",
+    "image": "https://cf.geekdo-images.com/XP16JEljDzawdvEVj0D_MQ__original/img/gDoTFYROkLPY8xISrXRsBJ8rHeY=/0x0/filters:format(jpeg)/pic34450.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "6.23333"
+  },
+  {
+    "bggId": "2815",
+    "name": "Chutes à gogo",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/L4XMvhyLWELUZOO5LzXhAw__original/img/sYckVmxOmmx9nIfqo-C8pXqvD8w=/0x0/filters:format(jpeg)/pic7244.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "6.25"
+  },
+  {
+    "bggId": "5206",
+    "name": "Ogre",
+    "year": "1977",
+    "image": "https://cf.geekdo-images.com/9ng8DF-hodBIOFhQnLoRKg__original/img/rIEcDUsWqyFD3V03R_lDka9JeUk=/0x0/filters:format(jpeg)/pic3229789.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "3",
+    "playTime": "45",
+    "rating": "6.95115"
+  },
+  {
+    "bggId": "6314",
+    "name": "Dynamite Nurse",
+    "year": "1990",
+    "image": "https://cf.geekdo-images.com/zKYHMkxxbfS3T4HFaEq9YQ__original/img/sO-AjOS-ZJ3A4HVXQagIdQ6ZdyQ=/0x0/filters:format(jpeg)/pic24350.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "30",
+    "rating": "6.34375"
+  },
+  {
+    "bggId": "6939",
+    "name": "The Battle of Guilford Courthouse",
+    "year": "1978",
+    "image": "https://cf.geekdo-images.com/NopbqzSe1kxG4mgRJxhN7A__original/img/u8eAx9-GVVCdQsKOwLUPRWaPKcM=/0x0/filters:format(png)/pic6592053.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "6.29746"
+  },
+  {
+    "bggId": "5057",
+    "name": "Never Call Retreat",
+    "year": "1983",
+    "image": "https://cf.geekdo-images.com/XK4J6AU7bQV7HfH16C5dsQ__original/img/uglZKoJ3FEVewCxJA26Sxk6bhrw=/0x0/filters:format(jpeg)/pic16956.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "180",
+    "rating": "5.53265"
+  },
+  {
+    "bggId": "5087",
+    "name": "JED",
+    "year": "1996",
+    "image": "https://cf.geekdo-images.com/9S_wnjfGZkpRPnq5Eh2bgw__original/img/5T87OGj1TbsjluT9JHiVpww1pqg=/0x0/filters:format(jpeg)/pic197899.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "5",
+    "playTime": "45",
+    "rating": "7.5"
+  },
+  {
+    "bggId": "5470",
+    "name": "Down the Tubes",
+    "year": "1982",
+    "image": "https://cf.geekdo-images.com/mOb9qLBnAA2wOXsmu85DqQ__original/img/JGlHGvBDxieQPyVKulNUcWDyBxw=/0x0/filters:format(jpeg)/pic19722.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "10",
+    "rating": "5.084"
+  },
+  {
+    "bggId": "5764",
+    "name": "Catechic",
+    "year": "1988",
+    "image": "https://cf.geekdo-images.com/eCrq41-Gji4DBJC-HpUEjQ__original/img/x1uSiIYDt6NnX2K3W3LphsC4Yns=/0x0/filters:format(jpeg)/pic61370.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "4.67692"
+  },
+  {
+    "bggId": "3893",
+    "name": "Full Thrust",
+    "year": "1992",
+    "image": "https://cf.geekdo-images.com/nL_PdAeNJcrrbu0jyp6r9Q__original/img/1iOcLHvzVDI7NSaT4R5y3NEaYTo=/0x0/filters:format(jpeg)/pic11172.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "7.37769"
+  },
+  {
+    "bggId": "4048",
+    "name": "War of the States: Gettysburg, 1863",
+    "year": "2002",
+    "image": "https://cf.geekdo-images.com/oWf2nw3J0B1T38zmcgUZQg__original/img/DGfo8E7l_VlJDM8Pfbwco8jNsiM=/0x0/filters:format(jpeg)/pic5954119.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "480",
+    "rating": "6.1766"
+  },
+  {
+    "bggId": "4235",
+    "name": "Fulda Gap: The First Battle of the Next War",
+    "year": "1977",
+    "image": "https://cf.geekdo-images.com/lKNCDWsNuZ9IJ3gaq_ZuGQ__original/img/qq1tE2h2hoaDAycUpt2mMSvM56U=/0x0/filters:format(jpeg)/pic5745451.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "300",
+    "rating": "6.41575"
+  },
+  {
+    "bggId": "4591",
+    "name": "Criss-Cross",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/sIEVz0olZfsyvvG6-XceZQ__original/img/DKfZc9IjcHJiyY685uXNsWrRVHU=/0x0/filters:format(jpeg)/pic1254858.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "5"
+  },
+  {
+    "bggId": "3586",
+    "name": "Sherlock",
+    "year": "1999",
+    "image": "https://cf.geekdo-images.com/OoyGKsAW0tMmBrUFDHOI5A__original/img/Clgd5u0x07d2aFe40KG4AkX6tbs=/0x0/filters:format(jpeg)/pic73047.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "20",
+    "rating": "6.24705"
+  },
+  {
+    "bggId": "5012",
+    "name": "Snit Smashing",
+    "year": "1977",
+    "image": "https://cf.geekdo-images.com/tpiX1mCoFOdKqdsU9iVJsQ__original/img/G7NdTayz1p7QpFj1G344q-lLxRE=/0x0/filters:format(jpeg)/pic385380.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "5.58317"
+  },
+  {
+    "bggId": "5267",
+    "name": "Campaign",
+    "year": "1966",
+    "image": "https://cf.geekdo-images.com/LIzEb6DZ0O4CVoh7tNFAEg__original/img/FXqZJIMU0OsXw2tcY0DPGxx6oh8=/0x0/filters:format(jpeg)/pic50608.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "60",
+    "rating": "4.5"
+  },
+  {
+    "bggId": "5519",
+    "name": "Air Charter",
+    "year": "1970",
+    "image": "https://cf.geekdo-images.com/FmiWaoduqzoyIrMNb-XWAw__original/img/S_B2kl_QgMNBp3Dn6ES_cvJls0g=/0x0/filters:format(jpeg)/pic3584641.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "6.02582"
+  },
+  {
+    "bggId": "5654",
+    "name": "Seduction",
+    "year": "1966",
+    "image": "https://cf.geekdo-images.com/Zrl2AnoQ9HswEkh3mrwUXQ__original/img/lbjZat1WMeTDYSDspWwkMN6izHM=/0x0/filters:format(jpeg)/pic22042.jpg",
+    "minPlayers": "4",
+    "maxPlayers": "8",
+    "playTime": "60",
+    "rating": "1.75"
+  },
+  {
+    "bggId": "1813",
+    "name": "Chalet",
+    "year": "1976",
+    "image": "https://cf.geekdo-images.com/3LRNbT-s_4GBBlqF6yEvcw__original/img/BAecRSxhTFr3CkfCobHW8a32khA=/0x0/filters:format(jpeg)/pic48422.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "4.35"
+  },
+  {
+    "bggId": "1973",
+    "name": "Outburst Junior",
+    "year": "1989",
+    "image": "https://cf.geekdo-images.com/FWzhb01PLIB4Wyt4wBSBDQ__original/img/UaTR23K3iEusdsmdCuybsmvtvE4=/0x0/filters:format(jpeg)/pic499084.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "30",
+    "rating": "5.35179"
+  },
+  {
+    "bggId": "2114",
+    "name": "Duck, Duck, Bruce",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/l-6UIdOTcXEeiK4KTgS_QQ__original/img/9MhCzkrn_w20kSRrzYIIn7v2Pjo=/0x0/filters:format(jpeg)/pic191734.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "5",
+    "playTime": "20",
+    "rating": "6.21034"
+  },
+  {
+    "bggId": "3084",
+    "name": "Buccaneer",
+    "year": "1938",
+    "image": "https://cf.geekdo-images.com/KfGiUzURPKpoblpa9wY50w__original/img/oyt6u9_3Bn_awZvAj8k4lwrNSbA=/0x0/filters:format(jpeg)/pic506685.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "90",
+    "rating": "6.04577"
+  },
+  {
+    "bggId": "3346",
+    "name": "Sea-Life",
+    "year": "1997",
+    "image": "https://cf.geekdo-images.com/IJLb3UZydt0QWTRKyy6WYA__original/img/bOqnhfoY44YgbXI1YCI4EdutRN0=/0x0/filters:format(jpeg)/pic245015.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "20",
+    "rating": "5.3"
+  },
+  {
+    "bggId": "511",
+    "name": "Silverton",
+    "year": "1991",
+    "image": "https://cf.geekdo-images.com/UlbnIzqpeba3cKzix16Rag__original/img/RTjRGaLY5plUNJ5akLQTA3_rMLU=/0x0/filters:format(jpeg)/pic223025.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "180",
+    "rating": "7.12206"
+  },
+  {
+    "bggId": "1411",
+    "name": "Fugger, Welser, Medici",
+    "year": "1994",
+    "image": "https://cf.geekdo-images.com/hVFM2C5nWsqxcZcufhopwQ__original/img/7NvjK7xb-NT4FRfbrSgHqy2MtAA=/0x0/filters:format(jpeg)/pic9381970.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "360",
+    "rating": "6.51757"
+  },
+  {
+    "bggId": "1902",
+    "name": "Mad Scientist",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/fyLp5ZV56GBzC0hGV5mw1A__original/img/qKHj4CrwCWYbu9m_Uz9vY5l07L8=/0x0/filters:format(jpeg)/pic937883.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "4.17661"
+  },
+  {
+    "bggId": "2121",
+    "name": "The Sword and the Stars",
+    "year": "1981",
+    "image": "https://cf.geekdo-images.com/zohFUn_d2Mgltjxe2edSQg__original/img/zYJgZo_ME5HBVmQ7EAJqV7yZVkA=/0x0/filters:format(jpeg)/pic143852.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "240",
+    "rating": "6.35443"
+  },
+  {
+    "bggId": "2226",
+    "name": "Greyhounds",
+    "year": "1985",
+    "image": "https://cf.geekdo-images.com/-wFxJCsVfFFKKJVon2FhHA__original/img/NkBKphyeRxP5uEcb3hIrHDO-0PE=/0x0/filters:format(jpeg)/pic1290512.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "6.36486"
+  },
+  {
+    "bggId": "752",
+    "name": "Maul of America",
+    "year": "1998",
+    "image": "https://cf.geekdo-images.com/Cy-CWcnzpVUVaq93Dz1evQ__original/img/HumVZdrhISLuIHSX5AFYWua_8c8=/0x0/filters:format(jpeg)/pic177928.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "120",
+    "rating": "4.69017"
+  },
+  {
+    "bggId": "1653",
+    "name": "Coup",
+    "year": "1991",
+    "image": "https://cf.geekdo-images.com/hLJxL1w1nKl8cP4k77hQZQ__original/img/ZmdVmpae3enWupXWYzYf-qole8w=/0x0/filters:format(jpeg)/pic160459.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "60",
+    "rating": "5.22689"
+  },
+  {
+    "bggId": "2056",
+    "name": "Courier",
+    "year": "1976",
+    "image": "https://cf.geekdo-images.com/hk7P8D5lzPs4mX90nFrM3A__original/img/hOHihvCiqqTFw80qXK3q5seZDys=/0x0/filters:format(jpeg)/pic5434.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "20",
+    "rating": "5.2"
+  },
+  {
+    "bggId": "2151",
+    "name": "Stomp!",
+    "year": "1978",
+    "image": "https://cf.geekdo-images.com/J-T0YVcA8R3fvLKa-zGQQg__original/img/k-U6LkaW0fywd-I2FbtsGZFjRP0=/0x0/filters:format(jpeg)/pic69069.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "5.7561"
+  },
+  {
+    "bggId": "237",
+    "name": "Wooden Ships & Iron Men",
+    "year": "1974",
+    "image": "https://cf.geekdo-images.com/ShE5Vu_YsW1J3408bbW8kQ__original/img/4XHxoXaxm-VbCLZIPPLZ3JGo-8I=/0x0/filters:format(jpeg)/pic6507518.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "300",
+    "rating": "7.10626"
+  },
+  {
+    "bggId": "1104",
+    "name": "Kiezkönig",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/QYOK-HCine4SSW7QomMAIQ__original/img/xWX-KWKoR0R7NK_0GdRfekC_cCM=/0x0/filters:format(jpeg)/pic1290521.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "6",
+    "playTime": "60",
+    "rating": "3"
+  },
+  {
+    "bggId": "2720",
+    "name": "Shooting Stars: A Tactical Game of Fighter Combat in Space",
+    "year": "1980",
+    "image": "https://cf.geekdo-images.com/faFOsuiTXn4c7mp5wtgqUw__original/img/i_B69w7Zj7dtvQYcN7cZCAVFgnk=/0x0/filters:format(jpeg)/pic6994.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "6.55263"
+  },
+  {
+    "bggId": "2772",
+    "name": "Mutant Chess",
+    "year": "2001",
+    "image": "https://cf.geekdo-images.com/HpIaBmUOJT3O2cJGDcz3WA__original/img/ICYIw8Uz6ec_A-n4uG93sg4Zvrk=/0x0/filters:format(jpeg)/pic634189.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "7"
+  },
+  {
+    "bggId": "331023",
+    "name": "Storms Over Kamala",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/RQ0Zvl6a2V3MEL_sKFfqFg__original/img/E5jMakVwFlfq5sN2SYhle8gx7T4=/0x0/filters:format(jpeg)/pic5972151.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "332023",
+    "name": "Persona Drive SRD",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/JSAvDQNL0yrUeI1Utiaceg__original/img/XPo2OL9VS1FW-OLSjJ7u9VxY_1Q=/0x0/filters:format(jpeg)/pic5998738.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "333023",
+    "name": "Vojvodina (Second Edition)",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/NnJHqkbpAuYj2nKDc2nTtA__original/img/piJKvRzdEiig-tYfJ_1khWxDcmg=/0x0/filters:format(png)/pic6080485.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "6"
+  },
+  {
+    "bggId": "335023",
+    "name": "Legend of the Five Rings: The Card Game – Peace at Any Cost",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/eIwoYrV5UWJwpS7w4PhuOg__original/img/qQDRATAuhDq8aibElYlhIup7PB0=/0x0/filters:format(jpeg)/pic6078156.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "90",
+    "rating": "7.47692"
+  },
+  {
+    "bggId": "336023",
+    "name": "Delivery Agent",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "337023",
+    "name": "Dog Man: The Hot Dog Card Game",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/G3nO3lJeJqNb-PcldHPwZw__original/img/1utDoz1yDTyIyO-4NTtkBNyRXRg=/0x0/filters:format(jpeg)/pic6381396.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "4.6403"
+  },
+  {
+    "bggId": "338023",
+    "name": "Prise De Fer",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/rE1A5ZU3mUp5jJLM_8p-aA__original/img/xxq7R08LFoMZ9b67dysyrdd3eiQ=/0x0/filters:format(png)/pic6167998.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "30",
+    "rating": "6.83333"
+  },
+  {
+    "bggId": "339023",
+    "name": "Builders Pack 5",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/KA--3pRxOkZg9KnKsQG3_w__original/img/bKMOOjdVb8Tfa7IHN2V_mU0MWKY=/0x0/filters:format(jpeg)/pic6181807.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "340023",
+    "name": "Letter Drop",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/wubU5gxB-thQfgpd-vDCLQ__original/img/FRpplFl-cmP1jdVD2YiTlIdFzOE=/0x0/filters:format(jpeg)/pic6210030.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "9.5"
+  },
+  {
+    "bggId": "341023",
+    "name": "The Witcher: Old World – Monster Trail",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/VtQ2yoqv344UIOEE4t-gew__original/img/6l6zWKnLhleza0edbcf9xZUtgk0=/0x0/filters:format(png)/pic8100634.png",
+    "minPlayers": "1",
+    "maxPlayers": "5",
+    "playTime": "150",
+    "rating": "8.7433"
+  },
+  {
+    "bggId": "342023",
+    "name": "Cursed Chapel Of The Sludge Mother",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/eKW6yXUTDrdF2jvTHlgsBg__original/img/V5xUO_LNxBKakWFyeSYDIc7UK4I=/0x0/filters:format(png)/pic6269333.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "343023",
+    "name": "Backgrounds in the Kingdom of Grimsby",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/7vuLfNbTU8smkEdT4n2o8w__original/img/Nep5q7nG5UL7rJMKaoQGCCr792s=/0x0/filters:format(jpeg)/pic6299474.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "344023",
+    "name": "Dragón (No. 6 - Oct/Nov 2004)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/jAZbB7b5g0q4_wcG2TK26A__original/img/dAhkuBcImeabF2I52R2KjWz694I=/0x0/filters:format(jpeg)/pic6317577.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "345023",
+    "name": "Tennis (1983)",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "346023",
+    "name": "Left Behind",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/DjL1_TpaqkHDCggbW9TgjQ__original/img/XpD0RUrAszFmWpItbPG95__3TVc=/0x0/filters:format(jpeg)/pic6363882.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "347023",
+    "name": "7 Wonders Duel: Gold, silver and bronze Conflict pawns",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Wvxs_RtThm6IBklEnGeN-g__original/img/CpRRTpP1LvXb6ddzJe2UFFuv9mU=/0x0/filters:format(jpeg)/pic6208572.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "10"
+  },
+  {
+    "bggId": "348023",
+    "name": "Royal Tiles",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/dGGtgAxIAuwvPX8H2QJ7gw__original/img/I_zYCy24RXoNByBN7HOku_pVebU=/0x0/filters:format(png)/pic6420558.png",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "0",
+    "rating": "8"
+  },
+  {
+    "bggId": "349023",
+    "name": "The Dad Class: Happy Father&#039;s Day!",
+    "year": "2009",
+    "image": "https://cf.geekdo-images.com/3hOcWPwrCtECjIEvjlFrYw__original/img/K4oQFPr_Zusf6y5J8bzrjFKLBWk=/0x0/filters:format(jpeg)/pic6447451.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "350023",
+    "name": "Keepers of the Pale Flame (5E)",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/qrv8uV-897F8jZKS-RwMuQ__original/img/2g-h9CzagEaIuR6qwfpvKYNvB5s=/0x0/filters:format(jpeg)/pic6476097.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "351023",
+    "name": "BattleTech: Experimental Technical Readout – Republic vol 3",
+    "year": "2015",
+    "image": "https://cf.geekdo-images.com/pVL9IYjGwf_A_iF3CV4pFg__original/img/c_NmmltBgFV9HlYZeXOgdnPc-ag=/0x0/filters:format(jpeg)/pic6503944.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "352023",
+    "name": "Heart of Oak",
+    "year": "1978",
+    "image": "https://cf.geekdo-images.com/aRkBCMF-vHg8wFFl8BpIpA__original/img/PuYqVWu_y9C0iLu94ZasbJpkBPY=/0x0/filters:format(jpeg)/pic6535921.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "10"
+  },
+  {
+    "bggId": "353023",
+    "name": "Warcraft Manual of Monsters",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/6F6KJvx6ydA-jsmBOuTmSA__original/img/o0DqOaDkENl-SvW28HRvosLzaPo=/0x0/filters:format(jpeg)/pic6572314.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "355023",
+    "name": "EN5ider (Issue 424 - 2021)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/gnz4lzm2IqKMPRuvGHR8Dw__original/img/-Wq86hQkkO-I4dD3XCnghYZSrts=/0x0/filters:format(jpeg)/pic6635897.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "356023",
+    "name": "Crisis at Steamfall: Premium board upgrade",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/TSQxvJaHYP34z8gIcIb-8Q__original/img/LPHKpX7WAjFmudfOyxwvLgDgaos=/0x0/filters:format(jpeg)/pic6782546.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "7.5"
+  },
+  {
+    "bggId": "357023",
+    "name": "Why Aren&#039;t We Changing?",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/ew3QO77b-Ls-gUR2cmB2fQ__original/img/aeWG2fZ9euryNC0UmuxS-UcrBM0=/0x0/filters:format(png)/pic6685596.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "359023",
+    "name": "Cult of Isis",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/gupaG_lEmxxXixPxh5UT3A__original/img/lPvZN_vnkXo-pn119OpTi65aRnk=/0x0/filters:format(jpeg)/pic6751823.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "361023",
+    "name": "Platoon Commander Deluxe: The Battle of Kursk – Special Dice",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/w-9oe-tKMXI9McqN4_8eUg__original/img/VZXdwFeDibQD0iX6pRkoYEXFOZA=/0x0/filters:format(jpeg)/pic6830600.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "362023",
+    "name": "A game about counting cats&#039; shapes and colours, that keeps getting trickier.",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/BRMUbrgcxIi5qDG6Hb6OPg__original/img/yKOCdBHuofuALHWepIeWBoE6SWQ=/0x0/filters:format(png)/pic6885087.png",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "10",
+    "rating": "7.675"
+  },
+  {
+    "bggId": "363023",
+    "name": "Journey to Aufstrag",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/sl2tnk6HF5FkI0VHBX0PVQ__original/img/q8-tM2IQJSFz_JRIGikCXbbJU4s=/0x0/filters:format(jpeg)/pic6868736.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "365023",
+    "name": "Conflict (Plot) Generator 2 1e",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/tHn4Ev1zqtMk99e5YD6hTg__original/img/N49L5uWRl--wRyvdUmq-g5KoEjs=/0x0/filters:format(jpeg)/pic6915717.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "366023",
+    "name": "Marvel Zombies: Heroes&#039; Resistance",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/Y0SBlSMxf21EqakGFujShA__original/img/rEF71_3lcNpky_lbqGFw0BFxhgM=/0x0/filters:format(jpeg)/pic6940547.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "7.75597"
+  },
+  {
+    "bggId": "367023",
+    "name": "Marvel Dice Throne: Promo Card Set",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/Q8GbDObP2m2wpMYiu9SlOw__original/img/f5fekG-SP0fZa7jNw7s4U_LVHLY=/0x0/filters:format(jpeg)/pic6971687.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "40",
+    "rating": "7.91304"
+  },
+  {
+    "bggId": "368023",
+    "name": "Dig it Up!: Crack the Crate",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/E0nssgRpZpKNNM1AVAZgjA__original/img/vYh-0JErxE6rKJKZ8OQA-c2WNaU=/0x0/filters:format(jpeg)/pic6988042.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "99",
+    "playTime": "60",
+    "rating": "8"
+  },
+  {
+    "bggId": "369023",
+    "name": "Absolute Power Custom Dice Set",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/EtxwFNStsPgfjaZjWxWJBg__original/img/edVoF621IxNlaAJ_r2F699fdoF8=/0x0/filters:format(jpeg)/pic7020261.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "370023",
+    "name": "Acts of Malice Volume Two",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/LnQZccGDh9QaEgylvDg_sA__original/img/ohgsQ2AeZKZc0eXjsjY7VvXYLA8=/0x0/filters:format(jpeg)/pic7052246.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "371023",
+    "name": "5E Rogue Subclass: Harlequin",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/FtXnJvErLt64XhfS9JqyrA__original/img/d6C_JRBj2vnxuNR1oX1x_OPv8dY=/0x0/filters:format(png)/pic7078982.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "372023",
+    "name": "Audubon Bird Spotting Opoly",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/TJigzqTW6n3kkoLW201N9g__original/img/seS8Wele1JEzKwIbPHfiYLJ34bY=/0x0/filters:format(png)/pic7265188.png",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "5.125"
+  },
+  {
+    "bggId": "373023",
+    "name": "An Omnibus of Opponents",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/fANVZpyrQjBAl1O1qFEE8Q__original/img/_L7CEkOrGmSNzxrRs96i1hfiT5I=/0x0/filters:format(jpeg)/pic7133271.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "374023",
+    "name": "Tactic: The Tactical Wargame",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/3nV6wLBGgz7sY99-E12u5w__original/img/62dIdW4YKOYfSsSxHhzOfUB9spo=/0x0/filters:format(jpeg)/pic7223020.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "120",
+    "rating": "8"
+  },
+  {
+    "bggId": "378023",
+    "name": "Who is the Beast?",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/KI73WcSJD5c-JMlvhB-xaA__original/img/Hf4wLpsEbUamoo3zEd3IqHNA_7U=/0x0/filters:format(png)/pic7275741.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "380023",
+    "name": "Saint Simu - La vengeance de Nü Wà",
+    "year": "2002",
+    "image": "https://cf.geekdo-images.com/gr60JXjUZdP9EpH7YqX2Gw__original/img/LOxDXFrc04AwoCk5_W-vtSBaDnY=/0x0/filters:format(jpeg)/pic7334204.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "381023",
+    "name": "Forgenesis",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/GjL9gHMgKPA9tNn637QqNA__original/img/vt8lcOtIPIhcqz68T8jfwSDjvyc=/0x0/filters:format(png)/pic7364392.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "6.38489"
+  },
+  {
+    "bggId": "382023",
+    "name": "When the Bough Breaks",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/s0zn0RSRziV6RwDxkYIumg__original/img/Us7codSe_-YALIR4qXE_AHN1UXo=/0x0/filters:format(png)/pic7392709.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "383023",
+    "name": "Catro Chip",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/r2OED6BjMQdvViiRWtqrMw__original/img/20acuO3A9TOIx-8NzVYc4wMsxAw=/0x0/filters:format(jpeg)/pic7427685.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "386023",
+    "name": "The Sword and the Flame: Mahdist Wars Action Deck",
+    "year": "0",
+    "image": "https://cf.geekdo-images.com/JxFRvqY77y0HGEkEEeiNCA__original/img/_KVWvZ_BZ3kR4ZQgk6d5w94pPPM=/0x0/filters:format(jpeg)/pic7475201.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "388023",
+    "name": "100 Encounters for a Fantasy Swamp (3Deep)",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Of7JgjuLAflEAW_npQ5K9A__original/img/D-BpD9jdHATudlwqFZPdngrFQh8=/0x0/filters:format(jpeg)/pic7505940.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "389023",
+    "name": "100 Hooks and Rumours to Hear in or About Bard&#039;s Gate",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/FmQr-sNqv3M9770001sFQA__original/img/zSmYGntQqCi4ZkKYNYqhDOIEb8Y=/0x0/filters:format(jpeg)/pic7527136.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "390023",
+    "name": "The Mine Syndicate Stock Battlemap",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Ko5dPm-c-bXcTh4WEC4t6w__original/img/yHPOvM5HNkKqK5k8fti84K37YtU=/0x0/filters:format(jpeg)/pic7541602.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "391023",
+    "name": "The Beast&#039;s Battles Card Game",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/d-WVhMQ0U7-K5Btpm0K4BQ__original/img/u7zJ1DrBTfvDvAFj0G731ufBVdA=/0x0/filters:format(jpeg)/pic7553592.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "33",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "392023",
+    "name": "Mycelia",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/P8-3HeCgEa_CODQiQxq9SQ__original/img/wpH1mGsLXafShzWDatYxmNnbvR4=/0x0/filters:format(jpeg)/pic7849476.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "7.36249"
+  },
+  {
+    "bggId": "393023",
+    "name": "The Turquoise Dragon",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/GkdlpV1XRESl73WZ8-rLmA__original/img/Lz82gwUcTu4Wc_UgIaxZgmn_i3Q=/0x0/filters:format(jpeg)/pic7590279.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "394023",
+    "name": "Frankfurt City Stock Map",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/7x5b91ItQ8-AMA9aLLVJ2A__original/img/qa75TCjylriUpiGNtu55S4PiO-I=/0x0/filters:format(jpeg)/pic7608931.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "395023",
+    "name": "Dreams of Solitude",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/BxI9pW1Z89yqDLCo70QWlg__original/img/j9Rj3aMBguY4ZVDA8m1EgRx2BUI=/0x0/filters:format(jpeg)/pic7620631.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "396023",
+    "name": "All About That Trident!",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/PwILaWqUWdMWvDsN6_Z60w__original/img/JX9m3O5ik1xY6jVMo49L8faqwHE=/0x0/filters:format(jpeg)/pic7635545.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "397023",
+    "name": "The Curse of Blackbeard&#039;s Treasure",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/KgSWJpGsRasN3twVA8-68A__original/img/aVvpkJ6MlMFKlptuvyoxIyyZwJI=/0x0/filters:format(png)/pic7654684.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "4"
+  },
+  {
+    "bggId": "398023",
+    "name": "The Eldritch Chicken of Barley Pines",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/2nHhnDe8U13yE4iUPHHNoQ__original/img/NFRRqEcYGabPCX56eoh7_MaBWoU=/0x0/filters:format(jpeg)/pic7672512.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "399023",
+    "name": "Warren of the Frostdrifter Clan",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/Ndi8CnhLiqFRZbBRlRrBGg__original/img/GXHGfHkQzd6pcD-mkh_qtHNLrP8=/0x0/filters:format(jpeg)/pic7684848.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "400023",
+    "name": "Tales of the Valiant Monster Vault",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/U2kYkqVeY04MNzXe9KBBZA__original/img/u83WaABk4eUV7R_ZWahan_NaJLc=/0x0/filters:format(jpeg)/pic8200228.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "9.33333"
+  },
+  {
+    "bggId": "401023",
+    "name": "Guilds, Costers, and Cabals",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/gNgofepJV8UEQDLNhN3EMQ__original/img/Tlqcf88QKTSKC4ooPshpIH4anXk=/0x0/filters:format(png)/pic7724742.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "403023",
+    "name": "The Sunken Tower",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/LjbN02I9pnQnbTZX849c-Q__original/img/0VF5X6G7dmgi4oay0qd_jZae7SM=/0x0/filters:format(jpeg)/pic7781179.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "404023",
+    "name": "Falsely Accused",
+    "year": "2019",
+    "image": "https://cf.geekdo-images.com/o_5UObLU9Rew_9YeYVNaJw__original/img/c5a7PjzZBPPDszHCRvjjTulRaJE=/0x0/filters:format(jpeg)/pic7803534.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "405023",
+    "name": "The Witch: 5e Compatible Class",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/nEwsr1rZ2w9XfXhKTxjBmg__original/img/19md4cYh3-U6Ew3US2LDdobEeus=/0x0/filters:format(jpeg)/pic7826948.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "406023",
+    "name": "They Say You Should Beg Your Plants For Mercy",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/jMxxJABBCXQKHxiD6Y4rkw__original/img/TEyXb4GbOrs7CRLCjkYZxmy_Erg=/0x0/filters:format(jpeg)/pic7850417.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "407023",
+    "name": "Sea of Legends: Translucent Sea Coven Miniatures",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/VL-iG8aKZYaPKHlP73oTjg__original/img/_f29_4Tdjq1r1DUFPdY7CQwMN-Q=/0x0/filters:format(jpeg)/pic8213212.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "408023",
+    "name": "Assassin&#039;s Creed IV Black Flag  - Illustrious Pirates Pack",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/EP78BLAN_doOWtfqf4VbXw__original/img/Z0BVv6UnMFQthZmUhqMg8Y3qhUs=/0x0/filters:format(jpeg)/pic7893003.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "409023",
+    "name": "Wretched Verses (Issue 20 - Wretched Minions Vol. 7: Wretched Minions from the Beyond)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/Tu5oZ7c_DRRWTE2IZY9SVA__original/img/EF2nNpHpYCfjiz1fsWgVuwmTGmc=/0x0/filters:format(png)/pic7912781.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "410023",
+    "name": "2023 One Page Dungeon Contest - And Still They Rise - Youth Entries",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/zQoC2wdgVobb7lxorOM2AQ__original/img/j-7nLJNuav0eOo81O4jmR72aAy8=/0x0/filters:format(jpeg)/pic7933910.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "411023",
+    "name": "Visions of Greyhawk (Volume 1 - Summer 2023)",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/q4UmC_jBBYwV6aFJDgNxYA__original/img/pNaQAXVm9FIGCvzjaQDdDeA6l2Y=/0x0/filters:format(jpeg)/pic7950441.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "412023",
+    "name": "Dollar före döden",
+    "year": "2000",
+    "image": "https://cf.geekdo-images.com/PQ_lFI9BjDrxF8f5equeaQ__original/img/YcQO9n9H_xLjwVVeZ2J8C629ums=/0x0/filters:format(jpeg)/pic7976792.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "413023",
+    "name": "The Secret of the Dragon&#039;s Tongue",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/TAhF-u1Hfy6iDNqv8Riirg__original/img/qFHrjg33as6SuuB8PGaOSuyeuj0=/0x0/filters:format(jpeg)/pic7992142.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "414023",
+    "name": "Bossarino",
+    "year": "2023",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "10",
+    "rating": "7"
+  },
+  {
+    "bggId": "417023",
+    "name": "Supply and Demand",
+    "year": "2014",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "418023",
+    "name": "The Corsham Witch Trial",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "419023",
+    "name": "Return to Grace",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "7"
+  },
+  {
+    "bggId": "420023",
+    "name": "Switchbacks: 2023 Promo Upgrade",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/kH4hUBQf0KoULJG1LsqhKg__original/img/mhbcz_dz7NBA6U0e-jwuElvCEnI=/0x0/filters:format(jpeg)/pic8174738.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "9"
+  },
+  {
+    "bggId": "421023",
+    "name": "Team GB: Go for Gold",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/HXZESTaY0fjAJ6aPO75bLA__original/img/EO3BbnFaJfA2ZepXytZnuQpAtLk=/0x0/filters:format(jpeg)/pic8204499.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "25",
+    "rating": "7"
+  },
+  {
+    "bggId": "422023",
+    "name": "Conquistadores da Matemática",
+    "year": "2022",
+    "image": "https://cf.geekdo-images.com/DP8Qswny45BMdKO-gSDvjA__original/img/UVraeLqoCIoebyctVicC1xU7dP8=/0x0/filters:format(jpeg)/pic8236215.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "20",
+    "rating": "10"
+  },
+  {
+    "bggId": "423023",
+    "name": "Le Franc Tireur #2",
+    "year": "1997",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "424023",
+    "name": "Warhammer 40,000: Battlesector – Necrons",
+    "year": "",
+    "image": "https://cf.geekdo-images.com/rFYC1C7kTap10_L8lqsTgw__original/img/eUivTV0kDfZa5YD0iHYdXvuyuX0=/0x0/filters:format(jpeg)/pic8297367.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "425023",
+    "name": "Marvel: Crisis Protocol – Battle for Asgard",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/3-psGNpHZxcCHNwE8MuuMA__original/img/Hjcjm-GlQn_1272YPpdCP_GVHhc=/0x0/filters:format(png)/pic8316658.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "90",
+    "rating": "0"
+  },
+  {
+    "bggId": "426023",
+    "name": "Tournament of Power",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/gf3bC_sCQq4vKp0ff5XcVg__original/img/RA1ntZ9d-s0jmoqhiore3Zvn3-4=/0x0/filters:format(png)/pic8348631.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "60",
+    "rating": "10"
+  },
+  {
+    "bggId": "427023",
+    "name": "Infeksjon",
+    "year": "2012",
+    "image": "https://cf.geekdo-images.com/dN9kQCzr-wTPtCWtYPu11Q__original/img/vlIeNXbfF4mVTgFE3sUOz4HKWcc=/0x0/filters:format(png)/pic8369774.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "429023",
+    "name": "The Kingdom of Roses: A Ravenloft Domain of Dread",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/o28DMJQuzDCp1MLsLXZg3g__original/img/aUIJA479-ETstsMCAsZkvJ5icZc=/0x0/filters:format(jpeg)/pic8428196.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "430023",
+    "name": "Catopomp",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/HN7m7HX1nw7hhGbnTxc1qQ__original/img/J5PFNVR2iKN75QTv7pCJ0IBCzWQ=/0x0/filters:format(jpeg)/pic8798924.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "7.40645"
+  },
+  {
+    "bggId": "431023",
+    "name": "Windsoul: Essentials",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/F89xrgrx5nSDSoXJm7cIdQ__original/img/f7bYuCtaCP8bJNlo4lceOB81ILs=/0x0/filters:format(jpeg)/pic8489843.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "432023",
+    "name": "Cosmic Hooligans",
+    "year": "2021",
+    "image": "https://cf.geekdo-images.com/izKKARqZoz9rcdwG5MyaBg__original/img/egm14LGP31El8E9fQkjzI5hlQBQ=/0x0/filters:format(png)/pic8516572.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "433023",
+    "name": "Hoof, Cinder, and Storm",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/dynlvoVxkTuUvGoWBH5svw__original/img/D9FlnJWG0SWPU4tX_G-klHwW_mg=/0x0/filters:format(jpeg)/pic8542570.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "8.5"
+  },
+  {
+    "bggId": "434023",
+    "name": "Cuvée: Rosé & Dessert Wine Expansion",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/o7_TKNEBpBAbJRQBKq8NEw__original/img/Ez0AF5VFEzHkOATtK4ygo06Foqg=/0x0/filters:format(jpeg)/pic8573216.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "90",
+    "rating": "8.25"
+  },
+  {
+    "bggId": "435023",
+    "name": "Trench Club: Extra Faction Minis",
+    "year": "2023",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "436023",
+    "name": "Blaster Archives: Gaslands Legacy",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/_yMum7HeRuQdr5106yr4HA__original/img/LLWq0NfcI-WKFpmYcS7YHSehLRo=/0x0/filters:format(jpeg)/pic8615053.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "437023",
+    "name": "Im grünen Walde",
+    "year": "1941",
+    "image": "https://cf.geekdo-images.com/YSgEgcN-AVBWVBNt6ZZBQQ__original/img/-cUEDjMXneiWvoYDsv-eEx8-HCQ=/0x0/filters:format(jpeg)/pic8643680.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "438023",
+    "name": "Nexus Fracture Solo Adventure",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/vEmjvdT1H7oEVA4yCKw68Q__original/img/4tKATO_gk4DiNt_F2X0syP5kQ5Q=/0x0/filters:format(jpeg)/pic8667511.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "439023",
+    "name": "Macuahuitl: Quickstart Rules",
+    "year": "2023",
+    "image": "https://cf.geekdo-images.com/OGtax1eIaZ32DbWkRy35jA__original/img/FphipnFbe9LfNpHwbxNma_G9z2c=/0x0/filters:format(jpeg)/pic8701149.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "440023",
+    "name": "Gazebo",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/bM35lTa6CHjaIWVjLjj3Kw__original/img/2Ym5TLQtEdwgl2wwimNg9gWA7yQ=/0x0/filters:format(png)/pic8731361.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "7.48707"
+  },
+  {
+    "bggId": "441023",
+    "name": "Moons of Gas Giants",
+    "year": "2020",
+    "image": "https://cf.geekdo-images.com/7FOcEXezUyxQYDc1Ue8BqQ__original/img/v1i_hESay0SLggBzyGuQfo_4ZII=/0x0/filters:format(png)/pic8767852.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "442023",
+    "name": "The Dungeon of Many Things",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/JbLu_W4nAF6cB3xfLsveVA__original/img/f0Ct01DDQQfnM7wrFa134WThxKI=/0x0/filters:format(jpeg)/pic8789500.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "443023",
+    "name": "Arzium Quickstart Guide 2",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/6mwW-TTvG2RgXOe7EnaQDQ__original/img/8HSc4fvwKW1JSHKkR5rnRMIB6Fg=/0x0/filters:format(jpeg)/pic9037148.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "444023",
+    "name": "Bird Brain",
+    "year": "2025",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "8",
+    "playTime": "30",
+    "rating": "0"
+  },
+  {
+    "bggId": "445023",
+    "name": "Stomp Stomp Dino!",
+    "year": "2025",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "40",
+    "rating": "0"
+  },
+  {
+    "bggId": "447023",
+    "name": "Occupation",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/zT1OB-ejbDatv6iwrmr62g__original/img/-5RSzpoMNiH0og9QRTZT4gguTwQ=/0x0/filters:format(jpeg)/pic8906254.jpg",
+    "minPlayers": "4",
+    "maxPlayers": "7",
+    "playTime": "90",
+    "rating": "9.08333"
+  },
+  {
+    "bggId": "448023",
+    "name": "This City Must Burn",
+    "year": "2023",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "449023",
+    "name": "War of the Ring: SickdaveCreations Mountains",
+    "year": "2017",
+    "image": "https://cf.geekdo-images.com/Bqo5SC8xzvgZtKcYHX-8Hg__original/img/mCYVmCQT1N_VKbjE1CIGQ2brD8c=/0x0/filters:format(jpeg)/pic8985865.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "450023",
+    "name": "Cohors Cthulhu Gamemaster&#039;s Toolkit",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/UA81M_GEKyDJ2Zzm5kxfnQ__original/img/IlTN2Vd5ijr5fpKJUMpvnDWU6-k=/0x0/filters:format(jpeg)/pic8987013.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "451023",
+    "name": "CthulhuTech: The Shadow War Player&#039;s Handbook",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/j9NtpZD9cSE8NFIGBVmBHQ__original/img/7rL-DN32dpx27cFg1r8kM0ppkGc=/0x0/filters:format(jpeg)/pic9007888.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "452023",
+    "name": "Deep Space Dine",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/EXk5p9w8LkOfmqYpstlNSA__original/img/FPuOK_pfyRDhvEZXiz-JW6YryZk=/0x0/filters:format(jpeg)/pic9037270.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "3",
+    "playTime": "60",
+    "rating": "7.27273"
+  },
+  {
+    "bggId": "453023",
+    "name": "Docchina",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/EIfTHqKdLxaYP2T1gzIEAg__original/img/YZnFCLlgvOkAO6eWuAXGX1yd9dY=/0x0/filters:format(jpeg)/pic9065499.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "10",
+    "playTime": "30",
+    "rating": "5.2"
+  },
+  {
+    "bggId": "454023",
+    "name": "Misterios Ocultos",
+    "year": "2024",
+    "image": "https://cf.geekdo-images.com/tkGkHu0x2Tvvtd55BMvjMA__original/img/dsxj4gDj-zL753PDG0rF3QUyNN0=/0x0/filters:format(jpeg)/pic9097985.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "455023",
+    "name": "Sixto: Kris-Kras",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/RivAnjEsWEUFz1MTS_vDhg__original/img/XYa0x2UbHGRPNI9mvwvLradNHkM=/0x0/filters:format(jpeg)/pic9119542.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "6",
+    "playTime": "15",
+    "rating": "6.88889"
+  },
+  {
+    "bggId": "457023",
+    "name": "The Third Man",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/pMkfjSl4SvI_6Zpn2WGMPw__original/img/FsFMQfg163Rgq-7xi1mBzhsxplo=/0x0/filters:format(jpeg)/pic9186465.jpg",
+    "minPlayers": "3",
+    "maxPlayers": "4",
+    "playTime": "20",
+    "rating": "6.33529"
+  },
+  {
+    "bggId": "458023",
+    "name": "Dungeon Pages: Underboss",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/H0roqXemwP0rCNPzD4MeFg__original/img/VUCCudYddKJmP2cwXSGUhghOGrE=/0x0/filters:format(jpeg)/pic9218085.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "1",
+    "playTime": "30",
+    "rating": "7.96154"
+  },
+  {
+    "bggId": "459023",
+    "name": "Wargaming with Panzerjagers and Sturmgeschutz",
+    "year": "2011",
+    "image": "https://cf.geekdo-images.com/YWwAYtREx8neUbBIVNvGIA__original/img/oQC9tz-lLhOYRZHW1dFfEDmWnig=/0x0/filters:format(jpeg)/pic9247704.jpg",
+    "minPlayers": "2",
+    "maxPlayers": "6",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "460023",
+    "name": "Gods&#039; Will",
+    "year": "2027",
+    "image": "https://cf.geekdo-images.com/wrckOdpbTQB9Pu8i-2nRvQ__original/img/9JwIAsT1ECj6V8r3vYv7oZLa7g0=/0x0/filters:format(jpeg)/pic9423689.jpg",
+    "minPlayers": "5",
+    "maxPlayers": "14",
+    "playTime": "60",
+    "rating": "8.2"
+  },
+  {
+    "bggId": "461023",
+    "name": "Kamibako: Mythology of Cube",
+    "year": "",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "0",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "462023",
+    "name": "The Solar System",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/m_2gdmhrciIR9BB5voU_JQ__original/img/en-2-ogIwXkcgdrL5xqMb5uj56g=/0x0/filters:format(jpeg)/pic9341176.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "463023",
+    "name": "Spin Cycle",
+    "year": "2027",
+    "image": "",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "45",
+    "rating": "0"
+  },
+  {
+    "bggId": "464023",
+    "name": "The Golden Idol of En-Tridar",
+    "year": "2025",
+    "image": "https://cf.geekdo-images.com/sRFtEZJZ5b-FfmN64-DtAw__original/img/o7ziwEzt7S7Xf081BI2AAnto-6g=/0x0/filters:format(jpeg)/pic9387523.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "465023",
+    "name": "Pacifist Raid: Al Capone Expansion",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/Pjc5PCr4VgGX6nViHIz__g__original/img/gWupx0i0og_T0oF4bmrReYcWd48=/0x0/filters:format(png)/pic9450576.png",
+    "minPlayers": "3",
+    "maxPlayers": "4",
+    "playTime": "70",
+    "rating": "7"
+  },
+  {
+    "bggId": "466023",
+    "name": "Council of Serpents",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/5rMMZI7eLVc9flFnv1Tsag__original/img/s6ay8FoGKfw3IOCMdJZUNU-v7Io=/0x0/filters:format(jpeg)/pic9542749.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "4",
+    "playTime": "30",
+    "rating": "8.78571"
+  },
+  {
+    "bggId": "467023",
+    "name": "Heroscape: Defenders of Kinsland – Marro Cavalry Army Expansion",
+    "year": "2008",
+    "image": "https://cf.geekdo-images.com/APBUEHedfZwZkou23QLBBw__original/img/Gkwa65nkjZtcLD8ZKIMH1qW-8mA=/0x0/filters:format(png)/pic9475524.png",
+    "minPlayers": "2",
+    "maxPlayers": "4",
+    "playTime": "120",
+    "rating": "7.8"
+  },
+  {
+    "bggId": "468023",
+    "name": "The Last Territory",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/7llpFORUFTeQiUiXKR51ZA__original/img/gzFldXcR6mEpb5mAyXOcW-OkB4g=/0x0/filters:format(png)/pic9501379.png",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "469023",
+    "name": "Hexplode",
+    "year": "1983",
+    "image": "",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "15",
+    "rating": "8"
+  },
+  {
+    "bggId": "470023",
+    "name": "Lone Wolf: Autumn Snow #1 - The Pit of Darkness",
+    "year": "2016",
+    "image": "",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "471023",
+    "name": "Valley Life",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/o3sNoiusKneSUhRY6wabIA__original/img/8N7tTP9pcIr8H4dQdsAIHIc35D0=/0x0/filters:format(jpeg)/pic9588591.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  },
+  {
+    "bggId": "473023",
+    "name": "HDMI4k: Happy Denizen Murder Incidents",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/nOB_U6jlPGnnH3lD8W43Jw__original/img/IYNawcprxUolsKqD25uISrxwTcw=/0x0/filters:format(png)/pic9641572.png",
+    "minPlayers": "2",
+    "maxPlayers": "2",
+    "playTime": "0",
+    "rating": "2"
+  },
+  {
+    "bggId": "474023",
+    "name": "Primal: Legends – Voice of the Flame",
+    "year": "2027",
+    "image": "https://cf.geekdo-images.com/fuTa6g0EHkSFYx93nr0d_g__original/img/oTD7vZGj1VJiHCiJ_3660uqpnRY=/0x0/filters:format(jpeg)/pic9669769.jpg",
+    "minPlayers": "1",
+    "maxPlayers": "3",
+    "playTime": "60",
+    "rating": "10"
+  },
+  {
+    "bggId": "475023",
+    "name": "Jenny Writes&#039; Tome of Companions",
+    "year": "2026",
+    "image": "https://cf.geekdo-images.com/AD5_VRIMHZICrvECwHW9Aw__original/img/NdAP12xgAX9HEnki_BEDYnW0hDs=/0x0/filters:format(jpeg)/pic9694451.jpg",
+    "minPlayers": "0",
+    "maxPlayers": "99",
+    "playTime": "0",
+    "rating": "0"
+  }
+]
