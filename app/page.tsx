@@ -5,7 +5,7 @@ import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon } from "lucide-react";
+import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -35,6 +35,9 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<"library" | "recommendations" | "analytics" | "friends" | "events">("library");
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  // Layout View Mode State ("grid" vs "compact")
+  const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year">("recent");
@@ -194,7 +197,12 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
-      <div className="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-colors">
+      {/* Mobile Top Navbar with Hide-On-Scroll Animation */}
+      <div 
+        className={`md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-transform duration-300 ${
+          isScrolled ? "-translate-y-full absolute top-0 left-0 right-0" : "translate-y-0 relative"
+        }`}
+      >
         <button
           onClick={() => selectTab("library")}
           className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 hover:opacity-80 transition-opacity outline-none"
@@ -259,6 +267,15 @@ export default function Home() {
                             <div className="w-full sm:w-32 relative"><Users size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><input type="number" placeholder={t('home.players')} value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)} min="1" max="99" className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none" /></div>
                             <div className="w-full sm:w-44 relative"><ArrowDownAZ size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><select value={sortOption} onChange={(e: any) => setSortOption(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white outline-none appearance-none"><option value="recent">{t('home.recentlyAdded')}</option><option value="alpha">{t('home.alphabetical')}</option><option value="year">{t('home.releaseYear')}</option></select></div>
                             <button onClick={pickRandomGame} className="w-full sm:w-auto bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-1.5 transition"><Shuffle size={16} /> {t('home.whatToPlay')}</button>
+                            
+                            {/* View Toggle Button */}
+                            <button
+                              onClick={() => setViewMode(prev => prev === "grid" ? "compact" : "grid")}
+                              className="p-2 bg-slate-100 dark:bg-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300 transition flex items-center justify-center border border-slate-200 dark:border-slate-600 shrink-0"
+                              title={viewMode === "grid" ? "Switch to Compact View" : "Switch to Grid View"}
+                            >
+                              {viewMode === "grid" ? <LayoutList size={18} /> : <LayoutGrid size={18} />}
+                            </button>
                           </div>
                         </div>
                       )}
@@ -267,7 +284,8 @@ export default function Home() {
 
                   <div className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
                     {parentGamesToRender.length === 0 ? <div className="flex items-center justify-center h-64 text-slate-500 dark:text-slate-400 font-medium">{t('home.noMatchesFilter')}</div>
-                      : (
+                      : viewMode === "grid" ? (
+                        /* Default Card Grid View */
                         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5 items-start">
                           {parentGamesToRender.map((game, index) => {
                             const gameExpansions = processedGames.filter(g => g.isExpansion && g.baseGameId === game.bggId);
@@ -287,6 +305,51 @@ export default function Home() {
                               />
                             );
                           })}
+                        </div>
+                      ) : (
+                        /* Compact Icon View with Only Log Score Action */
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {parentGamesToRender.map((game) => (
+                            <div
+                              key={game.id}
+                              onClick={() => setDetailsGame(game)}
+                              className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs hover:shadow-md transition cursor-pointer group"
+                            >
+                              <div className="flex items-center gap-3 min-w-0 pr-2">
+                                {game.image ? (
+                                  <img
+                                    src={game.image}
+                                    alt={game.name}
+                                    className="w-12 h-12 object-cover rounded-lg border border-slate-100 dark:border-slate-700 shrink-0"
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-slate-400 font-bold text-xs shrink-0">
+                                    N/A
+                                  </div>
+                                )}
+                                <div className="min-w-0">
+                                  <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                    {game.name}
+                                  </h4>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">
+                                    {game.minPlayers || "?"}-{game.maxPlayers || "?"} players • {game.playTime || "?"} mins
+                                  </p>
+                                </div>
+                              </div>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setScoringGame(game);
+                                }}
+                                className="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-600 dark:hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white dark:hover:text-white rounded-xl transition border border-indigo-100 dark:border-indigo-900 shrink-0"
+                                title="Log Score"
+                              >
+                                <Trophy size={16} />
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                   </div>

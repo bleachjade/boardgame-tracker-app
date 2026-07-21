@@ -16,7 +16,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
   const [history, setHistory] = useState<any[]>([]);
   
-  // NEW: Updated Play Mode States
+  // Updated Play Mode States
   const [playMode, setPlayMode] = useState<"score" | "winner" | "coop">("score");
   const [winnerIndex, setWinnerIndex] = useState<number>(0); // Tracks who is selected as Winner
   const [coopResult, setCoopResult] = useState<"win" | "loss">("win");
@@ -75,7 +75,6 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   
   const removePlayerRow = (index: number) => {
     setPlayers(players.filter((_, i) => i !== index));
-    // Re-adjust winner index if the winner row was deleted
     if (winnerIndex === index) setWinnerIndex(0);
     else if (winnerIndex > index) setWinnerIndex(winnerIndex - 1);
   };
@@ -198,7 +197,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       bggId: game.bggId || null, 
       gameName: game.name, 
       players: finalScores, 
-      isCoop: playMode === "coop", // Maintains backwards compatibility
+      isCoop: playMode === "coop", 
       playMode: playMode,
       coopResult: playMode === "coop" ? coopResult : null,
       teamScore: playMode === "coop" ? calculateScoreString(teamScore) : null,
@@ -237,10 +236,18 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       await batch.commit();
 
       if (matchedUids.size > 0) toast.success(`Saved and synced to ${matchedUids.size} linked accounts!`);
-      else toast.success("Game play session logged!");
+      else toast.success("Round saved! Ready for the next one.");
       
-      onClose();
-    } catch (err) { toast.error("Failed to save match scoring details."); }
+      // DO NOT CLOSE MODAL. Clear only the scores/photos for the next round.
+      setPlayers(prevPlayers => prevPlayers.map(p => ({ ...p, scoreInput: "" })));
+      setWinnerIndex(0);
+      setMemoryPhoto(null);
+      setTeamScore("");
+      setCoopResult("win");
+      
+    } catch (err) { 
+      toast.error("Failed to save match scoring details."); 
+    }
     
     setSaving(false);
   };
