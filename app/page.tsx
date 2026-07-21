@@ -5,9 +5,10 @@ import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, Loader2 } from "lucide-react";
+import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon } from "lucide-react";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next"; // NEW
+import { useTranslation } from "react-i18next";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 // Extracted Components
 import { Sidebar } from "@/components/Sidebar";
@@ -28,7 +29,7 @@ import { AddFromLibraryModal } from "@/components/modals/AddFromLibraryModal";
 
 export default function Home() {
   const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup, userGroups } = useAuthGroup();
-  const { t } = useTranslation(); // NEW
+  const { t } = useTranslation();
 
   const [games, setGames] = useState<any[]>([]);
   const [currentView, setCurrentView] = useState<"library" | "recommendations" | "analytics" | "friends" | "events">("library");
@@ -173,13 +174,14 @@ export default function Home() {
   if (authLoading || (user && !settingsLoaded)) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-        <div className="relative flex items-center justify-center w-20 h-20">
-          <div className="absolute inset-0 rounded-full border-4 border-indigo-200 dark:border-indigo-900/50 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite] opacity-75"></div>
-          <div className="bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg relative z-10 border border-slate-100 dark:border-slate-700">
-            <Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} />
-          </div>
+        <div className="w-48 h-48 flex items-center justify-center">
+          <DotLottieReact
+            src="/LoadingCat.lottie"
+            loop
+            autoplay
+          />
         </div>
-        <h2 suppressHydrationWarning className="mt-6 text-lg font-black text-slate-700 dark:text-slate-300 tracking-tight animate-pulse">
+        <h2 suppressHydrationWarning className="mt-4 text-lg font-black text-slate-700 dark:text-slate-300 tracking-tight animate-pulse">
           {t('common.loading')}
         </h2>
       </div>
