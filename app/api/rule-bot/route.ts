@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,12 +27,7 @@ Rules for answering:
 4. If you're not fully certain of an exact rule, say so honestly and suggest checking the official rulebook, rather than inventing a rule.
 5. Keep tone warm and helpful, like a fellow hobbyist explaining to a friend.`;
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-      systemInstruction: systemPrompt,
-    });
-
-    // Convert prior chat turns into Gemini's expected format
+    // Convert prior chat turns into Gemini's "contents" format
     const priorTurns = Array.isArray(history)
       ? history.slice(-8).map((h: { role: "user" | "ai"; text: string }) => ({
           role: h.role === "user" ? "user" : "model",
@@ -40,9 +35,18 @@ Rules for answering:
         }))
       : [];
 
-    const chat = model.startChat({ history: priorTurns });
-    const result = await chat.sendMessage(question);
-    const answer = result.response.text().trim();
+    const contents = [...priorTurns, { role: "user", parts: [{ text: question }] }];
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents,
+      config: {
+        systemInstruction: systemPrompt,
+        temperature: 0.4,
+      },
+    });
+
+    const answer = response.text?.trim();
 
     if (!answer) {
       return NextResponse.json({ error: "Empty response from model" }, { status: 502 });
