@@ -118,7 +118,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
         ...newHistory,
         {
           role: "ai",
-          text: "ขออภัยครับ ระบบ AI เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง / Sorry, the AI ran into an error — please try again.",
+          text: "ตอนนี้ระบบ AI มีผู้ใช้งานเยอะและไม่ตอบสนอง กรุณาลองใหม่อีกครั้งในอีกสักครู่ / The AI is currently overloaded with requests — please try again in a moment.",
         },
       ]);
     } finally {
