@@ -44,16 +44,16 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   useEffect(() => {
     // FIX: Removed orderBy() to prevent Firebase Composite Index errors on fresh loads!
     const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId));
-    
+
     const unsub = onSnapshot(q, (snap) => {
       const fetchedHistory = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
+
       // Sort client-side instead of relying on the Firestore server
       fetchedHistory.sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
-      
+
       setHistory(fetchedHistory);
     });
-    
+
     return () => unsub();
   }, [game.bggId]);
 
@@ -80,9 +80,10 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
   const handleAskGuru = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || isChatLoading) return;
 
-    const newHistory = [...chatHistory, { role: "user" as const, text: chatInput }];
+    const question = chatInput.trim();
+    const newHistory = [...chatHistory, { role: "user" as const, text: question }];
     setChatHistory(newHistory);
     setChatInput("");
     setIsChatLoading(true);
@@ -91,17 +92,35 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
       const res = await fetch("/api/rule-bot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gameName: liveData.name, question: chatInput })
+        body: JSON.stringify({
+          gameName: liveData.name,
+          question,
+          description: liveData.description,
+          mechanics: liveData.mechanics,
+          minPlayers: liveData.minPlayers,
+          maxPlayers: liveData.maxPlayers,
+          playTime: liveData.playTime,
+          history: chatHistory,
+        }),
       });
+
+      if (!res.ok) throw new Error(`API returned ${res.status}`);
 
       const data = await res.json();
       if (data.answer) {
         setChatHistory([...newHistory, { role: "ai", text: data.answer }]);
       } else {
-        throw new Error("No answer");
+        throw new Error(data.error || "No answer");
       }
     } catch (err) {
-      setChatHistory([...newHistory, { role: "ai", text: "ขออภัยครับ ระบบ AI เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง" }]);
+      console.error("Ask Guru failed:", err);
+      setChatHistory([
+        ...newHistory,
+        {
+          role: "ai",
+          text: "ขออภัยครับ ระบบ AI เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง / Sorry, the AI ran into an error — please try again.",
+        },
+      ]);
     } finally {
       setIsChatLoading(false);
     }
