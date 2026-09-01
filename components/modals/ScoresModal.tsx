@@ -248,7 +248,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
       matchedUids.forEach(uid => {
         const friendPlayRef = doc(collection(db, "gamePlays"));
-        batch.set(friendPlayRef, { ...playPayload, userId: uid, isSharedCopy: true });
+        batch.set(friendPlayRef, { ...playPayload, userId: uid, isSharedCopy: true, memoryPhoto: null });
       });
 
       await batch.commit();
@@ -525,7 +525,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                       </div>
                     )}
                     
-                    {record.memoryPhoto && (
+                    {record.memoryPhoto && record.userId === user?.uid ? (
                       <div className="mt-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50 flex items-center justify-center">
                         <img 
                           src={record.memoryPhoto} 
@@ -533,7 +533,11 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                           className="w-full max-h-60 object-contain" 
                         />
                       </div>
-                    )}
+                    ) : record.memoryPhoto ? (
+                      <div className="mt-3 rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Photo hidden — only the uploader can view this session image.
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}

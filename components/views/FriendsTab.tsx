@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { collection, query, where, getDocs, updateDoc, doc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
@@ -6,11 +6,11 @@ import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Users, UserPlus, Heart, Search, Eye, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next"; // NEW
+import { useTranslation } from "react-i18next";
 
 export function FriendsTab() {
   const { user } = useAuthGroup();
-  const { t } = useTranslation(); // NEW
+  const { t } = useTranslation();
 
   const [friendEmail, setFriendEmail] = useState("");
   const [partnerEmail, setPartnerEmail] = useState("");
@@ -21,8 +21,11 @@ export function FriendsTab() {
   const [loadingFriends, setLoadingFriends] = useState(true);
 
   const [selectedFriend, setSelectedFriend] = useState<any | null>(null);
+  const [selectedGame, setSelectedGame] = useState<any | null>(null);
   const [friendGames, setFriendGames] = useState<any[]>([]);
+  const [gameHistory, setGameHistory] = useState<any[]>([]);
   const [loadingGames, setLoadingGames] = useState(false);
+  const [loadingGameHistory, setLoadingGameHistory] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -64,11 +67,14 @@ export function FriendsTab() {
 
   useEffect(() => {
     if (!selectedFriend) return;
+    setSelectedGame(null);
     setLoadingGames(true);
+
     const targetUids = [selectedFriend.uid];
     if (selectedFriend.isCouple && selectedFriend.partnerId) {
       targetUids.push(selectedFriend.partnerId);
     }
+
     const q = query(collection(db, "userGames"), where("userId", "in", targetUids));
     const unsub = onSnapshot(q, (snap) => {
       setFriendGames(snap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -76,6 +82,30 @@ export function FriendsTab() {
     });
     return () => unsub();
   }, [selectedFriend]);
+
+  useEffect(() => {
+    if (!selectedFriend || !selectedGame) {
+      setGameHistory([]);
+      return;
+    }
+
+    setLoadingGameHistory(true);
+    const q = query(
+      collection(db, "gamePlays"),
+      where("userId", "==", selectedFriend.uid),
+      where("bggId", "==", selectedGame.bggId)
+    );
+
+    const unsub = onSnapshot(q, (snap) => {
+      const history = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+      setGameHistory(history);
+      setLoadingGameHistory(false);
+    });
+
+    return () => unsub();
+  }, [selectedFriend, selectedGame]);
 
   const handleLinkPartner = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,11 +127,11 @@ export function FriendsTab() {
 
       try {
         await updateDoc(doc(db, "users", partnerData.uid), { isCouple: true, partnerId: user.uid });
-      } catch (err) { }
+      } catch {}
 
       toast.success(t('friends.linkSuccess'));
       setPartnerEmail("");
-    } catch (err) {
+    } catch {
       toast.error(t('friends.linkFail'));
     }
   };
@@ -113,7 +143,7 @@ export function FriendsTab() {
       await updateDoc(doc(db, "users", user!.uid), { isCouple: false, partnerId: null });
       if (pId) await updateDoc(doc(db, "users", pId), { isCouple: false, partnerId: null });
       toast.success(t('friends.unlinkSuccess'));
-    } catch (err) {
+    } catch {
       toast.error(t('friends.unlinkFail'));
     }
   };
@@ -133,7 +163,9 @@ export function FriendsTab() {
       await updateDoc(doc(db, "users", user.uid), { friendsList: arrayUnion(targetUserDoc.uid) });
       toast.success(t('friends.followed', { name: targetUserDoc.nickname }));
       setFriendEmail("");
-    } catch (err) { toast.error(t('friends.addFail')); }
+    } catch {
+      toast.error(t('friends.addFail'));
+    }
   };
 
   const handleRemoveFriend = async (friendUid: string, friendName: string) => {
@@ -142,7 +174,9 @@ export function FriendsTab() {
       await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid) });
       toast.success(t('friends.removed', { name: friendName }));
       if (selectedFriend?.uid === friendUid) setSelectedFriend(null);
-    } catch (err) { toast.error(t('friends.removeFail')); }
+    } catch {
+      toast.error(t('friends.removeFail'));
+    }
   };
 
   if (loadingFriends || !currentUserProfile) {
@@ -222,44 +256,7 @@ export function FriendsTab() {
         </div>
       )}
 
-      {!selectedFriend ? (
-        <div className="space-y-3">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mt-4">
-            <Users size={14} /> {t('friends.myCircle', { count: friendsProfiles.length })}
-          </h3>
-
-          {friendsProfiles.length === 0 ? (
-            <div className="text-center py-12 bg-white dark:bg-slate-800 border rounded-2xl text-slate-400 text-sm font-medium">{t('friends.emptyCircle')}</div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {friendsProfiles.map((friend) => (
-                <div key={friend.uid} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 flex justify-between items-center shadow-xs group">
-                  <div className="min-w-0 pr-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-slate-900 dark:text-white truncate block">{friend.nickname}</span>
-                      {friend.isCouple && (
-                        <span className="flex items-center gap-0.5 text-[9px] font-black bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded-full">
-                          <Heart size={10} className="fill-rose-500" /> {t('friends.coupledShelf')}
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs text-slate-400 truncate block mt-0.5">{friend.email}</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <button onClick={() => setSelectedFriend(friend)} className="p-2.5 bg-slate-50 hover:bg-indigo-50 dark:bg-slate-900 dark:hover:bg-indigo-950/40 text-slate-500 dark:text-slate-300 hover:text-indigo-600 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors flex items-center justify-center gap-1.5 font-bold text-xs">
-                      <Eye size={14} /> <span className="hidden sm:inline">{t('friends.viewShelf')}</span>
-                    </button>
-                    <button onClick={() => handleRemoveFriend(friend.uid, friend.nickname)} className="p-2.5 bg-slate-50 hover:bg-red-50 dark:bg-slate-900 dark:hover:bg-red-950/40 text-slate-400 hover:text-red-500 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors md:opacity-0 md:group-hover:opacity-100">
-                      <UserMinus size={14} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      ) : (
+      {selectedFriend && !selectedGame && (
         <div className="space-y-5 animate-in slide-in-from-right duration-300">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
             <div className="min-w-0">
@@ -282,7 +279,7 @@ export function FriendsTab() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {filteredGames.map((game) => (
-                <div key={game.id} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col justify-between group">
+                <button key={game.id} type="button" onClick={() => setSelectedGame(game)} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col justify-between group text-left focus:outline-none focus:ring-2 focus:ring-indigo-600">
                   <div className="relative aspect-square w-full bg-slate-100 dark:bg-slate-900 border-b dark:border-slate-700/50 overflow-hidden">
                     {game.image ? (
                       <img src={`/api/media?url=${encodeURIComponent(game.image)}`} alt={game.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
@@ -298,8 +295,70 @@ export function FriendsTab() {
                       {game.isExpansion && <span className="text-indigo-600 bg-indigo-50 dark:bg-indigo-950/60 px-1.5 py-0.5 rounded">{t('friends.expansion')}</span>}
                     </div>
                   </div>
-                </div>
+                </button>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {selectedFriend && selectedGame && (
+        <div className="space-y-5 animate-in slide-in-from-right duration-300">
+          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="min-w-0">
+                <button onClick={() => setSelectedGame(null)} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mb-1 block">← {t('friends.returnRoster')}</button>
+                <h3 className="text-base font-black text-slate-900 dark:text-white truncate">{selectedGame.name}</h3>
+              </div>
+              <div className="flex items-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-900 px-3 py-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                <span>{selectedFriend.nickname}</span>
+              </div>
+            </div>
+          </div>
+
+          {loadingGameHistory ? (
+            <div className="flex justify-center py-10"><Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} /></div>
+          ) : gameHistory.length === 0 ? (
+            <div className="text-center py-12 bg-white dark:bg-slate-800 border rounded-2xl text-slate-400 text-sm font-medium">No logged plays found for this game.</div>
+          ) : (
+            <div className="space-y-4">
+              {gameHistory.map((record) => {
+                const players = Array.isArray(record.players) ? record.players : [];
+                const maxScore = players.length ? Math.max(...players.map((p: any) => Number(p.score || 0))) : 0;
+                const sortedPlayers = [...players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
+                const canViewPhoto = record.userId === user?.uid || selectedFriend.uid === user?.uid;
+
+                return (
+                  <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-xs space-y-3">
+                    <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold border-b dark:border-slate-700 pb-2 border-slate-100">
+                      <span className="flex items-center gap-1"><span>📅</span> {record.playedAt?.toDate ? new Date(record.playedAt.toDate()).toLocaleDateString() : "Just now"}</span>
+                      <span>{record.loggedBy || selectedFriend.nickname}</span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {sortedPlayers.map((p: any, index: number) => (
+                        <div key={`${record.id}-${index}`} className="flex justify-between items-center text-sm font-semibold">
+                          <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5">{Number(p.score) === maxScore && maxScore > 0 && <span>🏆</span>} {p.name}</span>
+                          <div className="text-right">
+                            <span className="font-black text-slate-900 dark:text-white">{p.score} pts</span>
+                            {p.rawExpression && p.rawExpression !== String(p.score) && <span className="block text-[10px] text-slate-400 dark:text-slate-500 font-normal">({p.rawExpression})</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {record.memoryPhoto && canViewPhoto ? (
+                      <div className="mt-3 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50">
+                        <img src={record.memoryPhoto} alt="Session memory" className="w-full max-h-64 object-contain" />
+                      </div>
+                    ) : record.memoryPhoto ? (
+                      <div className="mt-3 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-3 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Photo hidden — only the uploader can view this session image.
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

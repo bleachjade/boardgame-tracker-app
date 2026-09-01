@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Library, Sparkles, BarChart3, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck, CalendarDays, Globe } from "lucide-react";
+import { Library, Sparkles, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck, CalendarDays, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
@@ -9,7 +9,7 @@ interface SidebarProps {
     isSidebarOpen: boolean;
     setIsSidebarOpen: (open: boolean) => void;
     selectGroupMobile: (group: any | null) => void;
-    selectTab: (tab: "recommendations" | "analytics" | "library" | "friends" | "events") => void;
+    selectTab: (tab: "recommendations" | "library" | "friends" | "events") => void;
     handleCreateGroup: () => void;
     handleDeleteGroup: (e: React.MouseEvent, groupId: string, groupName: string) => void;
     handleExport: () => void;
@@ -50,7 +50,6 @@ export function Sidebar({ currentView, isSidebarOpen, setIsSidebarOpen, selectGr
                     <div className="space-y-1">
                         <button onClick={() => { selectGroupMobile(null); selectTab("library"); }} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${activeGroup === null && currentView === "library" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Library size={20} className={activeGroup === null && currentView === "library" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.allGames')}</button>
                         <button onClick={() => selectTab("recommendations")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "recommendations" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><Sparkles size={20} className={currentView === "recommendations" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.forYou')}</button>
-                        <button onClick={() => selectTab("analytics")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "analytics" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><BarChart3 size={20} className={currentView === "analytics" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.analytics')}</button>
                         <button onClick={() => selectTab("friends")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "friends" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><UserCheck size={20} className={currentView === "friends" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.friends')}</button>
                         <button onClick={() => selectTab("events")} className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${currentView === "events" ? 'bg-indigo-600 text-white font-bold shadow-md' : 'text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700'}`}><CalendarDays size={20} className={currentView === "events" ? "text-indigo-100" : "text-indigo-500 dark:text-indigo-400"} /> {t('sidebar.gameNights')}</button>
                     </div>

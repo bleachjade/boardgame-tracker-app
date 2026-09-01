@@ -14,7 +14,6 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Sidebar } from "@/components/Sidebar";
 import { GameCard } from "@/components/GameCard";
 import { RecommendationsTab } from "@/components/views/RecommendationsTab";
-import { AnalyticsTab } from "@/components/views/AnalyticsTab";
 import { FriendsTab } from "@/components/views/FriendsTab";
 import { GameNightsTab } from "@/components/views/GameNightsTab";
 
@@ -32,7 +31,7 @@ export default function Home() {
   const { t } = useTranslation();
 
   const [games, setGames] = useState<any[]>([]);
-  const [currentView, setCurrentView] = useState<"library" | "recommendations" | "analytics" | "friends" | "events">("library");
+  const [currentView, setCurrentView] = useState<"library" | "recommendations" | "friends" | "events">("library");
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
@@ -101,7 +100,7 @@ export default function Home() {
   };
 
   const selectGroupMobile = (group: any | null) => { setActiveGroup(group); setCurrentView("library"); setIsSidebarOpen(false); };
-  const selectTab = (tab: "recommendations" | "analytics" | "library" | "friends" | "events") => { setActiveGroup(null); setCurrentView(tab); setIsSidebarOpen(false); };
+  const selectTab = (tab: "recommendations" | "library" | "friends" | "events") => { setActiveGroup(null); setCurrentView(tab); setIsSidebarOpen(false); };
   const toggleBulkSelection = (gameId: string) => setSelectedGameIds(prev => prev.includes(gameId) ? prev.filter(id => id !== gameId) : [...prev, gameId]);
 
   const handleCreateGroup = async () => {
@@ -224,8 +223,7 @@ export default function Home() {
 
       <main className="flex-1 overflow-y-auto flex flex-col relative" onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 15)}>
         {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : []} /></div>
-          : currentView === "analytics" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><AnalyticsTab /></div>
-            : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : currentView === "events" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><GameNightsTab userGames={parentGamesToRender} /></div>
+          : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : currentView === "events" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><GameNightsTab userGames={parentGamesToRender} /></div>
               : (
                 <>
                   <div className={`bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur z-20 sticky top-0 border-b border-slate-200 dark:border-slate-800 transition-all duration-300 ${isScrolled ? "shadow-sm" : ""} p-3 md:p-8 pb-3 md:pb-6`}>
