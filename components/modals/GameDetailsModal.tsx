@@ -6,6 +6,7 @@ import { db } from "@/lib/firebase";
 import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { BoardGame3DModel } from "@/components/BoardGame3DModel";
 
 export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
         const res = await fetch(`/api/bgg?ids=${game.bggId}`);
         const data = await res.json();
         if (data && data.length > 0) {
+          console.log("Fetched full game details:", data[0]);
           setLiveData({ ...game, ...data[0] });
         }
       } catch (err) { } finally { setLoading(false); }
@@ -131,6 +133,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
   const playsCount = history.length;
   const costPerPlay = liveData.pricePaid ? (liveData.pricePaid / Math.max(playsCount, 1)).toFixed(2) : "0.00";
+  const dimensions = liveData.dimensions;
+  const hasDimensions = dimensions?.width > 0 && dimensions?.length > 0 && dimensions?.depth > 0;
 
   const createMarkup = (html: string) => {
     if (!html) return { __html: "No description provided." };
@@ -290,6 +294,10 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               </div>
             </div>
           </div>
+
+          {hasDimensions && (
+            <BoardGame3DModel dimensions={dimensions} image={liveData.image} name={liveData.name} />
+          )}
 
           <div className="md:col-span-2 border-t border-slate-200 dark:border-slate-700 pt-6">
             <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">

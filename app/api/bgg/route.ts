@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const response = await fetch(`https://boardgamegeek.com/xmlapi2/thing?id=${ids}&stats=1`, {
+    const response = await fetch(`https://boardgamegeek.com/xmlapi2/thing?id=${ids}&stats=1&versions=1`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },
@@ -102,6 +102,15 @@ export async function GET(request: Request) {
       }
 
       const rawDesc = typeof game.description === 'object' ? game.description['#text'] || '' : game.description || '';
+      const versions = game.versions?.item
+        ? (Array.isArray(game.versions.item) ? game.versions.item : [game.versions.item])
+        : [];
+      const versionDimensions = versions.find((version: any) => version.width || version.length || version.depth) || game;
+      const readDimension = (name: 'width' | 'length' | 'depth') => {
+        const value = versionDimensions[name]?.['@_value'] ?? versionDimensions[name]?.value ?? versionDimensions[name];
+        const parsedValue = Number.parseFloat(String(value ?? ''));
+        return Number.isFinite(parsedValue) ? parsedValue : null;
+      };
 
       return {
         bggId: String(game['@_id']),
@@ -120,6 +129,11 @@ export async function GET(request: Request) {
         mechanics,
         bestPlayers,
         communityAge,
+        dimensions: {
+          width: readDimension('width'),
+          length: readDimension('length'),
+          depth: readDimension('depth'),
+        },
         isExpansion,
         baseGameId
       };
