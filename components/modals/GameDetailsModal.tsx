@@ -148,8 +148,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
         <div className="p-6 overflow-y-auto flex-1 space-y-8 custom-scrollbar">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-56 h-56 md:h-auto rounded-xl overflow-hidden shadow-md shrink-0 relative bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-              {liveData.image ? <Image src={liveData.image} alt={liveData.name} fill className="object-cover" unoptimized /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>}
+            <div className="w-full md:w-56 h-64 md:h-80 rounded-xl overflow-hidden shrink-0 relative">
+              {liveData.image ? <Image src={liveData.image} alt={liveData.name} fill className="object-contain" unoptimized /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>}
             </div>
 
             <div className="flex-1 flex flex-col justify-center space-y-4">

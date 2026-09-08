@@ -323,8 +323,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                 
                 {players.map((player, idx) => {
                   const matches = allSuggestions.filter(name => 
-                    player.name.length > 0 && 
-                    name.toLowerCase().includes(player.name.toLowerCase()) && 
+                    (!player.name.trim() || name.toLowerCase().includes(player.name.toLowerCase())) &&
                     name.toLowerCase() !== player.name.toLowerCase()
                   ).slice(0, 5);
 
@@ -345,6 +344,11 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                           
                           {focusedPlayerIdx === idx && matches.length > 0 && (
                             <div className="absolute top-full left-0 mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in slide-in-from-top-1">
+                              {!player.name.trim() && (
+                                <div className="px-3 py-2 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-700">
+                                  Pick a previous player
+                                </div>
+                              )}
                               {matches.map((matchName, i) => {
                                 const isFriend = friendNames.includes(matchName);
                                 return (

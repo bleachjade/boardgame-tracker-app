@@ -58,7 +58,7 @@ export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, active
         </div>
       )}
 
-      <div className="h-48 sm:h-56 w-full overflow-hidden bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
+      <div className="aspect-square w-full overflow-hidden bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shrink-0 relative">
         {!isBulkMode && game.userId === userUid && (
           <button onClick={(e) => onDelete(e, game)} className="absolute top-2 right-2 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-red-50 dark:hover:bg-red-900/30 text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-full shadow-sm md:opacity-0 group-hover:opacity-100 transition-all z-10" title={activeGroup === null ? t('gameCard.deleteLibrary') : t('gameCard.removeGroup')}><Trash2 size={16} /></button>
         )}
