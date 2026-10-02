@@ -31,6 +31,7 @@ export default function Home() {
   const { t } = useTranslation();
 
   const [games, setGames] = useState<any[]>([]);
+  const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
   const [currentView, setCurrentView] = useState<"library" | "recommendations" | "friends" | "events">("library");
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
@@ -39,7 +40,7 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year">("recent");
+  const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year" | "plays">("recent");
   const [playerFilter, setPlayerFilter] = useState<string>("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -88,6 +89,33 @@ export default function Home() {
     const unsub = onSnapshot(q, (snap) => setGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
     return () => unsub();
   }, [activeGroup, user, settingsLoaded, userProfile]);
+
+  useEffect(() => {
+    if (!user) {
+      setPlayCounts({});
+      return;
+    }
+
+    setPlayCounts({});
+    const targetUids = [user.uid];
+    if (userProfile?.isCouple && userProfile.partnerId) targetUids.push(userProfile.partnerId);
+    const q = query(collection(db, "gamePlays"), where("userId", "in", targetUids));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const counts: Record<string, number> = {};
+      snapshot.docs.forEach((play) => {
+        const bggId = play.data().bggId;
+        if (bggId != null) {
+          const key = String(bggId);
+          counts[key] = (counts[key] || 0) + 1;
+        }
+      });
+      setPlayCounts(counts);
+    }, (error) => {
+      console.error("Failed to load game play counts.", error);
+    });
+
+    return () => unsubscribe();
+  }, [user, userProfile]);
 
   useEffect(() => { setIsBulkMode(false); setSelectedGameIds([]); setSearchQuery(""); setPlayerFilter(""); setIsFilterOpen(false); }, [activeGroup, currentView]);
 
@@ -169,7 +197,13 @@ export default function Home() {
   const orphanedExpansions = processedGames.filter(g => g.isExpansion && !baseGames.some(bg => bg.bggId === g.baseGameId));
   const parentGamesToRender = [...baseGames, ...orphanedExpansions];
 
-  parentGamesToRender.sort((a, b) => sortOption === "alpha" ? a.name.localeCompare(b.name) : sortOption === "year" ? parseInt(b.year || "0") - parseInt(a.year || "0") : (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+  parentGamesToRender.sort((a, b) => sortOption === "alpha"
+    ? a.name.localeCompare(b.name)
+    : sortOption === "year"
+      ? parseInt(b.year || "0") - parseInt(a.year || "0")
+      : sortOption === "plays"
+        ? (playCounts[String(b.bggId)] || 0) - (playCounts[String(a.bggId)] || 0)
+        : (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
 
   const pickRandomGame = () => { if (parentGamesToRender.length === 0) return toast.error(t('home.noMatches')); setRandomGameOpen(parentGamesToRender[Math.floor(Math.random() * parentGamesToRender.length)]); };
 
@@ -263,7 +297,7 @@ export default function Home() {
                           <div className={`${isFilterOpen ? "flex" : "hidden"} md:flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 md:gap-3 bg-white dark:bg-slate-800 p-2.5 md:p-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm`}>
                             <div className="flex-1 relative"><Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><input type="text" placeholder={t('home.filterByName')} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none" /></div>
                             <div className="w-full sm:w-32 relative"><Users size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><input type="number" placeholder={t('home.players')} value={playerFilter} onChange={(e) => setPlayerFilter(e.target.value)} min="1" max="99" className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none" /></div>
-                            <div className="w-full sm:w-44 relative"><ArrowDownAZ size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><select value={sortOption} onChange={(e: any) => setSortOption(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white outline-none appearance-none"><option value="recent">{t('home.recentlyAdded')}</option><option value="alpha">{t('home.alphabetical')}</option><option value="year">{t('home.releaseYear')}</option></select></div>
+                            <div className="w-full sm:w-44 relative"><ArrowDownAZ size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><select value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)} className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white outline-none appearance-none"><option value="recent">{t('home.recentlyAdded')}</option><option value="alpha">{t('home.alphabetical')}</option><option value="year">{t('home.releaseYear')}</option><option value="plays">{t('home.mostPlayed')}</option></select></div>
                             <button onClick={pickRandomGame} className="w-full sm:w-auto bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-1.5 transition"><Shuffle size={16} /> {t('home.whatToPlay')}</button>
                             
                             {/* View Toggle Button */}
