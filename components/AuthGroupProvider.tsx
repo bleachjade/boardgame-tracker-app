@@ -1,10 +1,11 @@
 "use client";
 
 import "@/lib/i18n"; // Initializes multi-language support
+import i18n from "@/lib/i18n";
 import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
-import { collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp, doc, setDoc } from "firebase/firestore";
 
 type AuthContextType = {
   user: User | null;
@@ -27,6 +28,18 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
   const [activeGroup, setActiveGroup] = useState<any | null>(null);
   const hasInitialized = useRef(false);
 
+  // When the signed-in account changes (login, logout, account switch), drop all
+  // per-account state during render — effects must not reset state synchronously.
+  const currentUid = user?.uid ?? null;
+  const [prevUid, setPrevUid] = useState<string | null>(null);
+  if (currentUid !== prevUid) {
+    setPrevUid(currentUid);
+    setUserProfile(null);
+    setUserNickname("");
+    setUserGroups([]);
+    setActiveGroup(null);
+  }
+
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -35,24 +48,31 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribeAuth();
   }, []);
 
+  // Keep <html lang> in sync with the selected language (a11y + font shaping)
+  useEffect(() => {
+    const syncLang = (lng: string) => { document.documentElement.lang = lng; };
+    syncLang(i18n.language);
+    i18n.on("languageChanged", syncLang);
+    return () => { i18n.off("languageChanged", syncLang); };
+  }, []);
+
   // 1. LIVE PROFILE LISTENER: Auto-updates if a partner links to you!
   useEffect(() => {
-    if (!user) {
-      setUserProfile(null);
-      setUserNickname("");
-      return;
-    }
+    if (!user) return;
 
     const userDocRef = doc(db, "users", user.uid);
     const unsubProfile = onSnapshot(userDocRef, async (docSnap) => {
       if (!docSnap.exists()) {
-        // Initialization for brand new accounts
-        let nick = prompt("Welcome to Boardgame Tracker! Please enter a nickname:");
-        while (!nick || !nick.trim()) nick = prompt("A nickname is required. Please enter a nickname:");
-        
+        // Initialization for brand new accounts.
+        // Cancel must never loop forever (it froze the whole app before).
+        let nick = prompt(i18n.t("profile.enterNickname"));
+        if (!nick || !nick.trim()) nick = prompt(i18n.t("profile.nicknameRequired"));
+        const fallback = user.displayName?.trim() || user.email?.split("@")[0] || "Player";
+        const nickname = nick && nick.trim() ? nick.trim() : fallback;
+
         await setDoc(userDocRef, {
           uid: user.uid,
-          nickname: nick.trim(),
+          nickname,
           email: user.email?.toLowerCase() || "",
           isCouple: false,
           partnerId: null,
@@ -95,11 +115,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
 
   // 3. Listen to Groups
   useEffect(() => {
-    if (!user) {
-      setUserGroups([]);
-      setActiveGroup(null);
-      return;
-    }
+    if (!user) return;
     const identifier = user.email || user.uid;
     const q = query(collection(db, "groups"), where("members", "array-contains", identifier));
     const unsubscribeGroups = onSnapshot(q, (snapshot) => {

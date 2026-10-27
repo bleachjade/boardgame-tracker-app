@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useParams } from "next/navigation";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Trophy, Clock, PartyPopper } from "lucide-react";
 import toast from "react-hot-toast";
+
+// localStorage is read through useSyncExternalStore instead of an effect so the
+// guest's saved name is available without a synchronous setState in an effect.
+const neverSubscribe = () => () => {};
 
 export default function GuestInvitePage() {
   const params = useParams();
@@ -15,17 +19,18 @@ export default function GuestInvitePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const [guestName, setGuestName] = useState("");
-  const [isJoined, setIsJoined] = useState(false);
+  const [draftName, setDraftName] = useState("");
+  const [joinedManually, setJoinedManually] = useState(false);
+
+  const savedName = useSyncExternalStore(
+    neverSubscribe,
+    () => localStorage.getItem(`guest_name_${eventId}`) ?? "",
+    () => ""
+  );
+  const guestName = savedName || draftName;
+  const isJoined = Boolean(savedName) || joinedManually;
 
   useEffect(() => {
-    // Check if they already entered their name previously on this device
-    const savedName = localStorage.getItem(`guest_name_${eventId}`);
-    if (savedName) {
-      setGuestName(savedName);
-      setIsJoined(true);
-    }
-
     const unsub = onSnapshot(doc(db, "gameNights", eventId), (docSnap) => {
       if (docSnap.exists()) {
         setEvent({ id: docSnap.id, ...docSnap.data() });
@@ -40,11 +45,10 @@ export default function GuestInvitePage() {
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName.trim()) return;
-    const formattedName = `Guest_${guestName.trim()}`;
+    if (!draftName.trim()) return;
+    const formattedName = `Guest_${draftName.trim()}`;
     localStorage.setItem(`guest_name_${eventId}`, formattedName);
-    setGuestName(formattedName);
-    setIsJoined(true);
+    setJoinedManually(true);
     toast.success("Joined! Please RSVP below.");
   };
 
@@ -52,11 +56,11 @@ export default function GuestInvitePage() {
     try {
       await updateDoc(doc(db, "gameNights", eventId), { [`rsvps.${guestName}`]: status });
       toast.success(status === "yes" ? "You're in! Cast your votes." : "RSVP updated.");
-    } catch (err) { toast.error("Failed to update RSVP."); }
+    } catch { toast.error("Failed to update RSVP."); }
   };
 
   const handleVote = async (gameId: string) => {
-    let currentVotes = event.votes[guestName] || [];
+    let currentVotes = (event.votes || {})[guestName] || [];
     if (!Array.isArray(currentVotes)) currentVotes = [currentVotes];
 
     let newVotes;
@@ -69,23 +73,23 @@ export default function GuestInvitePage() {
 
     try {
       await updateDoc(doc(db, "gameNights", eventId), { [`votes.${guestName}`]: newVotes });
-    } catch (err) { toast.error("Failed to cast vote."); }
+    } catch { toast.error("Failed to cast vote."); }
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-indigo-600"><PartyPopper className="animate-bounce" size={40} /></div>;
   if (error || !event) return <div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="text-center font-bold text-slate-500">Event not found or canceled.</div></div>;
 
-  const myRSVP = event.rsvps[guestName] || null;
-  let myVotes = event.votes[guestName] || [];
+  const myRSVP = (event.rsvps || {})[guestName] || null;
+  let myVotes = (event.votes || {})[guestName] || [];
   if (!Array.isArray(myVotes)) myVotes = [myVotes];
 
   const voteTallies: Record<string, number> = {};
-  Object.values(event.votes).forEach((voteData: any) => {
+  Object.values(event.votes || {}).forEach((voteData: any) => {
     if (Array.isArray(voteData)) voteData.forEach(gId => voteTallies[gId] = (voteTallies[gId] || 0) + 1);
     else if (typeof voteData === 'string') voteTallies[voteData] = (voteTallies[voteData] || 0) + 1;
   });
   const highestVotes = Math.max(0, ...Object.values(voteTallies) as number[]);
-  const guestsGoingCount = Object.values(event.rsvps).filter(r => r === "yes").length;
+  const guestsGoingCount = Object.values(event.rsvps || {}).filter(r => r === "yes").length;
 
   return (
     <div className="min-h-screen bg-slate-100 p-4 flex justify-center items-start pt-10">
@@ -123,8 +127,8 @@ export default function GuestInvitePage() {
         {!isJoined ? (
           <form onSubmit={handleJoin} className="p-6 space-y-4">
             <div>
-              <label className="text-xs font-black text-slate-500 uppercase">What's your name?</label>
-              <input required type="text" placeholder="Enter your name to RSVP" value={guestName} onChange={e => setGuestName(e.target.value)} className="w-full mt-1.5 p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-600" />
+              <label className="text-xs font-black text-slate-500 uppercase">What&apos;s your name?</label>
+              <input required type="text" placeholder="Enter your name to RSVP" value={guestName} onChange={e => setDraftName(e.target.value)} className="w-full mt-1.5 p-3 bg-slate-50 border border-slate-200 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-600" />
             </div>
             <button type="submit" className="w-full py-3 bg-indigo-600 text-white font-black rounded-xl shadow-md">Join Event</button>
           </form>
@@ -136,7 +140,7 @@ export default function GuestInvitePage() {
               <span className="text-xs font-black text-slate-500 uppercase tracking-widest block mb-2">Your RSVP</span>
               <div className="flex gap-2">
                 <button onClick={() => handleRSVP("yes")} className={`flex-1 py-3 rounded-xl text-sm font-black border transition flex items-center justify-center gap-2 ${myRSVP === "yes" ? "bg-emerald-50 border-emerald-300 text-emerald-700 ring-2 ring-emerald-500/20" : "bg-white border-slate-200 text-slate-500 hover:border-emerald-400"}`}>
-                  <CheckCircle2 size={18} /> I'm In
+                  <CheckCircle2 size={18} /> I&apos;m In
                 </button>
                 <button onClick={() => handleRSVP("no")} className={`flex-1 py-3 rounded-xl text-sm font-black border transition flex items-center justify-center gap-2 ${myRSVP === "no" ? "bg-red-50 border-red-300 text-red-700 ring-2 ring-red-500/20" : "bg-white border-slate-200 text-slate-500 hover:border-red-400"}`}>
                   <XCircle size={18} /> Out
@@ -153,11 +157,11 @@ export default function GuestInvitePage() {
               
               {myRSVP !== "yes" ? (
                 <div className="h-32 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-sm font-medium">
-                  RSVP "I'm In" to unlock voting!
+                  RSVP &quot;I&apos;m In&quot; to unlock voting!
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-3">
-                  {event.proposedGames.map((game: any) => {
+                  {(event.proposedGames || []).map((game: any) => {
                     const votes = voteTallies[game.id] || 0;
                     const isWinning = votes > 0 && votes === highestVotes;
                     const hasMyVote = myVotes.includes(game.id);

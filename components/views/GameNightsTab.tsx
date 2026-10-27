@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, getDocs, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Loader2, Trophy, Clock, Search, PartyPopper, Link as LinkIcon } from "lucide-react";
+import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Loader2, Trophy, Clock, Search, PartyPopper, Link as LinkIcon, UserPlus, UserCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
+import { useModalClose } from "@/lib/useModalClose";
 
 export function GameNightsTab({ userGames }: { userGames: any[] }) {
   const { user, userNickname, userProfile } = useAuthGroup();
@@ -21,6 +22,8 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
   const [selectedGames, setSelectedGames] = useState<any[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [searchGame, setSearchGame] = useState("");
+
+  const { overlayProps: createOverlayProps, panelProps: createPanelProps } = useModalClose(() => setIsCreating(false), { backdrop: true });
 
   useEffect(() => {
     if (!user || !userProfile) return;
@@ -90,7 +93,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
       setNewEvent({ title: "", date: "", time: "", location: "" });
       setSelectedGames([]);
       setSelectedFriends([]);
-    } catch (err) { toast.error(t('gameNights.createFail')); }
+    } catch { toast.error(t('gameNights.createFail')); }
   };
 
   const handleRSVP = async (eventId: string, status: "yes" | "no") => {
@@ -99,7 +102,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
       const eventRef = doc(db, "gameNights", eventId);
       await updateDoc(eventRef, { [`rsvps.${user.uid}`]: status });
       toast.success(status === "yes" ? t('gameNights.rsvpYes') : t('gameNights.rsvpUpdated'));
-    } catch (err) { toast.error(t('gameNights.rsvpFail')); }
+    } catch { toast.error(t('gameNights.rsvpFail')); }
   };
 
   const handleVote = async (eventId: string, gameId: string) => {
@@ -107,7 +110,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
     const targetEvent = events.find(e => e.id === eventId);
     if (!targetEvent) return;
 
-    let currentVotes = targetEvent.votes[user.uid] || [];
+    let currentVotes = (targetEvent.votes || {})[user.uid] || [];
     if (!Array.isArray(currentVotes)) currentVotes = [currentVotes]; 
 
     let newVotes;
@@ -120,7 +123,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
 
     try {
       await updateDoc(doc(db, "gameNights", eventId), { [`votes.${user.uid}`]: newVotes });
-    } catch (err) { toast.error(t('gameNights.voteFail')); }
+    } catch { toast.error(t('gameNights.voteFail')); }
   };
 
   const handleCopyLink = (eventId: string) => {
@@ -132,11 +135,25 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
   const handleDeleteEvent = async (eventId: string) => {
     if (!confirm(t('gameNights.cancelConfirm'))) return;
     try { await deleteDoc(doc(db, "gameNights", eventId)); toast.success(t('gameNights.cancelSuccess')); } 
-    catch (err) { toast.error(t('gameNights.cancelFail')); }
+    catch { toast.error(t('gameNights.cancelFail')); }
   };
 
   if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-indigo-600" size={32} /></div>;
   const filteredLibrary = userGames.filter(g => g.name.toLowerCase().includes(searchGame.toLowerCase()));
+
+  // Upcoming events first (so the next game night is on top), then archived ones
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const sortedEvents = [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const isPast = (event: any) => new Date(event.date).getTime() < startOfToday.getTime();
+  const upcomingEvents = sortedEvents.filter(event => !isPast(event));
+  const pastEvents = sortedEvents.filter(isPast).reverse();
+  type DisplayItem = { kind: "divider"; label: string } | { kind: "event"; event: any };
+  const displayList: DisplayItem[] = [
+    ...upcomingEvents.map(event => ({ kind: "event" as const, event })),
+    ...(pastEvents.length > 0 ? [{ kind: "divider" as const, label: t('gameNights.pastEvents') }] : []),
+    ...pastEvents.map(event => ({ kind: "event" as const, event })),
+  ];
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-300 px-1 sm:px-0">
@@ -153,8 +170,8 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
       </div>
 
       {isCreating && (
-        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
+        <div {...createOverlayProps} className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div {...createPanelProps} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700 animate-in fade-in zoom-in-95">
             <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
               <h3 className="font-black text-lg text-slate-900 dark:text-white">{t('gameNights.planTitle')}</h3>
               <button onClick={() => setIsCreating(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition"><X size={20}/></button>
@@ -196,6 +213,35 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
                   })}
                 </div>
               </div>
+
+              <div className="space-y-3">
+                <label className="text-xs font-black text-slate-500 uppercase flex justify-between">
+                  <span>{t('gameNights.inviteFriends')}</span>
+                  <span className="text-indigo-600 dark:text-indigo-400">{t('gameNights.invitedCount', { count: selectedFriends.length })}</span>
+                </label>
+                <p className="text-xs font-medium text-slate-400">{t('gameNights.inviteFriendsDesc')}</p>
+                {friendsList.length === 0 ? (
+                  <div className="text-xs font-medium text-slate-400 bg-slate-50 dark:bg-slate-900/50 border border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-3">
+                    {t('gameNights.noFriendsToInvite')}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {friendsList.map(friend => {
+                      const isInvited = selectedFriends.includes(friend.uid);
+                      return (
+                        <button
+                          type="button"
+                          key={friend.uid}
+                          onClick={() => toggleFriendSelection(friend.uid)}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition active:scale-95 ${isInvited ? "bg-indigo-600 border-indigo-600 text-white shadow-sm" : "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-300"}`}
+                        >
+                          {isInvited ? <UserCheck size={14} /> : <UserPlus size={14} />} {friend.nickname}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </form>
             <div className="p-4 border-t dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 flex justify-end gap-2 shrink-0">
               <button onClick={() => setIsCreating(false)} className="px-4 py-2 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition">{t('common.cancel')}</button>
@@ -206,25 +252,36 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
       )}
 
       <div className="space-y-4">
-        {events.length === 0 ? (
+        {upcomingEvents.length === 0 && (
           <div className="text-center py-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl">
             <CalendarDays size={40} className="mx-auto text-slate-300 dark:text-slate-600 mb-3" />
             <h3 className="text-slate-500 dark:text-slate-400 font-bold">{t('gameNights.noUpcoming')}</h3>
           </div>
-        ) : events.map(event => {
+        )}
+        {displayList.map(item => {
+          if (item.kind === "divider") {
+            return (
+              <div key="past-events-divider" className="flex items-center gap-3 pt-5 mt-1 border-t-2 border-dashed border-slate-200 dark:border-slate-700">
+                <span className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{item.label}</span>
+              </div>
+            );
+          }
+          const event = item.event;
+          const rsvps = event.rsvps || {};
+          const voteMap = event.votes || {};
           const isHost = event.hostId === user?.uid;
-          const myRSVP = event.rsvps[user?.uid || ""];
-          let myVotes = event.votes[user?.uid || ""] || [];
+          const myRSVP = rsvps[user?.uid || ""];
+          let myVotes = voteMap[user?.uid || ""] || [];
           if (!Array.isArray(myVotes)) myVotes = [myVotes];
           
           const voteTallies: Record<string, number> = {};
-          Object.values(event.votes).forEach((voteData: any) => {
+          Object.values(voteMap).forEach((voteData: any) => {
             if (Array.isArray(voteData)) voteData.forEach(gId => voteTallies[gId] = (voteTallies[gId] || 0) + 1);
             else if (typeof voteData === 'string') voteTallies[voteData] = (voteTallies[voteData] || 0) + 1;
           });
           const highestVotes = Math.max(0, ...Object.values(voteTallies) as number[]);
 
-          const goingIds = Object.keys(event.rsvps).filter(id => event.rsvps[id] === "yes");
+          const goingIds = Object.keys(rsvps).filter(id => rsvps[id] === "yes");
           const guestsGoingCount = goingIds.length;
           
           const goingNames = goingIds.map(id => {
@@ -298,7 +355,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {event.proposedGames.map((game: any) => {
+                    {(event.proposedGames || []).map((game: any) => {
                       const votes = voteTallies[game.id] || 0;
                       const isWinning = votes > 0 && votes === highestVotes;
                       const hasMyVote = myVotes.includes(game.id);

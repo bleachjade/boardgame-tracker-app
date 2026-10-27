@@ -26,6 +26,9 @@ import { BulkAssignModal } from "@/components/modals/BulkAssignModal";
 import { InviteModal } from "@/components/modals/InviteModal";
 import { AddFromLibraryModal } from "@/components/modals/AddFromLibraryModal";
 
+// Stable reference so tab components don't see a "new" prop on every render
+const EMPTY_GAMES: any[] = [];
+
 export default function Home() {
   const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup, userGroups } = useAuthGroup();
   const { t } = useTranslation();
@@ -58,6 +61,26 @@ export default function Home() {
   const [selectedGameIds, setSelectedGameIds] = useState<string[]>([]);
   const [isBulkAssignModalOpen, setIsBulkAssignModalOpen] = useState(false);
 
+  // Render-phase resets: clear dependent state the moment its scope changes,
+  // instead of doing it synchronously inside an effect.
+  const playCountsKey = user ? `${user.uid}|${userProfile?.partnerId ?? ""}` : "";
+  const [prevPlayCountsKey, setPrevPlayCountsKey] = useState(playCountsKey);
+  if (playCountsKey !== prevPlayCountsKey) {
+    setPrevPlayCountsKey(playCountsKey);
+    setPlayCounts({});
+  }
+
+  const scopeKey = `${activeGroup?.id ?? ""}::${currentView}`;
+  const [prevScopeKey, setPrevScopeKey] = useState(scopeKey);
+  if (scopeKey !== prevScopeKey) {
+    setPrevScopeKey(scopeKey);
+    setIsBulkMode(false);
+    setSelectedGameIds([]);
+    setSearchQuery("");
+    setPlayerFilter("");
+    setIsFilterOpen(false);
+  }
+
   useEffect(() => {
     if (!user) return;
     const fetchPref = async () => {
@@ -71,18 +94,18 @@ export default function Home() {
         } else {
           document.documentElement.classList.remove("dark");
         }
-      } catch (err) { } finally { setSettingsLoaded(true); }
+      } catch { /* stored preferences are optional */ } finally { setSettingsLoaded(true); }
     };
     fetchPref();
   }, [user]);
 
   useEffect(() => {
     if (!user || !settingsLoaded || !userProfile) return;
-    let targetUids = [user.uid];
+    const targetUids = [user.uid];
     if (userProfile.isCouple && userProfile.partnerId) {
       targetUids.push(userProfile.partnerId);
     }
-    let q = activeGroup === null
+    const q = activeGroup === null
       ? query(collection(db, "userGames"), where("userId", "in", targetUids))
       : query(collection(db, "userGames"), where("groupIds", "array-contains", activeGroup.id));
 
@@ -91,12 +114,8 @@ export default function Home() {
   }, [activeGroup, user, settingsLoaded, userProfile]);
 
   useEffect(() => {
-    if (!user) {
-      setPlayCounts({});
-      return;
-    }
+    if (!user) return;
 
-    setPlayCounts({});
     const targetUids = [user.uid];
     if (userProfile?.isCouple && userProfile.partnerId) targetUids.push(userProfile.partnerId);
     const q = query(collection(db, "gamePlays"), where("userId", "in", targetUids));
@@ -117,8 +136,6 @@ export default function Home() {
     return () => unsubscribe();
   }, [user, userProfile]);
 
-  useEffect(() => { setIsBulkMode(false); setSelectedGameIds([]); setSearchQuery(""); setPlayerFilter(""); setIsFilterOpen(false); }, [activeGroup, currentView]);
-
   const toggleTheme = async () => {
     const newTheme = userTheme === "light" ? "dark" : "light";
     setUserTheme(newTheme);
@@ -138,7 +155,7 @@ export default function Home() {
         await addDoc(collection(db, "groups"), { name: name.trim(), ownerId: user?.uid, members: [user?.email || user?.uid], isSystem: false, createdAt: serverTimestamp() });
         toast.success(t('home.created'));
         setIsSidebarOpen(true);
-      } catch (error) { toast.error(t('home.failed')); }
+      } catch { toast.error(t('home.failed')); }
     }
   };
 
@@ -149,7 +166,7 @@ export default function Home() {
         await deleteDoc(doc(db, "groups", groupId));
         if (activeGroup?.id === groupId) setActiveGroup(null);
         toast.success(t('home.deleted'));
-      } catch (error) { }
+      } catch { /* group already gone */ }
     }
   };
 
@@ -171,7 +188,15 @@ export default function Home() {
   const handleExport = async () => {
     if (user) {
       const snap = await getDocs(query(collection(db, "userGames"), where("userId", "==", user.uid)));
-      const data = snap.docs.map(d => { const { userId, ownerNickname, addedAt, id, groupIds, ...rest } = d.data(); return rest; });
+      const data = snap.docs.map(d => {
+        const rest: Record<string, any> = { ...d.data() };
+        delete rest.userId;
+        delete rest.ownerNickname;
+        delete rest.addedAt;
+        delete rest.id;
+        delete rest.groupIds;
+        return rest;
+      });
       await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
       toast.success(t('home.copied'));
     }
@@ -186,7 +211,7 @@ export default function Home() {
       const batch = writeBatch(db);
       imported.forEach((g: any) => { if (g.bggId) batch.set(doc(collection(db, "userGames")), { ...g, userId: user.uid, ownerNickname: userNickname, groupIds: [], addedAt: serverTimestamp() }); });
       await batch.commit(); toast.success(t('home.imported'));
-    } catch (err) { toast.error(t('home.invalidJson')); }
+    } catch { toast.error(t('home.invalidJson')); }
   };
 
   let processedGames = [...games];
@@ -230,10 +255,10 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
-      {/* Mobile Top Navbar with Hide-On-Scroll Animation */}
-      <div 
-        className={`md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-transform duration-300 ${
-          isScrolled ? "-translate-y-full absolute top-0 left-0 right-0" : "translate-y-0 relative"
+      {/* Mobile Top Navbar */}
+      <div
+        className={`md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-shadow duration-300 ${
+          isScrolled ? "shadow-md" : ""
         }`}
       >
         <button
@@ -256,7 +281,7 @@ export default function Home() {
       <Sidebar currentView={currentView} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} selectGroupMobile={selectGroupMobile} selectTab={selectTab} handleCreateGroup={handleCreateGroup} handleDeleteGroup={handleDeleteGroup} handleExport={handleExport} handleImport={handleImport} />
 
       <main className="flex-1 overflow-y-auto flex flex-col relative" onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 15)}>
-        {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : []} /></div>
+        {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : EMPTY_GAMES} /></div>
           : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : currentView === "events" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><GameNightsTab userGames={parentGamesToRender} /></div>
               : (
                 <>

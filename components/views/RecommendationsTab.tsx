@@ -43,7 +43,7 @@ export function RecommendationsTab({ userGames }: { userGames: any[] }) {
         });
         scoredGames.sort((a: any, b: any) => a.penalty - b.penalty);
         setRecommendations(scoredGames.slice(0, 12));
-      } catch (err) {} finally { setLoading(false); }
+      } catch { /* offline / API hiccup — show the empty state below */ } finally { setLoading(false); }
     }
     buildRecommendations();
   }, [userGames]);
@@ -68,7 +68,7 @@ export function RecommendationsTab({ userGames }: { userGames: any[] }) {
         addedAt: serverTimestamp() 
       });
       toast.success(t('recommendations.added')); setRecommendations(prev => prev.filter(g => g.bggId !== game.bggId));
-    } catch (err) { toast.error(t('recommendations.failed')); } finally { setAddingId(null); }
+    } catch { toast.error(t('recommendations.failed')); } finally { setAddingId(null); }
   };
 
   if (loading) return <div className="flex flex-col items-center justify-center h-64 text-slate-500 dark:text-slate-400 space-y-4"><Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" /><p className="font-bold">{t('recommendations.analyzing')}</p></div>;
@@ -103,6 +103,12 @@ export function RecommendationsTab({ userGames }: { userGames: any[] }) {
           </div>
         ))}
       </div>
+      {!loading && recommendations.length === 0 && (
+        <div className="bg-white dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center">
+          <Sparkles size={36} className="mx-auto mb-3 text-indigo-400 dark:text-indigo-500" />
+          <p className="font-bold text-slate-600 dark:text-slate-300">{t('recommendations.unavailable')}</p>
+        </div>
+      )}
     </div>
   );
 }

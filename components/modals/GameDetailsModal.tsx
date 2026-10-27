@@ -6,10 +6,13 @@ import { db } from "@/lib/firebase";
 import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useAuthGroup } from "@/components/AuthGroupProvider";
+import { useModalClose } from "@/lib/useModalClose";
 import { BoardGame3DModel } from "@/components/BoardGame3DModel";
 
 export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { t } = useTranslation();
+  const { user, userProfile } = useAuthGroup();
 
   const [liveData, setLiveData] = useState<any>(game);
   const [loading, setLoading] = useState(true);
@@ -28,6 +31,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: "user" | "ai", text: string }[]>([]);
   const [isChatLoading, setIsChatLoading] = useState(false);
+  // Escape only: this modal holds unsaved edits (price / Thai description / chat)
+  const { overlayProps, panelProps } = useModalClose(onClose);
 
   useEffect(() => {
     async function fetchFullDetails() {
@@ -38,7 +43,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
           console.log("Fetched full game details:", data[0]);
           setLiveData({ ...game, ...data[0] });
         }
-      } catch (err) { } finally { setLoading(false); }
+      } catch { /* fallback keeps whatever detail we already have */ } finally { setLoading(false); }
     }
     fetchFullDetails();
   }, [game]);
@@ -47,17 +52,27 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
     // FIX: Removed orderBy() to prevent Firebase Composite Index errors on fresh loads!
     const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId));
 
+    // Only this household/couple sees its own match history, not every user's plays
+    const visibleUids = new Set<string>();
+    if (user) visibleUids.add(user.uid);
+    if (userProfile?.isCouple && userProfile?.partnerId) visibleUids.add(userProfile.partnerId);
+
     const unsub = onSnapshot(q, (snap) => {
-      const fetchedHistory = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const fetchedHistory = snap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter((record: any) => visibleUids.has(record.userId));
 
       // Sort client-side instead of relying on the Firestore server
       fetchedHistory.sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
 
       setHistory(fetchedHistory);
+    }, (error) => {
+      console.error("Failed to load match history:", error);
+      setHistory([]);
     });
 
     return () => unsub();
-  }, [game.bggId]);
+  }, [game.bggId, user, userProfile]);
 
   const handleSavePrice = async () => {
     try {
@@ -67,7 +82,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
       setLiveData((prev: any) => ({ ...prev, pricePaid: numPrice }));
       setIsEditingPrice(false);
       toast.success("Cost updated!");
-    } catch (err) { toast.error("Failed to update price."); }
+    } catch { toast.error("Failed to update price."); }
   };
 
   const handleSaveThaiDesc = async () => {
@@ -77,7 +92,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
       setIsEditingThaiDesc(false);
       if (thaiDescInput.trim()) setUseThai(true);
       toast.success("Thai translation updated!");
-    } catch (err) { toast.error("Failed to save translation."); }
+    } catch { toast.error("Failed to save translation."); }
   };
 
   const handleAskGuru = async (e: React.FormEvent) => {
@@ -143,8 +158,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+    <div {...overlayProps} className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
+      <div {...panelProps} className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
         <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 shrink-0">
           <h2 className="font-black text-slate-900 dark:text-white text-xl flex items-center gap-2"><Info className="text-indigo-600 dark:text-indigo-400" /> {t('gameDetails.title')}</h2>
           <button onClick={onClose}><X size={24} className="text-slate-500 hover:text-slate-900 dark:hover:text-white" /></button>
@@ -268,8 +283,9 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                   <div className="text-center py-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-medium text-sm">{t('gameDetails.noHistory')}</div>
                 ) : (
                   history.map((record) => {
-                    const maxScore = Math.max(...record.players.map((p: any) => Number(p.score || 0)));
-                    const sortedPlayers = [...record.players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
+                    const playersInPlay = Array.isArray(record.players) ? record.players : [];
+                    const maxScore = playersInPlay.length ? Math.max(...playersInPlay.map((p: any) => Number(p.score || 0))) : 0;
+                    const sortedPlayers = [...playersInPlay].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
                     return (
                       <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3">
                         <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold border-b dark:border-slate-700 pb-2 border-slate-100">
@@ -367,7 +383,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                     <div className="h-full flex flex-col items-center justify-center text-center opacity-60">
                       <Bot size={32} className="text-indigo-500 mb-2" />
                       <p className="text-sm font-bold text-slate-500 dark:text-slate-400">AI ผู้ช่วยกติกาสำหรับ {liveData.name}</p>
-                      <p className="text-xs font-medium text-slate-400 mt-1">พิมพ์คำถามที่คุณสงสัยได้เลย เช่น "เซ็ตอัปเกมเล่น 3 คนยังไง?"</p>
+                      <p className="text-xs font-medium text-slate-400 mt-1">พิมพ์คำถามที่คุณสงสัยได้เลย เช่น &quot;เซ็ตอัปเกมเล่น 3 คนยังไง?&quot;</p>
                     </div>
                   ) : (
                     chatHistory.map((msg, i) => (

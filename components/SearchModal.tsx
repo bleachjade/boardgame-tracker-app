@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuthGroup } from "./AuthGroupProvider";
+import { useModalClose } from "@/lib/useModalClose";
 import { Search, Loader2, Plus, X, Users, Database, Globe, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -11,33 +12,27 @@ import { useTranslation } from "react-i18next";
 export function SearchModal({ onClose }: { onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
   const { t } = useTranslation();
+  const { overlayProps, panelProps } = useModalClose(onClose, { backdrop: true });
 
   const [queryText, setQueryText] = useState("");
   const [targetPlayers, setTargetPlayers] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Local JSON catalog state
-  const [localDb, setLocalDb] = useState<any[]>([]);
-  const [localDbLoading, setLocalDbLoading] = useState(true);
-
-  // 1. Fetch local games.json once on load (for player-only filtering)
+  // Local JSON catalog: loaded once into a ref so player-only searches can await
+// it instead of silently returning nothing while the fetch is still in flight.
+  const localCatalogRef = useRef<Promise<any[]> | null>(null);
   useEffect(() => {
-    const loadLocalDatabase = async () => {
-      try {
-        const res = await fetch("/games.json");
-        if (res.ok) {
-          const data = await res.json();
-          setLocalDb(Array.isArray(data) ? data : []);
-        }
-      } catch (err) {
+    localCatalogRef.current = fetch("/games.json")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: any) => (Array.isArray(data) ? data : []))
+      .catch((err) => {
         console.error("Failed to load local games catalog", err);
-      } finally {
-        setLocalDbLoading(false);
-      }
-    };
-    loadLocalDatabase();
+        return [] as any[];
+      });
   }, []);
+
+  const [addingBggId, setAddingBggId] = useState<string | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,9 +92,10 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
       // ==========================================
       else if (cleanPlayers) {
         const targetNum = parseInt(cleanPlayers, 10);
-        
+        const catalog = localCatalogRef.current ? await localCatalogRef.current : [];
+
         // 1. Filter by player count
-        finalResults = localDb.filter((game) => {
+        finalResults = catalog.filter((game) => {
           const min = parseInt(game.minPlayers || "0", 10);
           const max = parseInt(game.maxPlayers || "99", 10);
           return targetNum >= min && targetNum <= max;
@@ -134,20 +130,23 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
   const handleAddGame = async (game: any) => {
     if (!user) return;
-
-    const q = query(
-      collection(db, "userGames"),
-      where("userId", "==", user.uid),
-      where("bggId", "==", game.bggId)
-    );
-    const existing = await getDocs(q);
-
-    if (!existing.empty) {
-      toast.error(t("search.alreadyInLibrary", { name: game.name }));
-      return;
-    }
+    const bggId = String(game.bggId);
+    if (addingBggId === bggId) return; // ignore double-taps while this add is in flight
+    setAddingBggId(bggId);
 
     try {
+      const q = query(
+        collection(db, "userGames"),
+        where("userId", "==", user.uid),
+        where("bggId", "==", bggId)
+      );
+      const existing = await getDocs(q);
+
+      if (!existing.empty) {
+        toast.error(t("search.alreadyInLibrary", { name: game.name }));
+        return;
+      }
+
       await addDoc(collection(db, "userGames"), {
         userId: user.uid,
         ownerNickname: userNickname,
@@ -167,14 +166,16 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
       toast.success(t("search.addSuccess", { name: game.name }));
       onClose();
-    } catch (err) {
+    } catch {
       toast.error(t("search.addFailed"));
+    } finally {
+      setAddingBggId(null);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col border border-slate-200 dark:border-slate-700">
+    <div {...overlayProps} className="fixed inset-0 bg-slate-900/60 dark:bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-300">
+      <div {...panelProps} className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col border border-slate-200 dark:border-slate-700">
         <div className="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 rounded-t-xl shrink-0">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">{t("search.title")}</h2>
           <button onClick={onClose} className="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -236,9 +237,9 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           {(!Array.isArray(results) || results.length === 0) && !loading && (
             <div className="text-center text-slate-500 dark:text-slate-400 py-8 font-medium">
               {targetPlayers && !queryText
-                ? `No games found supporting ${targetPlayers} players in your local catalog.`
+                ? t("search.noGamesForPlayers", { count: targetPlayers })
                 : queryText
-                ? `No games found matching "${queryText}".`
+                ? t("search.noGamesMatching", { query: queryText })
                 : t("search.emptyState")}
             </div>
           )}
@@ -279,10 +280,15 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
                 </div>
                 <button
                   onClick={() => handleAddGame(game)}
-                  className="bg-slate-100 dark:bg-slate-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-slate-200 dark:border-slate-600 hover:border-indigo-200 dark:hover:border-indigo-800 p-3 rounded-full transition-colors group shrink-0"
+                  disabled={addingBggId === String(game.bggId)}
+                  className="bg-slate-100 dark:bg-slate-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 border border-slate-200 dark:border-slate-600 hover:border-indigo-200 dark:hover:border-indigo-800 p-3 rounded-full transition-colors group shrink-0 disabled:opacity-60"
                   title={t("search.addTooltip")}
                 >
-                  <Plus className="text-slate-600 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
+                  {addingBggId === String(game.bggId) ? (
+                    <Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={20} />
+                  ) : (
+                    <Plus className="text-slate-600 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400" />
+                  )}
                 </button>
               </div>
             ))}

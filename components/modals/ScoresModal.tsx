@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { collection, query, where, onSnapshot, getDocs, doc, getDoc, serverTimestamp, orderBy, writeBatch, deleteDoc, limit } from "firebase/firestore";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { collection, query, where, onSnapshot, getDocs, doc, getDoc, serverTimestamp, writeBatch, deleteDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Trophy, X, Calculator, History, Calendar, Plus, Users, Image as ImageIcon, CheckCircle, XCircle, Trash2, Mic, MicOff, UserCheck, Circle } from "lucide-react";
@@ -9,10 +9,21 @@ import { calculateScoreString } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import confetti from "canvas-confetti"; // NEW: Confetti import
+import { useModalClose } from "@/lib/useModalClose";
 
 export function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
-  const { user, userNickname } = useAuthGroup();
+  const { user, userNickname, userProfile } = useAuthGroup();
   const { t } = useTranslation();
+  // Escape only — never a stray backdrop click that would discard a half-entered score sheet
+  useModalClose(onClose);
+
+  // Match history stays inside this household/couple circle — never other users' plays
+  const visiblePlayerUids = useCallback(() => {
+    const uids = new Set<string>();
+    if (user) uids.add(user.uid);
+    if (userProfile?.isCouple && userProfile?.partnerId) uids.add(userProfile.partnerId);
+    return uids;
+  }, [user, userProfile]);
   
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
   const [history, setHistory] = useState<any[]>([]);
@@ -28,6 +39,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [listeningIdx, setListeningIdx] = useState<number | null>(null);
+  const activeRecognitionRef = useRef<any | null>(null);
   
   const [players, setPlayers] = useState([{ name: userNickname || "Player 1", scoreInput: "" }]);
   const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
@@ -35,10 +47,27 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const [focusedPlayerIdx, setFocusedPlayerIdx] = useState<number | null>(null);
 
   useEffect(() => {
-    const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId), orderBy("playedAt", "desc"));
-    const unsub = onSnapshot(q, (snap) => setHistory(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+    // No orderBy here: combining an equality filter with a server-side orderBy
+    // requires a Firestore composite index (this silently failed before).
+    // We sort client-side instead, scoped to accounts in this household/couple.
+    const q = query(collection(db, "gamePlays"), where("bggId", "==", game.bggId));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const visibleUids = visiblePlayerUids();
+        const fetched = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .filter((record: any) => visibleUids.has(record.userId))
+          .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+        setHistory(fetched);
+      },
+      (error) => {
+        console.error("Failed to load match history:", error);
+        setHistory([]);
+      }
+    );
     return () => unsub();
-  }, [game.bggId]);
+  }, [game.bggId, visiblePlayerUids]);
 
   useEffect(() => {
     if (!user) return;
@@ -63,11 +92,18 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     if (!user) return;
     const fetchRecentPlayers = async () => {
       try {
-        const q = query(collection(db, "gamePlays"), where("userId", "==", user.uid), orderBy("playedAt", "desc"), limit(10));
+        // Only an equality filter here — no orderBy, so no composite index is required.
+        const q = query(collection(db, "gamePlays"), where("userId", "==", user.uid));
         const snap = await getDocs(q);
-        const names = snap.docs.flatMap(d => d.data().players?.map((p: any) => p.name) || []);
-        setRecentPlayerNames(Array.from(new Set(names)));
-      } catch (err) { }
+        const plays = snap.docs
+          .map((d) => ({ players: d.data().players || [], ts: d.data().playedAt?.seconds || 0 }))
+          .sort((a, b) => b.ts - a.ts)
+          .slice(0, 10);
+        const names = plays.flatMap((play) => play.players.map((p: any) => p.name));
+        setRecentPlayerNames(Array.from(new Set(names)).filter(Boolean));
+      } catch (err) {
+        console.error("Failed to load recent players:", err);
+      }
     };
     fetchRecentPlayers();
   }, [user]);
@@ -121,9 +157,20 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     const SpeechRecognition = windowSupported && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
     
     if (!SpeechRecognition) return toast.error("Speech input unsupported on this browser.");
-    if (listeningIdx === index) return setListeningIdx(null);
+
+    // Tapping the mic again (or switching rows) must actually stop listening.
+    const stopActive = () => {
+      try { activeRecognitionRef.current?.stop?.(); } catch { /* already stopped */ }
+      activeRecognitionRef.current = null;
+    };
+    if (listeningIdx !== null) stopActive();
+    if (listeningIdx === index) {
+      setListeningIdx(null);
+      return;
+    }
 
     const recognition = new SpeechRecognition();
+    activeRecognitionRef.current = recognition;
     recognition.lang = "th-TH"; 
     recognition.interimResults = false;
 
@@ -133,8 +180,8 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
     };
 
     recognition.onresult = (event: any) => {
-      let transcript = event.results[0][0].transcript;
-      let mathExpression = transcript.toLowerCase()
+      const transcript = event.results[0][0].transcript;
+      const mathExpression = transcript.toLowerCase()
         .replace(/บวก|และ|และก็|กับ|แถม|plus|and/g, "+")
         .replace(/ลบ|หักออก|minus/g, "-")
         .replace(/เท่ากับ|ได้|equals/g, "")
@@ -154,8 +201,15 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       toast.success("Voice score loaded!");
     };
 
-    recognition.onerror = () => { toast.error("Audio recording failed."); setListeningIdx(null); };
-    recognition.onend = () => setListeningIdx(null);
+    recognition.onerror = (event: any) => {
+      const code = event?.error;
+      if (code && code !== "no-speech" && code !== "aborted") toast.error("Audio recording failed.");
+      setListeningIdx(prev => (prev === index ? null : prev));
+    };
+    recognition.onend = () => {
+      if (activeRecognitionRef.current === recognition) activeRecognitionRef.current = null;
+      setListeningIdx(prev => (prev === index ? null : prev));
+    };
     recognition.start();
   };
 
@@ -181,7 +235,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(bitmap, 0, 0, width, height);
       setMemoryPhoto(canvas.toDataURL("image/jpeg", 0.7)); 
-    } catch (err) {
+    } catch {
       const reader = new FileReader();
       reader.onload = (event) => {
         const img = new Image();
@@ -266,7 +320,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       setTeamScore("");
       setCoopResult("win");
       
-    } catch (err) { 
+    } catch { 
       toast.error("Failed to save match scoring details."); 
     }
     
@@ -276,7 +330,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   const handleDeletePlay = async (playId: string) => {
     if (!confirm("Are you sure you want to permanently delete this match record?")) return;
     try { await deleteDoc(doc(db, "gamePlays", playId)); toast.success("Match deleted!"); } 
-    catch (err) { toast.error("Failed to delete record."); }
+    catch { toast.error("Failed to delete record."); }
   };
 
   const friendNames = friendsList.map(f => f.nickname);
@@ -463,8 +517,9 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
           ) : (
             <div className="space-y-4">
               {history.length === 0 ? <div className="text-center py-8 text-slate-500 dark:text-slate-400 font-medium">{t('scores.noMatches')}</div> : history.map((record) => {
-                const maxScore = Math.max(...record.players.map((p: any) => Number(p.score || 0)));
-                const sortedPlayers = [...record.players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
+                const playersInPlay = Array.isArray(record.players) ? record.players : [];
+                const maxScore = playersInPlay.length ? Math.max(...playersInPlay.map((p: any) => Number(p.score || 0))) : 0;
+                const sortedPlayers = [...playersInPlay].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
                 
                 return (
                   <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3 relative group/card transition-all hover:shadow-md">
@@ -511,7 +566,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                         </div>
                         <div className="space-y-1.5">
                            <div className="text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2 flex-wrap">
-                             <Users size={14} /> {record.players.map((p:any) => p.name).join(", ")}
+                             <Users size={14} /> {playersInPlay.map((p: any) => p.name).join(", ")}
                            </div>
                         </div>
                       </>

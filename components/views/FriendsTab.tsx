@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { collection, query, where, getDocs, updateDoc, doc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Users, UserPlus, Heart, Search, Eye, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles } from "lucide-react";
+import { Users, UserPlus, Heart, Search, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
@@ -26,7 +26,31 @@ export function FriendsTab() {
   const [gameHistory, setGameHistory] = useState<any[]>([]);
   const [loadingGames, setLoadingGames] = useState(false);
   const [loadingGameHistory, setLoadingGameHistory] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
+
+  // Render-phase resets keyed on the current selection (no setState inside effects).
+  const partnerId = currentUserProfile?.isCouple ? currentUserProfile?.partnerId ?? null : null;
+  const [prevPartnerId, setPrevPartnerId] = useState<string | null>(null);
+  if (partnerId !== prevPartnerId) {
+    setPrevPartnerId(partnerId);
+    setPartnerProfile(null);
+  }
+
+  const friendKey = selectedFriend?.uid ?? null;
+  const [prevFriendKey, setPrevFriendKey] = useState<string | null>(null);
+  if (friendKey !== prevFriendKey) {
+    setPrevFriendKey(friendKey);
+    setFriendGames([]);
+    setLoadingGames(friendKey !== null);
+  }
+
+  const historyKey = selectedFriend && selectedGame ? `${selectedFriend.uid}::${selectedGame.bggId}` : null;
+  const [prevHistoryKey, setPrevHistoryKey] = useState<string | null>(null);
+  if (historyKey !== prevHistoryKey) {
+    setPrevHistoryKey(historyKey);
+    setGameHistory([]);
+    setLoadingGameHistory(historyKey !== null);
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -53,22 +77,17 @@ export function FriendsTab() {
     return () => unsub();
   }, [user]);
 
-  useEffect(() => {
-    if (!currentUserProfile?.isCouple || !currentUserProfile?.partnerId) {
-      setPartnerProfile(null);
-      return;
-    }
-    const partnerRef = doc(db, "users", currentUserProfile.partnerId);
+useEffect(() => {
+    if (!partnerId) return;
+    const partnerRef = doc(db, "users", partnerId);
     const unsubPartner = onSnapshot(partnerRef, (snap) => {
       if (snap.exists()) setPartnerProfile(snap.data());
     });
     return () => unsubPartner();
-  }, [currentUserProfile]);
+  }, [partnerId]);
 
-  useEffect(() => {
+useEffect(() => {
     if (!selectedFriend) return;
-    setSelectedGame(null);
-    setLoadingGames(true);
 
     const targetUids = [selectedFriend.uid];
     if (selectedFriend.isCouple && selectedFriend.partnerId) {
@@ -76,36 +95,72 @@ export function FriendsTab() {
     }
 
     const q = query(collection(db, "userGames"), where("userId", "in", targetUids));
-    const unsub = onSnapshot(q, (snap) => {
-      setFriendGames(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoadingGames(false);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        setFriendGames(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        setLoadingGames(false);
+      },
+      (error) => {
+        console.error("Failed to load friend's library:", error);
+        setFriendGames([]);
+        setLoadingGames(false);
+      }
+    );
     return () => unsub();
   }, [selectedFriend]);
 
-  useEffect(() => {
-    if (!selectedFriend || !selectedGame) {
-      setGameHistory([]);
-      return;
-    }
+useEffect(() => {
+    if (!selectedFriend || !selectedGame) return;
 
-    setLoadingGameHistory(true);
     const q = query(
       collection(db, "gamePlays"),
       where("userId", "==", selectedFriend.uid),
       where("bggId", "==", selectedGame.bggId)
     );
 
-    const unsub = onSnapshot(q, (snap) => {
-      const history = snap.docs
-        .map((d) => ({ id: d.id, ...d.data() }))
-        .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
-      setGameHistory(history);
-      setLoadingGameHistory(false);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const history = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+        setGameHistory(history);
+        setLoadingGameHistory(false);
+      },
+      (error) => {
+        console.error("Failed to load game history:", error);
+        setGameHistory([]);
+        setLoadingGameHistory(false);
+      }
+    );
 
     return () => unsub();
   }, [selectedFriend, selectedGame]);
+
+  const clearSelection = () => {
+    setSelectedFriend(null);
+    setSelectedGame(null);
+    setGameHistory([]);
+    setSearchQuery("");
+  };
+
+  const openFriend = (friend: any) => {
+    setSelectedFriend(friend);
+    setSelectedGame(null);
+    setGameHistory([]);
+    setSearchQuery("");
+  };
+
+  const openGame = (game: any) => {
+    setSelectedGame(game);
+    setGameHistory([]);
+  };
+
+  const closeGame = () => {
+    setSelectedGame(null);
+    setGameHistory([]);
+  };
 
   const handleLinkPartner = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,9 +226,9 @@ export function FriendsTab() {
   const handleRemoveFriend = async (friendUid: string, friendName: string) => {
     if (!user || !confirm(t('friends.removeConfirm', { name: friendName }))) return;
     try {
-      await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid) });
+await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid) });
       toast.success(t('friends.removed', { name: friendName }));
-      if (selectedFriend?.uid === friendUid) setSelectedFriend(null);
+      if (selectedFriend?.uid === friendUid) clearSelection();
     } catch {
       toast.error(t('friends.removeFail'));
     }
@@ -189,9 +244,16 @@ export function FriendsTab() {
 
   const filteredGames = friendGames.filter(g => g.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
+  // Partner shows up as a special entry so its combined shelf stays reachable
+  const roster = [
+    ...(partnerProfile ? [{ ...partnerProfile, isPartner: true }] : []),
+    ...friendsProfiles.filter(f => f.uid !== partnerProfile?.uid),
+  ];
+
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-300 px-1 sm:px-0">
-      {!selectedFriend && (
+{!selectedFriend && (
+        <>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-rose-50 dark:bg-rose-950/20 rounded-2xl shadow-sm border border-rose-200 dark:border-rose-900/50 p-5 space-y-4">
             <div>
@@ -251,16 +313,70 @@ export function FriendsTab() {
               <button type="submit" className="px-5 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 transition shadow-xs flex items-center gap-1.5 shrink-0">
                 {t('friends.followBtn')}
               </button>
-            </form>
+</form>
           </div>
         </div>
+
+        {/* MY GAMING CIRCLE ROSTER */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+          <div>
+            <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Users className="text-indigo-600 dark:text-indigo-400" size={18} /> {t('friends.myCircle', { count: roster.length })}
+            </h3>
+            <p className="text-xs font-medium text-slate-400 mt-0.5">{t('friends.browseHint')}</p>
+          </div>
+
+          {roster.length === 0 ? (
+            <div className="text-center py-8 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 text-slate-400 text-sm font-medium">
+              {t('friends.emptyCircle')}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {roster.map((friend) => (
+                <div key={friend.uid} className="group/card flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-white dark:hover:bg-slate-800 transition">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm shrink-0 ${friend.isPartner ? "bg-rose-100 text-rose-600 dark:bg-rose-900/50 dark:text-rose-400" : "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"}`}>
+                    {(friend.nickname || "?").charAt(0).toUpperCase()}
+                  </div>
+
+                  <button type="button" onClick={() => openFriend(friend)} className="flex-1 min-w-0 text-left focus:outline-none focus:ring-2 focus:ring-indigo-600 rounded-lg">
+                    <span className="block font-bold text-sm text-slate-900 dark:text-white truncate">{friend.nickname}</span>
+                    <span className="block text-[11px] font-medium text-slate-400 truncate">
+                      {friend.isPartner ? t('friends.coupledShelf') : friend.email || t('friends.viewShelf')}
+                    </span>
+                  </button>
+
+                  {friend.isPartner ? (
+                    <button type="button" onClick={() => openFriend(friend)} className="px-3 py-1.5 text-xs font-bold bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/50 transition shrink-0">
+                      {t('friends.viewShelf')}
+                    </button>
+                  ) : (
+                    <>
+                      <button type="button" onClick={() => openFriend(friend)} className="px-3 py-1.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition shrink-0">
+                        {t('friends.viewShelf')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFriend(friend.uid, friend.nickname)}
+                        title={t('friends.removeFriend')}
+                        className="p-2 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition shrink-0 md:opacity-0 md:group-hover/card:opacity-100"
+                      >
+                        <UserMinus size={16} />
+                      </button>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        </>
       )}
 
       {selectedFriend && !selectedGame && (
         <div className="space-y-5 animate-in slide-in-from-right duration-300">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
             <div className="min-w-0">
-              <button onClick={() => setSelectedFriend(null)} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mb-1 block">{t('friends.returnRoster')}</button>
+              <button onClick={clearSelection} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mb-1 block">{t('friends.returnRoster')}</button>
               <h3 className="text-base font-black text-slate-900 dark:text-white truncate flex items-center gap-2">
                 {t('friends.browsing', { name: selectedFriend.nickname })}
                 {selectedFriend.isCouple && <span className="shrink-0 flex items-center"><Heart size={14} className="text-rose-500 fill-rose-500" /></span>}
@@ -279,7 +395,7 @@ export function FriendsTab() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {filteredGames.map((game) => (
-                <button key={game.id} type="button" onClick={() => setSelectedGame(game)} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col justify-between group text-left focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                <button key={game.id} type="button" onClick={() => openGame(game)} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col justify-between group text-left focus:outline-none focus:ring-2 focus:ring-indigo-600">
                   <div className="relative aspect-square w-full bg-slate-100 dark:bg-slate-900 border-b dark:border-slate-700/50 overflow-hidden">
                     {game.image ? (
                       <img src={`/api/media?url=${encodeURIComponent(game.image)}`} alt={game.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
@@ -307,7 +423,7 @@ export function FriendsTab() {
           <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="min-w-0">
-                <button onClick={() => setSelectedGame(null)} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mb-1 block">← {t('friends.returnRoster')}</button>
+                <button onClick={closeGame} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mb-1 block">← {t('friends.backToShelf', { name: selectedFriend.nickname })}</button>
                 <h3 className="text-base font-black text-slate-900 dark:text-white truncate">{selectedGame.name}</h3>
               </div>
               <div className="flex items-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-900 px-3 py-2 text-xs font-bold text-slate-500 dark:text-slate-400">
