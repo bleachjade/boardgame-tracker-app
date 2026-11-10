@@ -1,12 +1,14 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs, updateDoc, doc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, getDocsFromServer, updateDoc, doc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Users, UserPlus, Heart, Search, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles } from "lucide-react";
+import { Users, UserPlus, Heart, Search, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles, QrCode, ScanLine } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { ProfileQrModal } from "@/components/modals/ProfileQrModal";
+import { ScanQrModal } from "@/components/modals/ScanQrModal";
 
 export function FriendsTab() {
   const { user } = useAuthGroup();
@@ -14,6 +16,8 @@ export function FriendsTab() {
 
   const [friendEmail, setFriendEmail] = useState("");
   const [partnerEmail, setPartnerEmail] = useState("");
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [showScanModal, setShowScanModal] = useState(false);
 
   const [currentUserProfile, setCurrentUserProfile] = useState<any>(null);
   const [partnerProfile, setPartnerProfile] = useState<any | null>(null);
@@ -42,6 +46,17 @@ const [searchQuery, setSearchQuery] = useState("");
     setPrevFriendKey(friendKey);
     setFriendGames([]);
     setLoadingGames(friendKey !== null);
+  }
+
+  // Bumped on every "View Shelf" click so the same friend's shelf reloads from scratch.
+  const [shelfTick, setShelfTick] = useState(0);
+  const [prevShelfTick, setPrevShelfTick] = useState(0);
+  if (shelfTick !== prevShelfTick) {
+    setPrevShelfTick(shelfTick);
+    if (friendKey !== null) {
+      setFriendGames([]);
+      setLoadingGames(true);
+    }
   }
 
   const historyKey = selectedFriend && selectedGame ? `${selectedFriend.uid}::${selectedGame.bggId}` : null;
@@ -95,20 +110,38 @@ useEffect(() => {
     }
 
     const q = query(collection(db, "userGames"), where("userId", "in", targetUids));
+    let cancelled = false;
+
+    const applyDocs = (docs: any[]) => {
+      if (!cancelled) setFriendGames(docs.map(d => ({ id: d.id, ...d.data() })));
+    };
+
     const unsub = onSnapshot(
       q,
       (snap) => {
-        setFriendGames(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        setLoadingGames(false);
+        applyDocs(snap.docs);
+        if (!cancelled) setLoadingGames(false);
       },
       (error) => {
         console.error("Failed to load friend's library:", error);
-        setFriendGames([]);
-        setLoadingGames(false);
+        if (!cancelled) {
+          setFriendGames([]);
+          setLoadingGames(false);
+        }
       }
     );
-    return () => unsub();
-  }, [selectedFriend]);
+
+    // Always pull a fresh server copy every time the shelf is opened.
+    getDocsFromServer(q)
+      .then((snap) => applyDocs(snap.docs))
+      .catch((error) => console.error("Failed to refresh friend's library:", error))
+      .finally(() => { if (!cancelled) setLoadingGames(false); });
+
+    return () => {
+      cancelled = true;
+      unsub();
+    };
+  }, [selectedFriend, shelfTick]);
 
 useEffect(() => {
     if (!selectedFriend || !selectedGame) return;
@@ -150,6 +183,7 @@ useEffect(() => {
     setSelectedGame(null);
     setGameHistory([]);
     setSearchQuery("");
+    setShelfTick((n) => n + 1);
   };
 
   const openGame = (game: any) => {
@@ -314,6 +348,14 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
                 {t('friends.followBtn')}
               </button>
 </form>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setShowQrModal(true)} className="flex-1 px-4 py-2.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center justify-center gap-1.5">
+                <QrCode size={16} /> {t('friends.myQr')}
+              </button>
+              <button type="button" onClick={() => setShowScanModal(true)} className="flex-1 px-4 py-2.5 text-xs font-bold bg-indigo-600 text-white border border-indigo-600 rounded-xl hover:bg-indigo-700 transition flex items-center justify-center gap-1.5 shadow-xs">
+                <ScanLine size={16} /> {t('friends.scanQr')}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -479,6 +521,14 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
           )}
         </div>
       )}
+
+      {showQrModal && currentUserProfile && (
+        <ProfileQrModal
+          profile={{ uid: currentUserProfile.uid, nickname: currentUserProfile.nickname, email: currentUserProfile.email }}
+          onClose={() => setShowQrModal(false)}
+        />
+      )}
+      {showScanModal && <ScanQrModal onClose={() => setShowScanModal(false)} />}
     </div>
   );
 }
