@@ -75,79 +75,60 @@ function ImageShapeView({ games, onOpenDetails, onLogScore }: ImageShapeViewProp
   const containerWidth = 100; // Percentage base
 
   return (
-    <div className="flex flex-wrap items-start gap-3 p-1">
-      {gamesWithMetrics.map((game) => {
-        // Flex basis as percentage of total width
-        const flexBasis = (game.normalizedWidth / totalWidthUnits) * containerWidth;
-        // Minimum width to prevent too-narrow boxes
-        const minWidth = Math.max(120, flexBasis * 0.5);
-        
-        return (
-          <div
-            key={game.id}
-            className="flex-shrink-0"
-            style={{
-              flexBasis: `${flexBasis}%`,
-              minWidth: `${minWidth}px`,
-              maxWidth: '100%',
-              // Container matches the box aspect ratio exactly
-              aspectRatio: game.aspectRatio || 0.75,
-            }}
-          >
-            <div
-              onClick={() => onOpenDetails(game)}
-              className="group relative bg-transparent rounded-xl shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer h-full w-full"
-              style={{
-                aspectRatio: game.aspectRatio || 0.75,
-              }}
-            >
-              {game.image ? (
-                <img
-                  src={game.image}
-                  alt={game.name}
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold bg-slate-100 dark:bg-slate-700 rounded-xl">
-                  {game.name}
-                </div>
-              )}
-
-              {/* Gradient overlay at bottom for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none rounded-xl" />
-
-              {/* Subtle border that follows the container shape */}
-              <div className="absolute inset-0 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pointer-events-none" />
-
-              {/* Game info overlay on hover */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <h4 className="font-bold text-white text-sm truncate mb-1">{game.name}</h4>
-                <p className="text-slate-300 text-xs font-medium">
-                  {game.minPlayers || "?"}-{game.maxPlayers || "?"} players • {game.playTime || "?"} mins
-                </p>
-              </div>
-
-              {/* Log Score button overlay */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onLogScore(game);
-                }}
-                className="absolute top-2 right-2 p-2 bg-indigo-600 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-indigo-500 z-10"
-                title="Log Score"
-              >
-                <Trophy size={14} />
-              </button>
+    <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-3 p-1 space-y-3">
+  {gamesWithMetrics.map((game) => {
+    return (
+      <div
+        key={game.id}
+        className="break-inside-avoid w-full"
+      >
+        <div
+          onClick={() => onOpenDetails(game)}
+          className="group relative bg-slate-900 rounded-xl shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden w-full flex flex-col"
+        >
+          {game.image ? (
+            <img
+              src={game.image}
+              alt={game.name}
+              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-48 flex items-center justify-center text-slate-400 font-bold bg-slate-100 dark:bg-slate-700 rounded-xl">
+              {game.name}
             </div>
+          )}
+
+          {/* Gradient overlay at bottom for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none rounded-xl" />
+
+          {/* Subtle border that follows the container shape */}
+          <div className="absolute inset-0 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pointer-events-none" />
+
+          {/* Game info overlay on hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
+            <h4 className="font-bold text-white text-sm truncate mb-1">{game.name}</h4>
+            <p className="text-slate-300 text-xs font-medium">
+              {game.minPlayers || "?"}-{game.maxPlayers || "?"} players • {game.playTime || "?"} mins
+            </p>
           </div>
-        );
-      })}
-    </div>
+
+          {/* Log Score button overlay */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onLogScore(game);
+            }}
+            className="absolute top-2 right-2 p-2 bg-indigo-600 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-indigo-500 z-10"
+            title="Log Score"
+          >
+            <Trophy size={14} />
+          </button>
+        </div>
+      </div>
+    );
+  })}
+</div>
   );
 }
 
