@@ -5,7 +5,7 @@ import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
 import { useState, useEffect, useMemo } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
-import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy } from "lucide-react";
+import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy, Image } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -35,6 +35,122 @@ import { GameGridSkeleton, GameListSkeleton } from "@/components/Skeletons";
 // Stable reference so tab components don't see a "new" prop on every render
 const EMPTY_GAMES: Game[] = [];
 
+// Image Shape View Component - Masonry layout based on box dimensions
+interface ImageShapeViewProps {
+  games: Game[];
+  onOpenDetails: (game: Game) => void;
+  onLogScore: (game: Game) => void;
+}
+
+function ImageShapeView({ games, onOpenDetails, onLogScore }: ImageShapeViewProps) {
+  // Calculate aspect ratio and normalized width from dimensions if available
+  const getBoxMetrics = (game: Game) => {
+    if (game.dimensions?.width && game.dimensions?.length && game.dimensions?.depth) {
+      // Box dimensions in cm typically
+      // width = box width (spine), length = box height, depth = box thickness
+      const aspectRatio = game.dimensions.width / game.dimensions.length;
+      // Use physical width (spine width) as the basis for horizontal space
+      // Normalize: typical box width ~30cm, so 30cm = 1 unit
+      const normalizedWidth = game.dimensions.width / 30;
+      return { aspectRatio, normalizedWidth: Math.max(0.5, Math.min(3, normalizedWidth)) }; // Clamp between 0.5x and 3x
+    }
+    // Default fallback based on game ID hash for consistency
+    const hash = game.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const ratios = [0.65, 0.75, 0.85, 1.0, 1.15, 1.3];
+    const widths = [0.7, 0.85, 1.0, 1.2, 1.5, 2.0]; // Corresponding widths
+    const idx = hash % ratios.length;
+    return { aspectRatio: ratios[idx], normalizedWidth: widths[idx] };
+  };
+
+  const gamesWithMetrics = games.map(game => ({
+    ...game,
+    ...getBoxMetrics(game),
+  }));
+
+  // Sort by aspect ratio for visual consistency (taller boxes together)
+  gamesWithMetrics.sort((a, b) => a.aspectRatio - b.aspectRatio);
+
+  // Calculate total width units for flex basis distribution
+  const totalWidthUnits = gamesWithMetrics.reduce((sum, g) => sum + g.normalizedWidth, 0);
+  const containerWidth = 100; // Percentage base
+
+  return (
+    <div className="flex flex-wrap items-start gap-3 p-1">
+      {gamesWithMetrics.map((game) => {
+        // Flex basis as percentage of total width
+        const flexBasis = (game.normalizedWidth / totalWidthUnits) * containerWidth;
+        // Minimum width to prevent too-narrow boxes
+        const minWidth = Math.max(120, flexBasis * 0.5);
+        
+        return (
+          <div
+            key={game.id}
+            className="flex-shrink-0"
+            style={{
+              flexBasis: `${flexBasis}%`,
+              minWidth: `${minWidth}px`,
+              maxWidth: '100%',
+              // Container matches the box aspect ratio exactly
+              aspectRatio: game.aspectRatio || 0.75,
+            }}
+          >
+            <div
+              onClick={() => onOpenDetails(game)}
+              className="group relative bg-transparent rounded-xl shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer h-full w-full"
+              style={{
+                aspectRatio: game.aspectRatio || 0.75,
+              }}
+            >
+              {game.image ? (
+                <img
+                  src={game.image}
+                  alt={game.name}
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold bg-slate-100 dark:bg-slate-700 rounded-xl">
+                  {game.name}
+                </div>
+              )}
+
+              {/* Gradient overlay at bottom for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none rounded-xl" />
+
+              {/* Subtle border that follows the container shape */}
+              <div className="absolute inset-0 border border-slate-200/50 dark:border-slate-700/50 rounded-xl pointer-events-none" />
+
+              {/* Game info overlay on hover */}
+              <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                <h4 className="font-bold text-white text-sm truncate mb-1">{game.name}</h4>
+                <p className="text-slate-300 text-xs font-medium">
+                  {game.minPlayers || "?"}-{game.maxPlayers || "?"} players • {game.playTime || "?"} mins
+                </p>
+              </div>
+
+              {/* Log Score button overlay */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLogScore(game);
+                }}
+                className="absolute top-2 right-2 p-2 bg-indigo-600 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-indigo-500 z-10"
+                title="Log Score"
+              >
+                <Trophy size={14} />
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Home() {
   const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup, userGroups } = useAuthGroup();
   const { t } = useTranslation();
@@ -43,12 +159,31 @@ export default function Home() {
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
-  // Layout View Mode State ("grid" vs "compact")
-  const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year" | "plays">("recent");
-  const [playerFilter, setPlayerFilter] = useState<string>("");
+  // Load filter/sort preferences from localStorage
+  const [searchQuery, setSearchQuery] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('boardgame-tracker-searchQuery') || "";
+    }
+    return "";
+  });
+  const [sortOption, setSortOption] = useState<"recent" | "alpha" | "year" | "plays">(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('boardgame-tracker-sortOption') as "recent" | "alpha" | "year" | "plays") || "recent";
+    }
+    return "recent";
+  });
+  const [playerFilter, setPlayerFilter] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('boardgame-tracker-playerFilter') || "";
+    }
+    return "";
+  });
+  const [viewMode, setViewMode] = useState<"grid" | "compact" | "imageShape">(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('boardgame-tracker-viewMode') as "grid" | "compact" | "imageShape") || "grid";
+    }
+    return "grid";
+  });
   const [isScrolled, setIsScrolled] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -64,6 +199,10 @@ export default function Home() {
   const [isBulkMode, setIsBulkMode] = useState(false);
   const [selectedGameIds, setSelectedGameIds] = useState<string[]>([]);
   const [isBulkAssignModalOpen, setIsBulkAssignModalOpen] = useState(false);
+
+  // Mobile nav hide on scroll down
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [showMobileNav, setShowMobileNav] = useState(true);
 
   // Games data from hook (will be implemented via useAuthGroup enhancement)
   const [games, setGames] = useState<Game[]>([]);
@@ -151,6 +290,31 @@ export default function Home() {
 
     return () => unsubscribe();
   }, [user, userProfile]);
+
+  // Persist filter/sort preferences to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('boardgame-tracker-searchQuery', searchQuery);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('boardgame-tracker-sortOption', sortOption);
+    }
+  }, [sortOption]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('boardgame-tracker-playerFilter', playerFilter);
+    }
+  }, [playerFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('boardgame-tracker-viewMode', viewMode);
+    }
+  }, [viewMode]);
 
   const toggleTheme = async () => {
     const newTheme = userTheme === "light" ? "dark" : "light";
@@ -269,13 +433,28 @@ export default function Home() {
     {t('home.signIn')}
   </button></div></div>;
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollTop = e.currentTarget.scrollTop;
+    setIsScrolled(scrollTop > 15);
+    
+    // Hide/show mobile nav on scroll
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+      setShowMobileNav(false);
+    } else if (scrollTop < lastScrollTop) {
+      setShowMobileNav(true);
+    }
+    setLastScrollTop(scrollTop);
+  };
+
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
       {/* Mobile Top Navbar */}
+      {showMobileNav && (
       <div
-        className={`md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-shadow duration-300 ${
+        className={`md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-3 flex items-center justify-between shrink-0 z-20 shadow-sm transition-all duration-300 ease-in-out ${
           isScrolled ? "shadow-md" : ""
         }`}
+        style={{ transform: showMobileNav ? 'translateY(0)' : 'translateY(-100%)' }}
       >
         <button
           onClick={() => selectTab("library")}
@@ -291,12 +470,13 @@ export default function Home() {
           <button onClick={() => setIsSidebarOpen(true)} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors"><Menu size={22} /></button>
         </div>
       </div>
+    )}
 
       {isSidebarOpen && <div className="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)} />}
 
       <Sidebar currentView={currentView} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} selectGroupMobile={selectGroupMobile} selectTab={selectTab} handleCreateGroup={handleCreateGroup} handleDeleteGroup={handleDeleteGroup} handleExport={handleExport} handleImport={handleImport} />
 
-      <main className="flex-1 overflow-y-auto flex flex-col relative" onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 15)}>
+      <main className="flex-1 overflow-y-auto flex flex-col relative" onScroll={handleScroll}>
         {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : EMPTY_GAMES} /></div>
           : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : currentView === "events" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><GameNightsTab userGames={parentGamesToRender} /></div>
               : (
@@ -341,13 +521,13 @@ export default function Home() {
                             <div className="w-full sm:w-44 relative"><ArrowDownAZ size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" /><select value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)} className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-900 dark:text-white outline-none appearance-none"><option value="recent">{t('home.recentlyAdded')}</option><option value="alpha">{t('home.alphabetical')}</option><option value="year">{t('home.releaseYear')}</option><option value="plays">{t('home.mostPlayed')}</option></select></div>
                             <button onClick={pickRandomGame} className="w-full sm:w-auto bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-1.5 transition"><Shuffle size={16} /> {t('home.whatToPlay')}</button>
                             
-                            {/* View Toggle Button */}
+                            {/* View Toggle Button - Cycles through Grid -> Compact -> Image Shape */}
                             <button
-                              onClick={() => setViewMode(prev => prev === "grid" ? "compact" : "grid")}
+                              onClick={() => setViewMode(prev => prev === "grid" ? "compact" : prev === "compact" ? "imageShape" : "grid")}
                               className="p-2 bg-slate-100 dark:bg-slate-700/60 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300 transition flex items-center justify-center border border-slate-200 dark:border-slate-600 shrink-0"
-                              title={viewMode === "grid" ? "Switch to Compact View" : "Switch to Grid View"}
+                              title={viewMode === "grid" ? "Switch to Compact View" : viewMode === "compact" ? "Switch to Image Shape View" : "Switch to Grid View"}
                             >
-                              {viewMode === "grid" ? <LayoutList size={18} /> : <LayoutGrid size={18} />}
+                              {viewMode === "grid" ? <LayoutList size={18} /> : viewMode === "compact" ? <LayoutGrid size={18} /> : <Image size={18} />}
                             </button>
                           </div>
                         </div>
@@ -379,6 +559,13 @@ export default function Home() {
                             );
                           })}
                         </div>
+                      ) : viewMode === "imageShape" ? (
+                        /* Image Shape View - Masonry layout based on box aspect ratio */
+                        <ImageShapeView
+                          games={parentGamesToRender}
+                          onOpenDetails={setDetailsGame}
+                          onLogScore={setScoringGame}
+                        />
                       ) : (
                         /* Compact Icon View with Only Log Score Action */
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
