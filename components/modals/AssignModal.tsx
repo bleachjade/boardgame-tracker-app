@@ -6,8 +6,9 @@ import { useModalClose } from "@/lib/useModalClose";
 import { FolderPlus, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Game } from "@/lib/types";
 
-export function AssignModal({ game, onClose }: { game: any, onClose: () => void }) {
+export function AssignModal({ game, onClose }: { game: Game, onClose: () => void }) {
   const { userGroups } = useAuthGroup();
   const { t } = useTranslation();
   const [selected, setSelected] = useState<string[]>(game.groupIds || []);

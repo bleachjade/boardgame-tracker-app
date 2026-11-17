@@ -8,18 +8,19 @@ import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Loader2, T
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
 import { useModalClose } from "@/lib/useModalClose";
+import { Game, GameNight, ProposedGame } from "@/lib/types";
 
-export function GameNightsTab({ userGames }: { userGames: any[] }) {
+export function GameNightsTab({ userGames }: { userGames: Game[] }) {
   const { user, userNickname, userProfile } = useAuthGroup();
   const { t } = useTranslation(); // NEW
   
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<GameNight[]>([]);
   const [loading, setLoading] = useState(true);
   const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
   
   const [isCreating, setIsCreating] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: "", date: "", time: "", location: "" });
-  const [selectedGames, setSelectedGames] = useState<any[]>([]);
+  const [selectedGames, setSelectedGames] = useState<Game[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [searchGame, setSearchGame] = useState("");
 
@@ -45,15 +46,15 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
     const q = query(collection(db, "gameNights"), where("participants", "array-contains", user.uid));
     
     const unsub = onSnapshot(q, (snap) => {
-      const fetchedEvents = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      fetchedEvents.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      const fetchedEvents = snap.docs.map(d => ({ id: d.id, ...d.data() } as GameNight));
+      fetchedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       setEvents(fetchedEvents);
       setLoading(false);
     });
     return () => unsub();
   }, [user]);
 
-  const toggleGameSelection = (game: any) => {
+  const toggleGameSelection = (game: Game) => {
     if (selectedGames.some(g => g.id === game.id)) {
       setSelectedGames(selectedGames.filter(g => g.id !== game.id));
     } else {
@@ -145,10 +146,10 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
   const sortedEvents = [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const isPast = (event: any) => new Date(event.date).getTime() < startOfToday.getTime();
+  const isPast = (event: GameNight) => new Date(event.date).getTime() < startOfToday.getTime();
   const upcomingEvents = sortedEvents.filter(event => !isPast(event));
   const pastEvents = sortedEvents.filter(isPast).reverse();
-  type DisplayItem = { kind: "divider"; label: string } | { kind: "event"; event: any };
+  type DisplayItem = { kind: "divider"; label: string } | { kind: "event"; event: GameNight };
   const displayList: DisplayItem[] = [
     ...upcomingEvents.map(event => ({ kind: "event" as const, event })),
     ...(pastEvents.length > 0 ? [{ kind: "divider" as const, label: t('gameNights.pastEvents') }] : []),
@@ -275,7 +276,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
           if (!Array.isArray(myVotes)) myVotes = [myVotes];
           
           const voteTallies: Record<string, number> = {};
-          Object.values(voteMap).forEach((voteData: any) => {
+          Object.values(voteMap).forEach((voteData: string | string[]) => {
             if (Array.isArray(voteData)) voteData.forEach(gId => voteTallies[gId] = (voteTallies[gId] || 0) + 1);
             else if (typeof voteData === 'string') voteTallies[voteData] = (voteTallies[voteData] || 0) + 1;
           });
@@ -355,7 +356,7 @@ export function GameNightsTab({ userGames }: { userGames: any[] }) {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(event.proposedGames || []).map((game: any) => {
+                    {(event.proposedGames || []).map((game: ProposedGame) => {
                       const votes = voteTallies[game.id] || 0;
                       const isWinning = votes > 0 && votes === highestVotes;
                       const hasMyVote = myVotes.includes(game.id);

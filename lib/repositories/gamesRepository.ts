@@ -1,4 +1,4 @@
-import { query, where, orderBy, limit, QueryConstraint } from "firebase/firestore";
+import { where, orderBy, limit } from "firebase/firestore";
 import { FirestoreRepository } from "./baseRepository";
 import { Game } from "@/lib/types";
 
@@ -30,7 +30,7 @@ export class GamesRepository extends FirestoreRepository<Game> {
       groupIds: doc.groupIds as string[] || [],
       userId: doc.userId as string,
       ownerNickname: doc.ownerNickname as string,
-      addedAt: doc.addedAt,
+      addedAt: doc.addedAt as Game["addedAt"],
       pricePaid: doc.pricePaid as number | undefined,
       description_th: doc.description_th as string | undefined,
       rating: doc.rating as string | undefined,

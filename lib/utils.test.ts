@@ -121,13 +121,13 @@ describe("createMarkup", () => {
   });
 
   it("should convert quote entities", () => {
-    const input = ""Quoted text"";
+    const input = "&quot;Quoted text&quot;";
     const expected = '"Quoted text"';
     expect(createMarkup(input)).toEqual({ __html: expected });
   });
 
   it("should handle multiple entity types", () => {
-    const input = ""Title"&#10;Description &mdash; with dash";
+    const input = "&quot;Title&quot;&#10;Description &mdash; with dash";
     const expected = '"Title"<br/>Description — with dash';
     expect(createMarkup(input)).toEqual({ __html: expected });
   });

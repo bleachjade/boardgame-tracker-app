@@ -6,13 +6,15 @@ import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Sparkles, Loader2, Plus, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
-import { Game } from "@/lib/types";
+import { EnrichedGame, Game } from "@/lib/types";
+
+type ScoredGame = EnrichedGame & { penalty: number };
 
 export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
   const { user, userNickname } = useAuthGroup();
   const { t } = useTranslation(); // NEW
 
-  const [recommendations, setRecommendations] = useState<Game[]>([]);
+  const [recommendations, setRecommendations] = useState<ScoredGame[]>([]);
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [avgPlayers, setAvgPlayers] = useState(4);
@@ -35,21 +37,21 @@ export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
         const hotIds = items.slice(0, 20).map(item => item.getAttribute("id")).filter(Boolean);
         if (hotIds.length === 0) throw new Error("Unavailable.");
         const enrichRes = await fetch(`/api/bgg?ids=${hotIds.join(',')}`);
-        const hotGames = await enrichRes.json();
+        const hotGames = (await enrichRes.json()) as EnrichedGame[];
         if (!Array.isArray(hotGames)) throw new Error("Failed.");
         const ownedIds = new Set(userGames.map(g => g.bggId));
-        const scoredGames = hotGames.filter((g: any) => !ownedIds.has(g.bggId)).map((g: any) => {
+        const scoredGames = hotGames.filter((g) => !ownedIds.has(g.bggId)).map((g): ScoredGame => {
           const time = parseInt(g.playTime) || 60; const maxP = parseInt(g.maxPlayers) || 4;
           return { ...g, penalty: Math.abs(time - myAvgTime) + (Math.abs(maxP - myAvgMax) * 20) };
         });
-        scoredGames.sort((a: any, b: any) => a.penalty - b.penalty);
+        scoredGames.sort((a, b) => a.penalty - b.penalty);
         setRecommendations(scoredGames.slice(0, 12));
       } catch { /* offline / API hiccup — show the empty state below */ } finally { setLoading(false); }
     }
     buildRecommendations();
   }, [userGames]);
 
-  const handleAddRec = async (game: any) => {
+  const handleAddRec = async (game: ScoredGame) => {
     if (!user) return;
     setAddingId(game.bggId);
     try {

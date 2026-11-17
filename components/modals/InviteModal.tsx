@@ -5,8 +5,9 @@ import { useModalClose } from "@/lib/useModalClose";
 import { UserPlus, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Group } from "@/lib/types";
 
-export function InviteModal({ group, onClose }: { group: any, onClose: () => void }) {
+export function InviteModal({ group, onClose }: { group: Group, onClose: () => void }) {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);

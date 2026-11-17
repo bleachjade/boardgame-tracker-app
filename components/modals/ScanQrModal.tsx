@@ -74,16 +74,23 @@ export function ScanQrModal({ onClose }: { onClose: () => void }) {
         return;
       }
 
+      const targetUid = targetUser.uid;
       const mySnap = await getDoc(doc(db, "users", user.uid));
       const friendsList: string[] = mySnap.data()?.friendsList || [];
-      if (friendsList.includes(targetUser.uid)) {
-        toast(t("friends.alreadyFollowing", { name: targetUser.nickname }));
+      if (friendsList.includes(targetUid)) {
+        // Repair legacy one-way follows so both shelves stay visible.
+        await updateDoc(doc(db, "users", targetUid), { friendsList: arrayUnion(user.uid) });
+        toast(t("friends.alreadyFriends", { name: targetUser.nickname }));
         onClose();
         return;
       }
 
-      await updateDoc(doc(db, "users", user.uid), { friendsList: arrayUnion(targetUser.uid) });
-      toast.success(t("friends.followed", { name: targetUser.nickname }));
+      // Mutual friendship: both users see each other's shelves immediately.
+      await Promise.all([
+        updateDoc(doc(db, "users", user.uid), { friendsList: arrayUnion(targetUid) }),
+        updateDoc(doc(db, "users", targetUid), { friendsList: arrayUnion(user.uid) }),
+      ]);
+      toast.success(t("friends.added", { name: targetUser.nickname }));
       onClose();
     } catch {
       toast.error(t("friends.addFail"));

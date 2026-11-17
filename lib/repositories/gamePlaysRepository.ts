@@ -1,4 +1,4 @@
-import { query, where, orderBy, QueryConstraint, limit } from "firebase/firestore";
+import { where, orderBy } from "firebase/firestore";
 import { FirestoreRepository } from "./baseRepository";
 import { GamePlay } from "@/lib/types";
 
@@ -17,7 +17,7 @@ export class GamePlaysRepository extends FirestoreRepository<GamePlay> {
       coopResult: doc.coopResult as GamePlay["coopResult"],
       teamScore: doc.teamScore as number | undefined,
       memoryPhoto: doc.memoryPhoto as string | undefined,
-      playedAt: doc.playedAt,
+      playedAt: doc.playedAt as GamePlay["playedAt"],
       loggedBy: doc.loggedBy as string,
       userId: doc.userId as string,
       isSharedCopy: doc.isSharedCopy as boolean | undefined,

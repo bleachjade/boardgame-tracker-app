@@ -2,8 +2,9 @@ import Image from "next/image";
 import { Shuffle, X } from "lucide-react";
 import { useModalClose } from "@/lib/useModalClose";
 import { useTranslation } from "react-i18next";
+import { Game } from "@/lib/types";
 
-export function RandomGameModal({ game, onClose }: { game: any; onClose: () => void }) {
+export function RandomGameModal({ game, onClose }: { game: Game; onClose: () => void }) {
   const { t } = useTranslation();
   const { overlayProps, panelProps } = useModalClose(onClose, { backdrop: true });
 

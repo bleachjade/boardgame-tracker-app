@@ -9,6 +9,38 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { ProfileQrModal } from "@/components/modals/ProfileQrModal";
 import { ScanQrModal } from "@/components/modals/ScanQrModal";
+import type { QueryDocumentSnapshot } from "firebase/firestore";
+
+type FriendProfile = {
+  uid: string;
+  nickname: string;
+  email?: string;
+  isCouple?: boolean;
+  partnerId?: string | null;
+  friendsList?: string[];
+  isPartner?: boolean;
+};
+
+type FriendGame = {
+  id: string;
+  bggId?: string;
+  name: string;
+  image?: string;
+  minPlayers?: string;
+  maxPlayers?: string;
+  playTime?: string;
+  weight?: string;
+  isExpansion?: boolean;
+};
+
+type PlayRecord = {
+  id: string;
+  userId?: string;
+  loggedBy?: string;
+  memoryPhoto?: string;
+  playedAt?: { toDate?: () => Date; seconds?: number };
+  players?: { name?: string; score?: number | string; rawExpression?: string }[];
+};
 
 export function FriendsTab() {
   const { user } = useAuthGroup();
@@ -19,15 +51,15 @@ export function FriendsTab() {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showScanModal, setShowScanModal] = useState(false);
 
-  const [currentUserProfile, setCurrentUserProfile] = useState<any>(null);
-  const [partnerProfile, setPartnerProfile] = useState<any | null>(null);
-  const [friendsProfiles, setFriendsProfiles] = useState<any[]>([]);
+  const [currentUserProfile, setCurrentUserProfile] = useState<FriendProfile | null>(null);
+  const [partnerProfile, setPartnerProfile] = useState<FriendProfile | null>(null);
+  const [friendsProfiles, setFriendsProfiles] = useState<FriendProfile[]>([]);
   const [loadingFriends, setLoadingFriends] = useState(true);
 
-  const [selectedFriend, setSelectedFriend] = useState<any | null>(null);
-  const [selectedGame, setSelectedGame] = useState<any | null>(null);
-  const [friendGames, setFriendGames] = useState<any[]>([]);
-  const [gameHistory, setGameHistory] = useState<any[]>([]);
+  const [selectedFriend, setSelectedFriend] = useState<FriendProfile | null>(null);
+  const [selectedGame, setSelectedGame] = useState<FriendGame | null>(null);
+  const [friendGames, setFriendGames] = useState<FriendGame[]>([]);
+  const [gameHistory, setGameHistory] = useState<PlayRecord[]>([]);
   const [loadingGames, setLoadingGames] = useState(false);
   const [loadingGameHistory, setLoadingGameHistory] = useState(false);
 const [searchQuery, setSearchQuery] = useState("");
@@ -75,7 +107,7 @@ const [searchQuery, setSearchQuery] = useState("");
         setLoadingFriends(false);
         return;
       }
-      const data = profileSnap.data();
+      const data = profileSnap.data() as FriendProfile;
       setCurrentUserProfile(data);
 
       const followedUids = data.friendsList || [];
@@ -86,7 +118,7 @@ const [searchQuery, setSearchQuery] = useState("");
       }
       const q = query(collection(db, "users"), where("uid", "in", followedUids));
       const res = await getDocs(q);
-      setFriendsProfiles(res.docs.map(d => d.data()));
+      setFriendsProfiles(res.docs.map(d => d.data() as FriendProfile));
       setLoadingFriends(false);
     });
     return () => unsub();
@@ -96,7 +128,7 @@ useEffect(() => {
     if (!partnerId) return;
     const partnerRef = doc(db, "users", partnerId);
     const unsubPartner = onSnapshot(partnerRef, (snap) => {
-      if (snap.exists()) setPartnerProfile(snap.data());
+      if (snap.exists()) setPartnerProfile(snap.data() as FriendProfile);
     });
     return () => unsubPartner();
   }, [partnerId]);
@@ -112,8 +144,8 @@ useEffect(() => {
     const q = query(collection(db, "userGames"), where("userId", "in", targetUids));
     let cancelled = false;
 
-    const applyDocs = (docs: any[]) => {
-      if (!cancelled) setFriendGames(docs.map(d => ({ id: d.id, ...d.data() })));
+    const applyDocs = (docs: QueryDocumentSnapshot[]) => {
+      if (!cancelled) setFriendGames(docs.map(d => ({ id: d.id, ...d.data() } as unknown as FriendGame)));
     };
 
     const unsub = onSnapshot(
@@ -156,8 +188,8 @@ useEffect(() => {
       q,
       (snap) => {
         const history = snap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+          .map((d) => ({ id: d.id, ...d.data() } as PlayRecord))
+          .sort((a, b) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
         setGameHistory(history);
         setLoadingGameHistory(false);
       },
@@ -178,7 +210,7 @@ useEffect(() => {
     setSearchQuery("");
   };
 
-  const openFriend = (friend: any) => {
+  const openFriend = (friend: FriendProfile) => {
     setSelectedFriend(friend);
     setSelectedGame(null);
     setGameHistory([]);
@@ -186,7 +218,7 @@ useEffect(() => {
     setShelfTick((n) => n + 1);
   };
 
-  const openGame = (game: any) => {
+  const openGame = (game: FriendGame) => {
     setSelectedGame(game);
     setGameHistory([]);
   };
@@ -228,7 +260,7 @@ useEffect(() => {
   const handleUnlinkPartner = async () => {
     if (!confirm(t('friends.unlinkConfirm'))) return;
     try {
-      const pId = currentUserProfile.partnerId;
+      const pId = currentUserProfile?.partnerId;
       await updateDoc(doc(db, "users", user!.uid), { isCouple: false, partnerId: null });
       if (pId) await updateDoc(doc(db, "users", pId), { isCouple: false, partnerId: null });
       toast.success(t('friends.unlinkSuccess'));
@@ -249,8 +281,12 @@ useEffect(() => {
       const targetUserDoc = snap.docs[0].data();
       if (targetUserDoc.uid === user.uid) return toast.error(t('friends.addNoSelf'));
 
-      await updateDoc(doc(db, "users", user.uid), { friendsList: arrayUnion(targetUserDoc.uid) });
-      toast.success(t('friends.followed', { name: targetUserDoc.nickname }));
+      // Mutual friendship: both users see each other's shelves immediately.
+      await Promise.all([
+        updateDoc(doc(db, "users", user.uid), { friendsList: arrayUnion(targetUserDoc.uid) }),
+        updateDoc(doc(db, "users", targetUserDoc.uid), { friendsList: arrayUnion(user.uid) }),
+      ]);
+      toast.success(t('friends.added', { name: targetUserDoc.nickname }));
       setFriendEmail("");
     } catch {
       toast.error(t('friends.addFail'));
@@ -260,7 +296,10 @@ useEffect(() => {
   const handleRemoveFriend = async (friendUid: string, friendName: string) => {
     if (!user || !confirm(t('friends.removeConfirm', { name: friendName }))) return;
     try {
-await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid) });
+      await Promise.all([
+        updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid) }),
+        updateDoc(doc(db, "users", friendUid), { friendsList: arrayRemove(user.uid) }),
+      ]);
       toast.success(t('friends.removed', { name: friendName }));
       if (selectedFriend?.uid === friendUid) clearSelection();
     } catch {
@@ -298,8 +337,8 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
             </div>
 
             {currentUserProfile?.isCouple ? (
-              <div className="bg-white dark:bg-slate-800 border-2 border-rose-300 dark:border-rose-800 rounded-xl p-4 flex items-center justify-between shadow-sm relative overflow-hidden">
-                <div className="flex items-center gap-3 relative z-10">
+              <div className="bg-white dark:bg-slate-800 border-2 border-rose-300 dark:border-rose-800 rounded-xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between shadow-sm relative overflow-hidden">
+                <div className="flex items-center gap-3 relative z-10 min-w-0">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center shadow-sm shrink-0">
                     <Sparkles className="text-white" size={20} />
                   </div>
@@ -313,18 +352,18 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
                     </span>
                   </div>
                 </div>
-                <button onClick={handleUnlinkPartner} className="p-2.5 bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/70 text-rose-600 dark:text-rose-400 rounded-lg transition relative z-10 shadow-xs">
+                <button onClick={handleUnlinkPartner} className="self-end sm:self-auto p-2.5 bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/70 text-rose-600 dark:text-rose-400 rounded-lg transition relative z-10 shadow-xs shrink-0">
                   <Unlink size={16} />
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleLinkPartner} className="flex gap-2">
+              <form onSubmit={handleLinkPartner} className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email" required placeholder={t('friends.partnerEmail')}
                   value={partnerEmail} onChange={(e) => setPartnerEmail(e.target.value)}
-                  className="flex-1 border border-rose-200 dark:border-rose-900/50 bg-white dark:bg-slate-900 p-2.5 text-sm rounded-xl outline-none focus:ring-2 focus:ring-rose-500 text-slate-900 dark:text-white font-medium"
+                  className="flex-1 min-w-0 border border-rose-200 dark:border-rose-900/50 bg-white dark:bg-slate-900 p-2.5 text-sm rounded-xl outline-none focus:ring-2 focus:ring-rose-500 text-slate-900 dark:text-white font-medium"
                 />
-                <button type="submit" className="px-4 bg-rose-500 text-white font-bold text-sm rounded-xl hover:bg-rose-600 transition shadow-xs flex items-center gap-1.5 shrink-0">
+                <button type="submit" className="px-4 py-2.5 bg-rose-500 text-white font-bold text-sm rounded-xl hover:bg-rose-600 transition shadow-xs flex items-center justify-center gap-1.5 shrink-0">
                   {t('friends.linkBtn')}
                 </button>
               </form>
@@ -338,21 +377,21 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
               </h3>
               <p className="text-xs font-medium text-slate-400 mt-0.5">{t('friends.followDesc')}</p>
             </div>
-            <form onSubmit={handleAddFriend} className="flex gap-2">
+            <form onSubmit={handleAddFriend} className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email" required placeholder="friend@email.com"
                 value={friendEmail} onChange={(e) => setFriendEmail(e.target.value)}
-                className="flex-1 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-sm rounded-xl outline-none focus:ring-2 focus:ring-indigo-600 text-slate-900 dark:text-white font-medium"
+                className="flex-1 min-w-0 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-2.5 text-sm rounded-xl outline-none focus:ring-2 focus:ring-indigo-600 text-slate-900 dark:text-white font-medium"
               />
-              <button type="submit" className="px-5 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 transition shadow-xs flex items-center gap-1.5 shrink-0">
+              <button type="submit" className="px-5 py-2.5 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 transition shadow-xs flex items-center justify-center gap-1.5 shrink-0">
                 {t('friends.followBtn')}
               </button>
-</form>
-            <div className="flex gap-2">
-              <button type="button" onClick={() => setShowQrModal(true)} className="flex-1 px-4 py-2.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center justify-center gap-1.5">
+            </form>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button type="button" onClick={() => setShowQrModal(true)} className="w-full px-4 py-2.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center justify-center gap-1.5">
                 <QrCode size={16} /> {t('friends.myQr')}
               </button>
-              <button type="button" onClick={() => setShowScanModal(true)} className="flex-1 px-4 py-2.5 text-xs font-bold bg-indigo-600 text-white border border-indigo-600 rounded-xl hover:bg-indigo-700 transition flex items-center justify-center gap-1.5 shadow-xs">
+              <button type="button" onClick={() => setShowScanModal(true)} className="w-full px-4 py-2.5 text-xs font-bold bg-indigo-600 text-white border border-indigo-600 rounded-xl hover:bg-indigo-700 transition flex items-center justify-center gap-1.5 shadow-xs">
                 <ScanLine size={16} /> {t('friends.scanQr')}
               </button>
             </div>
@@ -375,37 +414,41 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {roster.map((friend) => (
-                <div key={friend.uid} className="group/card flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-white dark:hover:bg-slate-800 transition">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm shrink-0 ${friend.isPartner ? "bg-rose-100 text-rose-600 dark:bg-rose-900/50 dark:text-rose-400" : "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"}`}>
-                    {(friend.nickname || "?").charAt(0).toUpperCase()}
+                <div key={friend.uid} className="group/card flex flex-col gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-white dark:hover:bg-slate-800 transition sm:flex-row sm:items-center">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm shrink-0 ${friend.isPartner ? "bg-rose-100 text-rose-600 dark:bg-rose-900/50 dark:text-rose-400" : "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"}`}>
+                      {(friend.nickname || "?").charAt(0).toUpperCase()}
+                    </div>
+
+                    <button type="button" onClick={() => openFriend(friend)} className="flex-1 min-w-0 text-left focus:outline-none focus:ring-2 focus:ring-indigo-600 rounded-lg">
+                      <span className="block font-bold text-sm text-slate-900 dark:text-white truncate">{friend.nickname}</span>
+                      <span className="block text-[11px] font-medium text-slate-400 truncate">
+                        {friend.isPartner ? t('friends.coupledShelf') : friend.email || t('friends.viewShelf')}
+                      </span>
+                    </button>
                   </div>
 
-                  <button type="button" onClick={() => openFriend(friend)} className="flex-1 min-w-0 text-left focus:outline-none focus:ring-2 focus:ring-indigo-600 rounded-lg">
-                    <span className="block font-bold text-sm text-slate-900 dark:text-white truncate">{friend.nickname}</span>
-                    <span className="block text-[11px] font-medium text-slate-400 truncate">
-                      {friend.isPartner ? t('friends.coupledShelf') : friend.email || t('friends.viewShelf')}
-                    </span>
-                  </button>
-
-                  {friend.isPartner ? (
-                    <button type="button" onClick={() => openFriend(friend)} className="px-3 py-1.5 text-xs font-bold bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/50 transition shrink-0">
-                      {t('friends.viewShelf')}
-                    </button>
-                  ) : (
-                    <>
-                      <button type="button" onClick={() => openFriend(friend)} className="px-3 py-1.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition shrink-0">
+                  <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                    {friend.isPartner ? (
+                      <button type="button" onClick={() => openFriend(friend)} className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900/50 transition shrink-0">
                         {t('friends.viewShelf')}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveFriend(friend.uid, friend.nickname)}
-                        title={t('friends.removeFriend')}
-                        className="p-2 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition shrink-0 md:opacity-0 md:group-hover/card:opacity-100"
-                      >
-                        <UserMinus size={16} />
-                      </button>
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <button type="button" onClick={() => openFriend(friend)} className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition shrink-0">
+                          {t('friends.viewShelf')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFriend(friend.uid, friend.nickname)}
+                          title={t('friends.removeFriend')}
+                          className="p-2 rounded-lg text-slate-300 dark:text-slate-600 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition shrink-0 sm:opacity-0 sm:group-hover/card:opacity-100"
+                        >
+                          <UserMinus size={16} />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -482,8 +525,8 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
             <div className="space-y-4">
               {gameHistory.map((record) => {
                 const players = Array.isArray(record.players) ? record.players : [];
-                const maxScore = players.length ? Math.max(...players.map((p: any) => Number(p.score || 0))) : 0;
-                const sortedPlayers = [...players].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
+                const maxScore = players.length ? Math.max(...players.map((p) => Number(p.score || 0))) : 0;
+                const sortedPlayers = [...players].sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
                 const canViewPhoto = record.userId === user?.uid || selectedFriend.uid === user?.uid;
 
                 return (
@@ -494,7 +537,7 @@ await updateDoc(doc(db, "users", user.uid), { friendsList: arrayRemove(friendUid
                     </div>
 
                     <div className="space-y-1.5">
-                      {sortedPlayers.map((p: any, index: number) => (
+                      {sortedPlayers.map((p, index: number) => (
                         <div key={`${record.id}-${index}`} className="flex justify-between items-center text-sm font-semibold">
                           <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5">{Number(p.score) === maxScore && maxScore > 0 && <span>🏆</span>} {p.name}</span>
                           <div className="text-right">

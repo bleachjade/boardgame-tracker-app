@@ -1,4 +1,4 @@
-import { query, where, orderBy, QueryConstraint } from "firebase/firestore";
+import { where, orderBy } from "firebase/firestore";
 import { FirestoreRepository } from "./baseRepository";
 import { GameNight } from "@/lib/types";
 
@@ -18,7 +18,7 @@ export class GameNightsRepository extends FirestoreRepository<GameNight> {
       proposedGames: doc.proposedGames as GameNight["proposedGames"],
       rsvps: doc.rsvps as Record<string, "yes" | "no"> || {},
       votes: doc.votes as Record<string, string[]> || {},
-      createdAt: doc.createdAt,
+      createdAt: doc.createdAt as GameNight["createdAt"],
     };
   }
 

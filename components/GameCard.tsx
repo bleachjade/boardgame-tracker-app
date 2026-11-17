@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import Image from "next/image";
 import { Check, Trash2, Trophy, FolderPlus, Puzzle, Star, Pin } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -39,7 +39,7 @@ interface GameCardProps {
   onTogglePin: (e: React.MouseEvent, game: Game) => void;
 }
 
-export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign, onTogglePin }: GameCardProps) {
+export const GameCard = memo(function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign, onTogglePin }: GameCardProps) {
   const { t, i18n } = useTranslation();
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -176,4 +176,4 @@ export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, active
       )}
     </div>
   );
-}
+});

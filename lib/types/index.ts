@@ -1,3 +1,10 @@
+export type FirestoreDate = {
+  seconds?: number;
+  nanoseconds?: number;
+  toMillis?: () => number;
+  toDate?: () => Date;
+} | null;
+
 export interface Game {
   id: string;
   bggId: string;
@@ -11,6 +18,7 @@ export interface Game {
   maxPlayTime?: string;
   minAge?: string;
   description?: string;
+  description_th?: string;
   weight?: string;
   categories: string[];
   mechanics: string[];
@@ -22,10 +30,9 @@ export interface Game {
   groupIds: string[];
   userId: string;
   ownerNickname: string;
-  addedAt: any;
+  addedAt: FirestoreDate;
   pricePaid?: number;
-  description_th?: string;
-  rating?: string;
+  rating?: string; rank?: number;
   isPinned?: boolean;
 }
 
@@ -37,7 +44,7 @@ export interface UserProfile {
   isCouple: boolean;
   partnerId: string | null;
   friendsList: string[];
-  createdAt: any;
+  createdAt: FirestoreDate;
 }
 
 export interface Group {
@@ -46,7 +53,7 @@ export interface Group {
   ownerId: string;
   members: string[];
   isSystem: boolean;
-  createdAt: any;
+  createdAt: FirestoreDate;
 }
 
 export interface GamePlay {
@@ -60,7 +67,7 @@ export interface GamePlay {
   coopResult?: "win" | "loss";
   teamScore?: number;
   memoryPhoto?: string;
-  playedAt: any;
+  playedAt: FirestoreDate;
   loggedBy: string;
   userId: string;
   isSharedCopy?: boolean;
@@ -84,7 +91,7 @@ export interface GameNight {
   proposedGames: ProposedGame[];
   rsvps: Record<string, "yes" | "no">;
   votes: Record<string, string[]>;
-  createdAt: any;
+  createdAt: FirestoreDate;
 }
 
 export interface ProposedGame {
@@ -118,7 +125,7 @@ export interface EnrichedGame extends SearchResult {
   dimensions?: { width: number; length: number; depth: number };
   isExpansion: boolean;
   baseGameId?: string;
-  rating?: string;
+  rating?: string; rank?: number;
 }
 
 export interface UserPreferences {

@@ -7,18 +7,19 @@ import { useModalClose } from "@/lib/useModalClose";
 import { BookOpen, X, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Game, Group } from "@/lib/types";
 
-export function AddFromLibraryModal({ group, onClose }: { group: any, onClose: () => void }) {
+export function AddFromLibraryModal({ group, onClose }: { group: Group, onClose: () => void }) {
   const { user } = useAuthGroup();
   const { t } = useTranslation();
-  const [myGames, setMyGames] = useState<any[]>([]);
+  const [myGames, setMyGames] = useState<Game[]>([]);
   const { overlayProps, panelProps } = useModalClose(onClose, { backdrop: true });
 
   useEffect(() => {
     if (!user) return;
     const unsub = onSnapshot(
       query(collection(db, "userGames"), where("userId", "==", user.uid)),
-      (snap) => setMyGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))),
+      (snap) => setMyGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game))),
       (error) => {
         console.error("Failed to load library:", error);
         toast.error(t('home.failed'));
@@ -27,9 +28,9 @@ export function AddFromLibraryModal({ group, onClose }: { group: any, onClose: (
     return () => unsub();
   }, [user, t]);
 
-  const toggleGameInGroup = async (game: any) => {
+  const toggleGameInGroup = async (game: Game) => {
     const inGroup = game.groupIds?.includes(group.id);
-    const newGroupIds = inGroup ? (game.groupIds || []).filter((id: string) => id !== group.id) : [...(game.groupIds || []), group.id];
+    const newGroupIds = inGroup ? (game.groupIds || []).filter((id) => id !== group.id) : [...(game.groupIds || []), group.id];
     try { await updateDoc(doc(db, "userGames", game.id), { groupIds: newGroupIds }); } catch { toast.error(t('home.failed')); }
   };
 

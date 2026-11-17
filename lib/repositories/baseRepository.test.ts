@@ -26,7 +26,9 @@ jest.mock("@/lib/firebase", () => ({
 }));
 
 // Create a test implementation
-class TestRepository extends FirestoreRepository<{ id?: string; name: string; value: number }> {
+type TestModel = { id?: string; name: string; value: number };
+
+class TestRepository extends FirestoreRepository<TestModel> {
   protected collectionName = "testCollection";
 
   protected mapDoc(doc: { id: string } & Record<string, unknown>) {
@@ -35,6 +37,10 @@ class TestRepository extends FirestoreRepository<{ id?: string; name: string; va
       name: doc.name as string,
       value: doc.value as number,
     };
+  }
+
+  async runBatch(operations: Array<{ type: "create" | "update" | "delete"; id?: string; data?: Partial<TestModel> }>) {
+    return this.batchWrite(operations);
   }
 }
 
@@ -175,8 +181,8 @@ describe("FirestoreRepository", () => {
 
     it("should call callback with mapped documents on snapshot", () => {
       const mockUnsubscribe = jest.fn();
-      let snapshotCallback: Function;
-      mockOnSnapshot.mockImplementation((_, cb) => {
+      let snapshotCallback: (snapshot: { docs: Array<{ id: string; data: () => Record<string, unknown> }> }) => void;
+      mockOnSnapshot.mockImplementation((_: unknown, cb: typeof snapshotCallback) => {
         snapshotCallback = cb;
         return mockUnsubscribe;
       });
@@ -204,7 +210,7 @@ describe("FirestoreRepository", () => {
       const mockBatch = { set: jest.fn(), update: jest.fn(), delete: jest.fn(), commit: jest.fn() };
       mockWriteBatch.mockReturnValue(mockBatch);
 
-      await repository.batchWrite([
+      await repository.runBatch([
         { type: "create", data: { name: "New 1", value: 1 } },
         { type: "create", data: { name: "New 2", value: 2 } }
       ]);
@@ -221,7 +227,7 @@ describe("FirestoreRepository", () => {
         data: () => ({ name: "Existing", value: 0, groupIds: [] })
       });
 
-      await repository.batchWrite([
+      await repository.runBatch([
         { type: "update", id: "doc1", data: { value: 100 } },
         { type: "update", id: "doc2", data: { value: 200 } }
       ]);
@@ -234,7 +240,7 @@ describe("FirestoreRepository", () => {
       const mockBatch = { set: jest.fn(), update: jest.fn(), delete: jest.fn(), commit: jest.fn() };
       mockWriteBatch.mockReturnValue(mockBatch);
 
-      await repository.batchWrite([
+      await repository.runBatch([
         { type: "delete", id: "doc1" },
         { type: "delete", id: "doc2" }
       ]);

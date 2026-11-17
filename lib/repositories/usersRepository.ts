@@ -1,4 +1,4 @@
-import { query, where, orderBy, limit, QueryConstraint } from "firebase/firestore";
+import { where, limit } from "firebase/firestore";
 import { FirestoreRepository } from "./baseRepository";
 import { UserProfile } from "@/lib/types";
 
@@ -13,7 +13,7 @@ export class UsersRepository extends FirestoreRepository<UserProfile> {
       isCouple: doc.isCouple as boolean,
       partnerId: doc.partnerId as string | null,
       friendsList: doc.friendsList as string[] || [],
-      createdAt: doc.createdAt,
+      createdAt: doc.createdAt as UserProfile["createdAt"],
     };
   }
 

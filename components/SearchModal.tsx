@@ -8,7 +8,7 @@ import { useModalClose } from "@/lib/useModalClose";
 import { Search, Loader2, Plus, X, Users, Database, Globe, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { Game } from "@/lib/types";
+import { Game, SearchResult } from "@/lib/types";
 
 export function SearchModal({ onClose }: { onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
@@ -53,12 +53,12 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
       // ==========================================
       if (cleanText) {
         const res = await fetch(`/api/search?q=${encodeURIComponent(cleanText)}`);
-        const searchData = await res.json();
+        const searchData = (await res.json()) as SearchResult[];
 
         if (Array.isArray(searchData) && searchData.length > 0) {
           // Smart Sort: Bring exact/prefix matches to top before slicing
           const lowerQuery = cleanText.toLowerCase();
-          searchData.sort((a: any, b: any) => {
+          searchData.sort((a, b) => {
             const aName = (a.name || "").toLowerCase();
             const bName = (b.name || "").toLowerCase();
             if (aName === lowerQuery && bName !== lowerQuery) return -1;
@@ -69,7 +69,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           });
 
           // Fetch deep details for top 20
-          const rawIds = searchData.slice(0, 20).map((item: any) => item.id);
+          const rawIds = searchData.slice(0, 20).map((item) => item.id);
           const uniqueIds = Array.from(new Set(rawIds)).join(",");
 
           const bggRes = await fetch(`/api/bgg?ids=${uniqueIds}`);

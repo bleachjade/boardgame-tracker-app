@@ -1,4 +1,4 @@
-import { query, where, orderBy, QueryConstraint } from "firebase/firestore";
+import { where } from "firebase/firestore";
 import { FirestoreRepository } from "./baseRepository";
 import { Group } from "@/lib/types";
 
@@ -12,7 +12,7 @@ export class GroupsRepository extends FirestoreRepository<Group> {
       ownerId: doc.ownerId as string,
       members: doc.members as string[] || [],
       isSystem: doc.isSystem as boolean,
-      createdAt: doc.createdAt,
+      createdAt: doc.createdAt as Group["createdAt"],
     };
   }
 

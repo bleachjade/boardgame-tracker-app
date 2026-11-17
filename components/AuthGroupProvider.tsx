@@ -6,26 +6,27 @@ import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot, getDocs, addDoc, serverTimestamp, doc, setDoc } from "firebase/firestore";
+import { Group, UserProfile } from "@/lib/types";
 
 type AuthContextType = {
   user: User | null;
-  userProfile: any | null; // NEW: Exposes the full profile (including couple status)
+  userProfile: UserProfile | null;
   userNickname: string;
   loading: boolean;
-  activeGroup: any | null;
-  setActiveGroup: (group: any | null) => void;
-  userGroups: any[];
+  activeGroup: Group | null;
+  setActiveGroup: (group: Group | null) => void;
+  userGroups: Group[];
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<any | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userNickname, setUserNickname] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  const [userGroups, setUserGroups] = useState<any[]>([]);
-  const [activeGroup, setActiveGroup] = useState<any | null>(null);
+  const [userGroups, setUserGroups] = useState<Group[]>([]);
+  const [activeGroup, setActiveGroup] = useState<Group | null>(null);
   const hasInitialized = useRef(false);
 
   // When the signed-in account changes (login, logout, account switch), drop all
@@ -80,8 +81,8 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
           createdAt: serverTimestamp()
         });
       } else {
-        const data = docSnap.data();
-        setUserProfile(data);
+        const data = docSnap.data() as UserProfile;
+        setUserProfile({ ...data, id: docSnap.id });
         setUserNickname(data.nickname);
         
         // Safety Backfill: Add missing couple fields to older accounts
@@ -119,7 +120,7 @@ export function AuthGroupProvider({ children }: { children: React.ReactNode }) {
     const identifier = user.email || user.uid;
     const q = query(collection(db, "groups"), where("members", "array-contains", identifier));
     const unsubscribeGroups = onSnapshot(q, (snapshot) => {
-      const groups = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as any[];
+      const groups = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Group));
       groups.sort((a, b) => (b.isSystem ? 1 : 0) - (a.isSystem ? 1 : 0));
       setUserGroups(groups);
     });

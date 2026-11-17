@@ -10,8 +10,29 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import confetti from "canvas-confetti"; // NEW: Confetti import
 import { useModalClose } from "@/lib/useModalClose";
+import { Game, GamePlay, PlayerScore } from "@/lib/types";
 
-export function ScoresModal({ game, onClose }: { game: any; onClose: () => void }) {
+interface SpeechRecognitionEventLike {
+  results: ArrayLike<ArrayLike<{ transcript: string }>>;
+  error?: string;
+}
+interface SpeechRecognitionLike {
+  lang: string;
+  interimResults: boolean;
+  onstart: () => void;
+  onresult: (event: SpeechRecognitionEventLike) => void;
+  onerror: (event: SpeechRecognitionEventLike) => void;
+  onend: () => void;
+  start: () => void;
+  stop: () => void;
+}
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+type SpeechWindow = Window & {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+};
+
+export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void }) {
   const { user, userNickname, userProfile } = useAuthGroup();
   const { t } = useTranslation();
   // Escape only — never a stray backdrop click that would discard a half-entered score sheet
@@ -26,7 +47,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   }, [user, userProfile]);
   
   const [activeTab, setActiveTab] = useState<"log" | "history">("log");
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<GamePlay[]>([]);
   
   const [playMode, setPlayMode] = useState<"score" | "winner" | "coop">("score");
   const [winnerIndex, setWinnerIndex] = useState<number>(0); 
@@ -39,7 +60,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [listeningIdx, setListeningIdx] = useState<number | null>(null);
-  const activeRecognitionRef = useRef<any | null>(null);
+  const activeRecognitionRef = useRef<SpeechRecognitionLike | null>(null);
   
   const [players, setPlayers] = useState([{ name: userNickname || "Player 1", scoreInput: "" }]);
   const [friendsList, setFriendsList] = useState<{uid: string, nickname: string}[]>([]);
@@ -56,9 +77,9 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       (snap) => {
         const visibleUids = visiblePlayerUids();
         const fetched = snap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .filter((record: any) => visibleUids.has(record.userId))
-          .sort((a: any, b: any) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
+          .map((d) => ({ id: d.id, ...d.data() } as GamePlay))
+          .filter((record: GamePlay) => visibleUids.has(record.userId))
+          .sort((a: GamePlay, b: GamePlay) => (b.playedAt?.seconds || 0) - (a.playedAt?.seconds || 0));
         setHistory(fetched);
       },
       (error) => {
@@ -99,7 +120,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
           .map((d) => ({ players: d.data().players || [], ts: d.data().playedAt?.seconds || 0 }))
           .sort((a, b) => b.ts - a.ts)
           .slice(0, 10);
-        const names = plays.flatMap((play) => play.players.map((p: any) => p.name));
+        const names = plays.flatMap((play) => play.players.map((p: PlayerScore) => p.name));
         setRecentPlayerNames(Array.from(new Set(names)).filter(Boolean));
       } catch (err) {
         console.error("Failed to load recent players:", err);
@@ -154,7 +175,8 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
   const handleVoiceInput = (index: number) => {
     const windowSupported = typeof window !== "undefined";
-    const SpeechRecognition = windowSupported && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+    const speechWindow = window as SpeechWindow;
+    const SpeechRecognition = windowSupported ? (speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition) : undefined;
     
     if (!SpeechRecognition) return toast.error("Speech input unsupported on this browser.");
 
@@ -179,7 +201,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       toast("Listening for score numbers...", { icon: "🎙️", duration: 2000 });
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
       const transcript = event.results[0][0].transcript;
       const mathExpression = transcript.toLowerCase()
         .replace(/บวก|และ|และก็|กับ|แถม|plus|and/g, "+")
@@ -201,7 +223,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
       toast.success("Voice score loaded!");
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionEventLike) => {
       const code = event?.error;
       if (code && code !== "no-speech" && code !== "aborted") toast.error("Audio recording failed.");
       setListeningIdx(prev => (prev === index ? null : prev));
@@ -334,7 +356,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
   };
 
   const friendNames = friendsList.map(f => f.nickname);
-  const historyNames = history.flatMap(h => h.players?.map((p: any) => p.name) || []);
+  const historyNames = history.flatMap(h => h.players?.map((p: PlayerScore) => p.name) || []);
   const allSuggestions = Array.from(new Set([...friendNames, ...recentPlayerNames, ...historyNames]))
     .filter(name => name && name.trim() !== "" && name !== userNickname && name !== "Anonymous");
 
@@ -518,13 +540,13 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
             <div className="space-y-4">
               {history.length === 0 ? <div className="text-center py-8 text-slate-500 dark:text-slate-400 font-medium">{t('scores.noMatches')}</div> : history.map((record) => {
                 const playersInPlay = Array.isArray(record.players) ? record.players : [];
-                const maxScore = playersInPlay.length ? Math.max(...playersInPlay.map((p: any) => Number(p.score || 0))) : 0;
-                const sortedPlayers = [...playersInPlay].sort((a: any, b: any) => Number(b.score || 0) - Number(a.score || 0));
+                const maxScore = playersInPlay.length ? Math.max(...playersInPlay.map((p: PlayerScore) => Number(p.score || 0))) : 0;
+                const sortedPlayers = [...playersInPlay].sort((a: PlayerScore, b: PlayerScore) => Number(b.score || 0) - Number(a.score || 0));
                 
                 return (
                   <div key={record.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 shadow-sm space-y-3 relative group/card transition-all hover:shadow-md">
                     <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold border-b dark:border-slate-700 pb-2 border-slate-100">
-                      <span className="flex items-center gap-1"><Calendar size={14} /> {record.playedAt?.toDate() ? new Date(record.playedAt.toDate()).toLocaleDateString() : "Just now"}</span>
+                      <span className="flex items-center gap-1"><Calendar size={14} /> {((d) => (d ? new Date(d).toLocaleDateString() : "Just now"))(record.playedAt?.toDate?.())}</span>
                       
                       <div className="flex items-center gap-2">
                         <span>{t('scores.loggedBy', { name: record.loggedBy || "Friend" })}</span>
@@ -542,7 +564,7 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
 
                     {record.playMode === "winner" ? (
                       <div className="space-y-1.5">
-                        {sortedPlayers.map((p: any, pIdx: number) => (
+                        {sortedPlayers.map((p: PlayerScore, pIdx: number) => (
                           <div key={pIdx} className="flex justify-between items-center text-sm font-semibold">
                             <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                               {p.rawExpression === "Win" && <Trophy className="text-amber-500 shrink-0 animate-in zoom-in" size={14} />} {p.name}
@@ -566,13 +588,13 @@ export function ScoresModal({ game, onClose }: { game: any; onClose: () => void 
                         </div>
                         <div className="space-y-1.5">
                            <div className="text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2 flex-wrap">
-                             <Users size={14} /> {playersInPlay.map((p: any) => p.name).join(", ")}
+                             <Users size={14} /> {playersInPlay.map((p: PlayerScore) => p.name).join(", ")}
                            </div>
                         </div>
                       </>
                     ) : (
                       <div className="space-y-1.5">
-                        {sortedPlayers.map((p: any, pIdx: number) => (
+                        {sortedPlayers.map((p: PlayerScore, pIdx: number) => (
                           <div key={pIdx} className="flex justify-between items-center text-sm font-semibold">
                             <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5">{Number(p.score) === maxScore && maxScore > 0 && <Trophy className="text-amber-500 shrink-0" size={14} />} {p.name}</span>
                             <div className="text-right">

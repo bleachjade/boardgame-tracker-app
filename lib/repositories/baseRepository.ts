@@ -2,9 +2,6 @@ import {
   collection, 
   doc, 
   query, 
-  where, 
-  orderBy, 
-  limit, 
   getDocs, 
   getDoc, 
   addDoc, 
@@ -15,12 +12,11 @@ import {
   serverTimestamp,
   QueryConstraint,
   DocumentData,
-  DocumentReference,
-  Firestore
+  UpdateData
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-export interface BaseRepository<T extends { id?: string; createdAt?: any }> {
+export interface BaseRepository<T extends { id?: string; createdAt?: unknown }> {
   getById(id: string): Promise<T | null>;
   getAll(constraints?: QueryConstraint[]): Promise<T[]>;
   create(data: Omit<T, "id" | "createdAt">): Promise<string>;
@@ -64,13 +60,12 @@ export abstract class FirestoreRepository<T extends { id?: string }> implements 
 
   async update(id: string, data: Partial<T>): Promise<void> {
     const docRef = this.getDocRef(id);
-    // Cast both to any to bypass strict generic constraints
-    await updateDoc(docRef as any, data as any);
+    await updateDoc(docRef, data as UpdateData<DocumentData>);
   }
 
   async delete(id: string): Promise<void> {
     const docRef = this.getDocRef(id);
-    await deleteDoc(docRef as any);
+    await deleteDoc(docRef);
   }
 
   subscribe(constraints: QueryConstraint[], callback: (data: T[]) => void): () => void {
@@ -90,10 +85,10 @@ export abstract class FirestoreRepository<T extends { id?: string }> implements 
         batch.set(docRef, { ...op.data, createdAt: serverTimestamp() });
       } else if (op.type === "update" && op.id && op.data) {
         const docRef = this.getDocRef(op.id);
-        batch.update(docRef as any, op.data as any);
+        batch.update(docRef, op.data as UpdateData<DocumentData>);
       } else if (op.type === "delete" && op.id) {
         const docRef = this.getDocRef(op.id);
-        batch.delete(docRef as any);
+        batch.delete(docRef);
       }
     });
     
