@@ -6,12 +6,13 @@ import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Sparkles, Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
+import { Game } from "@/lib/types";
 
-export function RecommendationsTab({ userGames }: { userGames: any[] }) {
+export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
   const { user, userNickname } = useAuthGroup();
   const { t } = useTranslation(); // NEW
 
-  const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [recommendations, setRecommendations] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [avgPlayers, setAvgPlayers] = useState(4);

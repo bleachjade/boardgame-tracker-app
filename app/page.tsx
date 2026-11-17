@@ -2,7 +2,7 @@
 
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
 import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy } from "lucide-react";
@@ -26,15 +26,19 @@ import { BulkAssignModal } from "@/components/modals/BulkAssignModal";
 import { InviteModal } from "@/components/modals/InviteModal";
 import { AddFromLibraryModal } from "@/components/modals/AddFromLibraryModal";
 
+// Types
+import { Game, Group } from "@/lib/types";
+
+// Skeletons
+import { GameGridSkeleton, GameListSkeleton } from "@/components/Skeletons";
+
 // Stable reference so tab components don't see a "new" prop on every render
-const EMPTY_GAMES: any[] = [];
+const EMPTY_GAMES: Game[] = [];
 
 export default function Home() {
   const { user, userNickname, userProfile, loading: authLoading, activeGroup, setActiveGroup, userGroups } = useAuthGroup();
   const { t } = useTranslation();
 
-  const [games, setGames] = useState<any[]>([]);
-  const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
   const [currentView, setCurrentView] = useState<"library" | "recommendations" | "friends" | "events">("library");
   const [userTheme, setUserTheme] = useState("light");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
@@ -49,17 +53,23 @@ export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [assigningGame, setAssigningGame] = useState<any | null>(null);
-  const [scoringGame, setScoringGame] = useState<any | null>(null);
-  const [detailsGame, setDetailsGame] = useState<any | null>(null);
-  const [invitingGroup, setInvitingGroup] = useState<any | null>(null);
-  const [libraryModalGroup, setLibraryModalGroup] = useState<any | null>(null);
-  const [randomGameOpen, setRandomGameOpen] = useState<any | null>(null);
+  const [assigningGame, setAssigningGame] = useState<Game | null>(null);
+  const [scoringGame, setScoringGame] = useState<Game | null>(null);
+  const [detailsGame, setDetailsGame] = useState<Game | null>(null);
+  const [invitingGroup, setInvitingGroup] = useState<Group | null>(null);
+  const [libraryModalGroup, setLibraryModalGroup] = useState<Group | null>(null);
+  const [randomGameOpen, setRandomGameOpen] = useState<Game | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [isBulkMode, setIsBulkMode] = useState(false);
   const [selectedGameIds, setSelectedGameIds] = useState<string[]>([]);
   const [isBulkAssignModalOpen, setIsBulkAssignModalOpen] = useState(false);
+
+  // Games data from hook (will be implemented via useAuthGroup enhancement)
+  const [games, setGames] = useState<Game[]>([]);
+  const [gamesLoading, setGamesLoading] = useState(true);
+  const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
+  const [playCountsLoading, setPlayCountsLoading] = useState(true);
 
   // Render-phase resets: clear dependent state the moment its scope changes,
   // instead of doing it synchronously inside an effect.
@@ -68,6 +78,7 @@ export default function Home() {
   if (playCountsKey !== prevPlayCountsKey) {
     setPrevPlayCountsKey(playCountsKey);
     setPlayCounts({});
+    setPlayCountsLoading(true);
   }
 
   const scopeKey = `${activeGroup?.id ?? ""}::${currentView}`;
@@ -109,7 +120,10 @@ export default function Home() {
       ? query(collection(db, "userGames"), where("userId", "in", targetUids))
       : query(collection(db, "userGames"), where("groupIds", "array-contains", activeGroup.id));
 
-    const unsub = onSnapshot(q, (snap) => setGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))));
+    const unsub = onSnapshot(q, (snap) => {
+      setGames(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Game)));
+      setGamesLoading(false);
+    });
     return () => unsub();
   }, [activeGroup, user, settingsLoaded, userProfile]);
 
@@ -129,8 +143,10 @@ export default function Home() {
         }
       });
       setPlayCounts(counts);
+      setPlayCountsLoading(false);
     }, (error) => {
       console.error("Failed to load game play counts.", error);
+      setPlayCountsLoading(false);
     });
 
     return () => unsubscribe();
@@ -232,7 +248,7 @@ export default function Home() {
 
   const pickRandomGame = () => { if (parentGamesToRender.length === 0) return toast.error(t('home.noMatches')); setRandomGameOpen(parentGamesToRender[Math.floor(Math.random() * parentGamesToRender.length)]); };
 
-  if (authLoading || (user && !settingsLoaded)) {
+  if (authLoading || (user && !settingsLoaded) || gamesLoading || playCountsLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <div className="w-48 h-48 flex items-center justify-center">

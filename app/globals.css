@@ -87,3 +87,20 @@ body {
   background-color: rgb(148 163 184 / 0.6);
   border-radius: 999px;
 }
+
+/* Prevent iOS zoom on input focus */
+input, textarea, select {
+  font-size: 16px !important;
+  touch-action: manipulation;
+}
+
+/* Disable zoom on double tap */
+html {
+  touch-action: manipulation;
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}

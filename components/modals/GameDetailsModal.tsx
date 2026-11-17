@@ -40,7 +40,6 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
         const res = await fetch(`/api/bgg?ids=${game.bggId}`);
         const data = await res.json();
         if (data && data.length > 0) {
-          console.log("Fetched full game details:", data[0]);
           setLiveData({ ...game, ...data[0] });
         }
       } catch { /* fallback keeps whatever detail we already have */ } finally { setLoading(false); }

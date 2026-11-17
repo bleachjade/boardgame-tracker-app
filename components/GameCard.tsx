@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { Check, Trash2, Trophy, FolderPlus, Puzzle } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Game, Group } from "@/lib/types";
 
 interface GameCardProps {
-  game: any; userUid: string; isBulkMode: boolean; isSelected: boolean; iOwnIt: boolean;
-  activeGroup: any; index: number;
-  expansions?: any[];
-  userLists?: any[]; // Added prop
-  onToggleBulk: (id: string) => void; onOpenDetails: (game: any) => void; onDelete: (e: React.MouseEvent, game: any) => void;
-  onLogScore: (e: React.MouseEvent, game: any) => void; onAssign: (e: React.MouseEvent, game: any) => void;
+  game: Game; userUid: string; isBulkMode: boolean; isSelected: boolean; iOwnIt: boolean;
+  activeGroup: Group | null; index: number;
+  expansions?: Game[];
+  userLists?: Group[]; // Added prop
+  onToggleBulk: (id: string) => void; onOpenDetails: (game: Game) => void; onDelete: (e: React.MouseEvent, game: Game) => void;
+  onLogScore: (e: React.MouseEvent, game: Game) => void; onAssign: (e: React.MouseEvent, game: Game) => void;
 }
 
 export function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign }: GameCardProps) {

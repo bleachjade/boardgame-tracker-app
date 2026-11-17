@@ -3,12 +3,13 @@ import { auth } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { Library, Sparkles, FolderOpen, Users, Trash2, Plus, Copy, ClipboardPaste, LogOut, X, UserCheck, CalendarDays, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Group } from "@/lib/types";
 
 interface SidebarProps {
     currentView: string;
     isSidebarOpen: boolean;
     setIsSidebarOpen: (open: boolean) => void;
-    selectGroupMobile: (group: any | null) => void;
+    selectGroupMobile: (group: Group | null) => void;
     selectTab: (tab: "recommendations" | "library" | "friends" | "events") => void;
     handleCreateGroup: () => void;
     handleDeleteGroup: (e: React.MouseEvent, groupId: string, groupName: string) => void;

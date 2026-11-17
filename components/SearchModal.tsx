@@ -8,6 +8,7 @@ import { useModalClose } from "@/lib/useModalClose";
 import { Search, Loader2, Plus, X, Users, Database, Globe, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Game } from "@/lib/types";
 
 export function SearchModal({ onClose }: { onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
@@ -16,19 +17,19 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
   const [queryText, setQueryText] = useState("");
   const [targetPlayers, setTargetPlayers] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Game[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Local JSON catalog: loaded once into a ref so player-only searches can await
-// it instead of silently returning nothing while the fetch is still in flight.
-  const localCatalogRef = useRef<Promise<any[]> | null>(null);
+  // it instead of silently returning nothing while the fetch is still in flight.
+  const localCatalogRef = useRef<Promise<Game[]> | null>(null);
   useEffect(() => {
     localCatalogRef.current = fetch("/games.json")
       .then((res) => (res.ok ? res.json() : []))
-      .then((data: any) => (Array.isArray(data) ? data : []))
+      .then((data: Game[]) => (Array.isArray(data) ? data : []))
       .catch((err) => {
         console.error("Failed to load local games catalog", err);
-        return [] as any[];
+        return [] as Game[];
       });
   }, []);
 
@@ -44,7 +45,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     setLoading(true);
 
     try {
-      let finalResults: any[] = [];
+      let finalResults: Game[] = [];
 
       // ==========================================
       // PATH A: USER TYPED A TEXT QUERY
@@ -128,7 +129,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const handleAddGame = async (game: any) => {
+  const handleAddGame = async (game: Game) => {
     if (!user) return;
     const bggId = String(game.bggId);
     if (addingBggId === bggId) return; // ignore double-taps while this add is in flight
