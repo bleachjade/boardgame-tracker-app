@@ -34,6 +34,7 @@ export class GamesRepository extends FirestoreRepository<Game> {
       pricePaid: doc.pricePaid as number | undefined,
       description_th: doc.description_th as string | undefined,
       rating: doc.rating as string | undefined,
+      isPinned: doc.isPinned as boolean | undefined,
     };
   }
 

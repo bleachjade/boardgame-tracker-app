@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useState, useEffect, useMemo } from "react";
 // Removed orderBy from imports as we won't need it
 import { collection, query, where, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen } from "lucide-react";
+import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen, Star, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
@@ -17,6 +16,9 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [liveData, setLiveData] = useState<any>(game);
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState<any[]>([]);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // ROI Tracker State
   const [isEditingPrice, setIsEditingPrice] = useState(false);
@@ -31,8 +33,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [chatInput, setChatInput] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: "user" | "ai", text: string }[]>([]);
   const [isChatLoading, setIsChatLoading] = useState(false);
-  // Escape only: this modal holds unsaved edits (price / Thai description / chat)
-  const { overlayProps, panelProps } = useModalClose(onClose);
+  // Escape closes the fullscreen viewer first, then the details modal
+  const { overlayProps, panelProps } = useModalClose(isFullscreen ? () => undefined : onClose);
 
   useEffect(() => {
     async function fetchFullDetails() {
@@ -46,6 +48,46 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
     }
     fetchFullDetails();
   }, [game]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch(`/api/bgg-images?id=${encodeURIComponent(game.bggId)}`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data)) setGalleryImages(data);
+      })
+      .catch(() => { /* gallery is optional */ });
+
+    return () => { cancelled = true; };
+  }, [game.bggId]);
+
+  const carouselImages = useMemo(() => {
+    const images = [liveData.image, ...galleryImages].filter(
+      (url): url is string => typeof url === 'string' && url.length > 0
+    );
+    return Array.from(new Set(images));
+  }, [liveData.image, galleryImages]);
+
+  const safeImageIndex = carouselImages.length > 0 ? activeImageIndex % carouselImages.length : 0;
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsFullscreen(false);
+      } else if (event.key === 'ArrowLeft' && carouselImages.length > 1) {
+        setActiveImageIndex((i) => (i - 1 + carouselImages.length) % carouselImages.length);
+      } else if (event.key === 'ArrowRight' && carouselImages.length > 1) {
+        setActiveImageIndex((i) => (i + 1) % carouselImages.length);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [isFullscreen, carouselImages.length]);
 
   useEffect(() => {
     // FIX: Removed orderBy() to prevent Firebase Composite Index errors on fresh loads!
@@ -143,6 +185,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   };
 
   const timeDisplay = liveData.minPlayTime !== liveData.maxPlayTime ? `${liveData.minPlayTime}–${liveData.maxPlayTime}` : liveData.playTime;
+  const ratingValue = Number.parseFloat(liveData.rating || "");
+  const hasRating = Number.isFinite(ratingValue) && ratingValue > 0;
   const slugifiedName = liveData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
   const playsCount = history.length;
@@ -166,8 +210,81 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
         <div className="p-6 overflow-y-auto flex-1 space-y-8 custom-scrollbar">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-56 h-64 md:h-80 rounded-xl overflow-hidden shrink-0 relative">
-              {liveData.image ? <Image src={liveData.image} alt={liveData.name} fill className="object-contain" unoptimized /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>}
+            <div className="w-full md:w-56 shrink-0">
+              <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                {carouselImages.length > 0 ? (
+                  <>
+                    <img
+                      src={`/api/media?url=${encodeURIComponent(carouselImages[safeImageIndex] || carouselImages[0])}`}
+                      alt={liveData.name}
+                      className="w-full h-full object-contain"
+                    />
+                    <button
+                      type="button"
+                      aria-label="View image fullscreen"
+                      title="View fullscreen"
+                      onClick={() => setIsFullscreen(true)}
+                      className="absolute inset-0 cursor-zoom-in group/fullscreen"
+                    >
+                      <span className="absolute top-2 left-2 p-1.5 rounded-full bg-black/50 text-white opacity-70 group-hover/fullscreen:opacity-100 transition-opacity">
+                        <Maximize2 size={14} />
+                      </span>
+                    </button>
+                  </>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>
+                )}
+
+                {carouselImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      aria-label="Previous image"
+                      onClick={() => setActiveImageIndex((i) => (i - 1 + carouselImages.length) % carouselImages.length)}
+                      className="absolute left-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Next image"
+                      onClick={() => setActiveImageIndex((i) => (i + 1) % carouselImages.length)}
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                    <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/60 text-white text-[10px] font-bold">
+                      {safeImageIndex + 1}/{carouselImages.length}
+                    </span>
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                      {carouselImages.map((img, idx) => (
+                        <button
+                          key={img}
+                          type="button"
+                          aria-label={`Show image ${idx + 1}`}
+                          onClick={() => setActiveImageIndex(idx)}
+                          className={`h-1.5 rounded-full transition-all ${idx === safeImageIndex ? 'bg-white w-3' : 'bg-white/50 w-1.5'}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {carouselImages.length > 1 && (
+                <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
+                  {carouselImages.map((img, idx) => (
+                    <button
+                      key={img}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border-2 transition ${idx === safeImageIndex ? 'border-indigo-500' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                    >
+                      <img src={`/api/media?url=${encodeURIComponent(img)}`} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex-1 flex flex-col justify-center space-y-4">
@@ -175,6 +292,24 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                 <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-1 leading-tight">
                   {liveData.name} <span className="text-slate-400 font-medium text-2xl">({liveData.year || 'N/A'})</span>
                 </h3>
+
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  {!loading && hasRating && (
+                    <span
+                      title="BoardGameGeek score"
+                      className="inline-flex items-center gap-1 text-sm font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800"
+                    >
+                      <Star size={13} className="fill-amber-400 text-amber-400" />
+                      {ratingValue.toFixed(1)}
+                      <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">/ 10 BGG</span>
+                    </span>
+                  )}
+                  {!loading && liveData.rank && (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
+                      #{liveData.rank} BGG Rank
+                    </span>
+                  )}
+                </div>
 
                 <div className="mt-3 min-h-[28px] flex flex-wrap gap-1.5">
                   {!loading && liveData.mechanics && liveData.mechanics.length > 0 && (
@@ -420,6 +555,59 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
         </div>
       </div>
+
+      {isFullscreen && carouselImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setIsFullscreen(false)}
+        >
+          <button
+            type="button"
+            aria-label="Close fullscreen image"
+            onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+          >
+            <X size={28} />
+          </button>
+
+          <img
+            src={`/api/media?url=${encodeURIComponent(carouselImages[safeImageIndex] || carouselImages[0])}`}
+            alt={liveData.name}
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl"
+          />
+
+          {carouselImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous image"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImageIndex((i) => (i - 1 + carouselImages.length) % carouselImages.length);
+                }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                <ChevronLeft size={28} />
+              </button>
+              <button
+                type="button"
+                aria-label="Next image"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImageIndex((i) => (i + 1) % carouselImages.length);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                <ChevronRight size={28} />
+              </button>
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold">
+                {safeImageIndex + 1} / {carouselImages.length}
+              </span>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

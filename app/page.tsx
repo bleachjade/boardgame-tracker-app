@@ -2,7 +2,7 @@
 
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { signInWithPopup, googleProvider, auth, db } from "@/lib/firebase";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import { SearchModal } from "@/components/SearchModal";
 import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy, Image } from "lucide-react";
@@ -190,6 +190,7 @@ export default function Home() {
   const [gamesLoading, setGamesLoading] = useState(true);
   const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
   const [playCountsLoading, setPlayCountsLoading] = useState(true);
+  const ratingBackfillIds = useRef<Set<string>>(new Set());
 
   // Render-phase resets: clear dependent state the moment its scope changes,
   // instead of doing it synchronously inside an effect.
@@ -246,6 +247,45 @@ export default function Home() {
     });
     return () => unsub();
   }, [activeGroup, user, settingsLoaded, userProfile]);
+
+  // Backfill BoardGameGeek scores for games saved before ratings were stored.
+  useEffect(() => {
+    if (!user) return;
+
+    const missingIds = Array.from(new Set(
+      games
+        .filter((game) => game.bggId && !(Number.parseFloat(game.rating || "") > 0))
+        .map((game) => String(game.bggId))
+        .filter((id) => !ratingBackfillIds.current.has(id))
+    ));
+
+    if (missingIds.length === 0) return;
+    missingIds.forEach((id) => ratingBackfillIds.current.add(id));
+
+    (async () => {
+      const ratings: Record<string, string> = {};
+
+      for (let i = 0; i < missingIds.length; i += 20) {
+        const chunk = missingIds.slice(i, i + 20);
+        try {
+          const res = await fetch(`/api/bgg?ids=${chunk.join(',')}`);
+          if (!res.ok) continue;
+          const data = await res.json();
+          if (!Array.isArray(data)) continue;
+
+          data.forEach((item: any) => {
+            const value = typeof item?.rating === 'string' ? item.rating : '';
+            if (Number.parseFloat(value) > 0) ratings[String(item.bggId)] = value;
+          });
+        } catch { /* ignore chunk failures and keep existing card data */ }
+      }
+
+      if (Object.keys(ratings).length === 0) return;
+      setGames((prev) => prev.map((game) => (
+        ratings[String(game.bggId)] ? { ...game, rating: ratings[String(game.bggId)] } : game
+      )));
+    })();
+  }, [games, user]);
 
   useEffect(() => {
     if (!user) return;
@@ -331,8 +371,17 @@ export default function Home() {
     }
   };
 
-  const handleDeleteGame = async (e: React.MouseEvent, game: any) => {
+  const handleTogglePin = async (e: React.MouseEvent, game: Game) => {
     e.stopPropagation();
+    try {
+      await updateDoc(doc(db, "userGames", game.id), { isPinned: !game.isPinned });
+      toast.success(game.isPinned ? t('gameCard.unpinned') : t('gameCard.pinned'));
+    } catch {
+      toast.error(t('home.failed'));
+    }
+  };
+
+  const handleDeleteGame = async (e: React.MouseEvent, game: any) => {    e.stopPropagation();
     if (activeGroup === null) {
       if (confirm(t('home.confirmDeleteLibrary', { name: game.name }))) {
         await deleteDoc(doc(db, "userGames", game.id));
@@ -383,13 +432,16 @@ export default function Home() {
   const orphanedExpansions = processedGames.filter(g => g.isExpansion && !baseGames.some(bg => bg.bggId === g.baseGameId));
   const parentGamesToRender = [...baseGames, ...orphanedExpansions];
 
-  parentGamesToRender.sort((a, b) => sortOption === "alpha"
-    ? a.name.localeCompare(b.name)
-    : sortOption === "year"
-      ? parseInt(b.year || "0") - parseInt(a.year || "0")
-      : sortOption === "plays"
-        ? (playCounts[String(b.bggId)] || 0) - (playCounts[String(a.bggId)] || 0)
-        : (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+  parentGamesToRender.sort((a, b) => {
+    if (Boolean(a.isPinned) !== Boolean(b.isPinned)) return a.isPinned ? -1 : 1;
+    return sortOption === "alpha"
+      ? a.name.localeCompare(b.name)
+      : sortOption === "year"
+        ? parseInt(b.year || "0") - parseInt(a.year || "0")
+        : sortOption === "plays"
+          ? (playCounts[String(b.bggId)] || 0) - (playCounts[String(a.bggId)] || 0)
+          : (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0);
+  });
 
   const pickRandomGame = () => { if (parentGamesToRender.length === 0) return toast.error(t('home.noMatches')); setRandomGameOpen(parentGamesToRender[Math.floor(Math.random() * parentGamesToRender.length)]); };
 
@@ -520,7 +572,7 @@ export default function Home() {
                     {parentGamesToRender.length === 0 ? <div className="flex items-center justify-center h-64 text-slate-500 dark:text-slate-400 font-medium">{t('home.noMatchesFilter')}</div>
                       : viewMode === "grid" ? (
                         /* Default Card Grid View */
-                        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5 items-start">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 items-start">
                           {parentGamesToRender.map((game, index) => {
                             const gameExpansions = processedGames.filter(g => g.isExpansion && g.baseGameId === game.bggId);
                             const hasEditPermission = game.userId === user.uid || (userProfile?.isCouple && game.userId === userProfile.partnerId);
@@ -536,6 +588,7 @@ export default function Home() {
                                 onToggleBulk={toggleBulkSelection} onOpenDetails={setDetailsGame} onDelete={handleDeleteGame}
                                 onLogScore={(e, g) => { e.stopPropagation(); setScoringGame(g); }}
                                 onAssign={(e, g) => { e.stopPropagation(); setAssigningGame(g); }}
+                                onTogglePin={handleTogglePin}
                               />
                             );
                           })}
@@ -605,7 +658,7 @@ export default function Home() {
       {libraryModalGroup && <AddFromLibraryModal group={libraryModalGroup} onClose={() => setLibraryModalGroup(null)} />}
       {scoringGame && <ScoresModal game={scoringGame} onClose={() => setScoringGame(null)} />}
       {randomGameOpen && <RandomGameModal game={randomGameOpen} onClose={() => setRandomGameOpen(null)} />}
-      {detailsGame && <GameDetailsModal game={detailsGame} onClose={() => setDetailsGame(null)} />}
+      {detailsGame && <GameDetailsModal key={detailsGame.id} game={detailsGame} onClose={() => setDetailsGame(null)} />}
     </div>
   );
 }

@@ -26,6 +26,7 @@ export interface Game {
   pricePaid?: number;
   description_th?: string;
   rating?: string;
+  isPinned?: boolean;
 }
 
 export interface UserProfile {

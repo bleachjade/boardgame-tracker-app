@@ -3,7 +3,7 @@ import Image from "next/image";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Sparkles, Loader2, Plus } from "lucide-react";
+import { Sparkles, Loader2, Plus, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
 import { Game } from "@/lib/types";
@@ -63,6 +63,7 @@ export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
         minPlayers: game.minPlayers, 
         maxPlayers: game.maxPlayers, 
         playTime: game.playTime, 
+        rating: game.rating || "N/A",
         groupIds: [], 
         isExpansion: game.isExpansion || false,
         baseGameId: game.baseGameId || null,
@@ -92,7 +93,15 @@ export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
             <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-tight mb-1 line-clamp-2 min-h-[45px]">{game.name}</h3>
-                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">{game.year || t('recommendations.unknownYear')}</p>
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{game.year || t('recommendations.unknownYear')}</p>
+                  {Number.parseFloat(game.rating || "") > 0 && (
+                    <span title="BoardGameGeek score" className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0">
+                      <Star size={11} className="fill-amber-400 text-amber-400" />
+                      {Number.parseFloat(game.rating || "0").toFixed(1)}
+                    </span>
+                  )}
+                </div>
                 <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2.5 rounded-lg mb-4">
                   <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} {t('search.players')}</span><span>{game.playTime || '?'} {t('search.mins')}</span>
                 </div>

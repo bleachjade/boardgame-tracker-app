@@ -124,6 +124,14 @@ export async function GET(request: Request) {
         maxPlayTime: game.maxplaytime?.['@_value'] || '',
         minAge: game.minage?.['@_value'] || '',
         description: rawDesc,
+        rating: game.statistics?.ratings?.average?.['@_value'] || '',
+        ratingsCount: game.statistics?.ratings?.usersrated?.['@_value'] || '',
+        rank: (() => {
+          const ranks = game.statistics?.ratings?.ranks?.rank;
+          const rankArr = Array.isArray(ranks) ? ranks : (ranks ? [ranks] : []);
+          const overall = rankArr.find((r: any) => r?.['@_name'] === 'boardgame');
+          return overall?.['@_value'] || '';
+        })(),
         weight: game.statistics?.ratings?.averageweight?.['@_value'] || '0',
         categories,
         mechanics,
