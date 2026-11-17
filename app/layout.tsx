@@ -42,6 +42,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster position="bottom-right" />
         </AuthGroupProvider>
       </body>
+      <Analytics />
+      <SpeedInsights />
     </html>
   )
 }
