@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata, Viewport } from 'next'
 import { AuthGroupProvider } from '@/components/AuthGroupProvider'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "Boardgame Tracker",
