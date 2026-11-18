@@ -2,12 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 // Removed orderBy from imports as we won't need it
 import { collection, query, where, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen, Star, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { Info, X, Loader2, Bot, Send, Layers, History, Calendar, Trophy, PiggyBank, Edit3, Check, Languages, BookOpen, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
 import { useModalClose } from "@/lib/useModalClose";
 import { BoardGame3DModel } from "@/components/BoardGame3DModel";
+import { BggRatingHex } from "@/components/BggRatingHex";
 
 export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => void }) {
   const { t } = useTranslation();
@@ -295,12 +296,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
 
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   {!loading && hasRating && (
-                    <span
-                      title="BoardGameGeek score"
-                      className="inline-flex items-center gap-1 text-sm font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800"
-                    >
-                      <Star size={13} className="fill-amber-400 text-amber-400" />
-                      {ratingValue.toFixed(1)}
+                    <span className="inline-flex items-center gap-1.5 text-sm font-black text-slate-700 dark:text-slate-300">
+                      <BggRatingHex rating={ratingValue} size="md" />
                       <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">/ 10 BGG</span>
                     </span>
                   )}

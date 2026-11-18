@@ -1,8 +1,9 @@
 import { memo, useState } from "react";
 import Image from "next/image";
-import { Check, Trash2, Trophy, FolderPlus, Puzzle, Star, Pin } from "lucide-react";
+import { Check, Trash2, Trophy, FolderPlus, Puzzle, Pin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Game, Group } from "@/lib/types";
+import { BggRatingHex } from "@/components/BggRatingHex";
 
 function ExpansionThumb({ image }: { image?: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -135,13 +136,7 @@ export const GameCard = memo(function GameCard({ game, userUid, isBulkMode, isSe
           <div className="flex items-center justify-between gap-2 mb-2">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{game.year || t('gameCard.unknownYear')}</p>
             {hasRating && (
-              <span
-                title="BoardGameGeek score"
-                className="flex items-center gap-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0"
-              >
-                <Star size={10} className="fill-amber-400 text-amber-400" />
-                {ratingValue.toFixed(1)}
-              </span>
+              <BggRatingHex rating={ratingValue} size="sm" />
             )}
           </div>
           <div className="flex justify-between text-[10px] sm:text-[11px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2 rounded-lg md:mb-2">

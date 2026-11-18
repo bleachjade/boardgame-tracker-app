@@ -6,7 +6,7 @@ import { useState, useEffect, useMemo, useRef, useCallback, memo } from "react";
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs, getDoc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 import NextImage from "next/image";
-import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy, Image as ImageIcon, ChevronDown } from "lucide-react";
+import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy, Image as ImageIcon, ChevronDown, ArrowUp } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -160,8 +160,10 @@ export default function Home() {
     }
     return "grid";
   });
-  const [isScrolled, setIsScrolled] = useState(false);
+  
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGamePickerOpen, setIsGamePickerOpen] = useState(false);
@@ -182,8 +184,7 @@ export default function Home() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // Mobile nav hide on scroll down
-  const lastScrollTopRef = useRef(0);
-  const [showMobileNav, setShowMobileNav] = useState(true);
+
 
   // Games data from hook (will be implemented via useAuthGroup enhancement)
   const [games, setGames] = useState<Game[]>([]);
@@ -538,60 +539,48 @@ export default function Home() {
     {t('home.signIn')}
   </button></div></div>;
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollTop = e.currentTarget.scrollTop;
-    setIsScrolled(scrollTop > 15);
+  
 
-    // Hide/show navs on scroll down/up (small threshold avoids jitter)
-    const diff = scrollTop - lastScrollTopRef.current;
-    if (scrollTop > 50 && diff > 6) {
-      setShowMobileNav(false);
-    } else if (diff < -6 || scrollTop <= 50) {
-      setShowMobileNav(true);
-    }
-    lastScrollTopRef.current = scrollTop;
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setShowScrollTop(e.currentTarget.scrollTop > 300);
   };
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
-      {/* Mobile Top Navbar */}
-      <div
-        className={`md:hidden relative z-30 overflow-hidden shrink-0 bg-white dark:bg-slate-800 border-b transition-[max-height,padding,opacity,transform,box-shadow] duration-300 ease-out ${
-          showMobileNav
-            ? "max-h-24 p-3 opacity-100 translate-y-0 border-slate-200 dark:border-slate-700 shadow-sm"
-            : "max-h-0 p-0 opacity-0 -translate-y-full border-transparent shadow-none"
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => selectTab("library")}
-            className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 hover:opacity-80 transition-opacity outline-none"
-          >
-            <Library size={22} className="text-indigo-600 dark:text-indigo-400" /> BG Tracker
-          </button>
-
-          <div className="flex items-center gap-2">
-            <button onClick={toggleTheme} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
-              {userTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <button onClick={() => setIsSidebarOpen(true)} aria-label={t("sidebar.more")} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
-              <Menu size={20} />
-            </button>
-          </div>
-        </div>
-      </div>
-
       {isSidebarOpen && <div className="fixed inset-0 bg-slate-900/50 z-40 md:hidden backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)} />}
 
       <Sidebar currentView={currentView} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} selectGroupMobile={selectGroupMobile} selectTab={selectTab} handleCreateGroup={handleCreateGroup} handleDeleteGroup={handleDeleteGroup} handleExport={handleExport} handleImport={handleImport} />
 
-      <main className="flex-1 overflow-y-auto flex flex-col relative isolate pb-24 md:pb-0" onScroll={handleScroll}>
+      <main ref={mainRef} className="flex-1 overflow-y-auto flex flex-col relative isolate pb-0" onScroll={handleScroll}>
+        {/* Mobile Top Navbar */}
+        <div
+          className="md:hidden relative z-30 shrink-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm p-2"
+        >
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => selectTab("library")}
+              className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 hover:opacity-80 transition-opacity outline-none"
+            >
+              <Library size={22} className="text-indigo-600 dark:text-indigo-400" /> BG Tracker
+            </button>
+
+            <div className="flex items-center gap-2">
+              <button onClick={toggleTheme} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
+                {userTheme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button onClick={() => setIsSidebarOpen(true)} aria-label={t("sidebar.more")} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors">
+                <Menu size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+
         {currentView === "recommendations" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><RecommendationsTab userGames={activeGroup === null ? games : EMPTY_GAMES} /></div>
           : currentView === "analytics" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><AnalyticsTab /></div>
           : currentView === "friends" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><FriendsTab /></div> : currentView === "events" ? <div className="p-4 md:p-8 max-w-7xl mx-auto w-full"><GameNightsTab userGames={parentGamesToRender} /></div>
               : (
                 <>
-                  <div className={`bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur z-20 sticky top-0 border-b border-slate-200 dark:border-slate-800 transition-[transform,opacity,box-shadow,padding] duration-300 ease-out ${isScrolled ? "shadow-sm" : ""} ${showMobileNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none md:translate-y-0 md:opacity-100 md:pointer-events-auto"} p-3 md:p-8 pb-3 md:pb-6`}>
+                  <div className="bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur z-20 relative md:sticky md:top-0 border-b border-slate-200 dark:border-slate-800 transition-[transform,opacity,box-shadow,padding] duration-300 ease-out p-3 md:p-8 pb-3 md:pb-6">
                     <div className="max-w-7xl mx-auto flex flex-col gap-2 md:gap-3">
                       <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2 md:gap-4 mb-0 md:mb-2">
                         <div>
@@ -728,6 +717,16 @@ export default function Home() {
                 </>
               )}
       </main>
+
+      <button
+        onClick={() => mainRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`fixed bottom-20 right-4 z-40 p-2.5 bg-white dark:bg-slate-800 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all duration-300 ease-out ${showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
+        aria-label="Back to top"
+        aria-hidden={!showScrollTop}
+        tabIndex={showScrollTop ? 0 : -1}
+      >
+        <ArrowUp size={20} />
+      </button>
 
       <MobileBottomNav currentView={currentView} onSelect={selectTab} onLogScore={() => setIsGamePickerOpen(true)} />
 

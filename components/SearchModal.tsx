@@ -5,10 +5,11 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuthGroup } from "./AuthGroupProvider";
 import { useModalClose } from "@/lib/useModalClose";
-import { Search, Loader2, Plus, X, Users, Database, Globe, Star } from "lucide-react";
+import { Search, Loader2, Plus, X, Users, Database, Globe } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Game, SearchResult } from "@/lib/types";
+import { BggRatingHex } from "@/components/BggRatingHex";
 
 export function SearchModal({ onClose }: { onClose: () => void }) {
   const { user, userNickname } = useAuthGroup();
@@ -269,10 +270,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
                       {game.name} <span className="text-slate-500 font-normal text-sm">({game.year || "N/A"})</span>
                     </h3>
                     {game.rating && game.rating !== "0" && (
-                      <span className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0">
-                        <Star size={11} className="fill-amber-400 text-amber-400" />
-                        {parseFloat(game.rating).toFixed(1)}
-                      </span>
+                      <BggRatingHex rating={parseFloat(game.rating)} size="sm" />
                     )}
                   </div>
                   <p className="text-sm text-slate-600 dark:text-slate-400 font-medium mt-0.5">

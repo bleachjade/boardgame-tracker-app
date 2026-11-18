@@ -3,10 +3,11 @@ import Image from "next/image";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Sparkles, Loader2, Plus, Star } from "lucide-react";
+import { Sparkles, Loader2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
 import { EnrichedGame, Game } from "@/lib/types";
+import { BggRatingHex } from "@/components/BggRatingHex";
 
 type ScoredGame = EnrichedGame & { penalty: number };
 
@@ -98,10 +99,7 @@ export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
                 <div className="flex items-center justify-between gap-2 mb-4">
                   <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{game.year || t('recommendations.unknownYear')}</p>
                   {Number.parseFloat(game.rating || "") > 0 && (
-                    <span title="BoardGameGeek score" className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 shrink-0">
-                      <Star size={11} className="fill-amber-400 text-amber-400" />
-                      {Number.parseFloat(game.rating || "0").toFixed(1)}
-                    </span>
+                    <BggRatingHex rating={Number.parseFloat(game.rating || "0")} size="sm" />
                   )}
                 </div>
                 <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2.5 rounded-lg mb-4">

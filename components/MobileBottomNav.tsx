@@ -38,7 +38,7 @@ export function MobileBottomNav({ currentView, onSelect, onLogScore }: MobileBot
   };
 
   return (
-    <nav className="md:hidden fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur dark:border-slate-700 dark:bg-slate-800/95 pb-[calc(env(safe-area-inset-bottom)+12px)]">
+    <nav className="md:hidden fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 backdrop-blur dark:border-slate-700 dark:bg-slate-800/95 pb-[calc(env(safe-area-inset-bottom)+16px)] px-2">
       <div className="mx-auto grid max-w-lg grid-cols-5 items-end">
         {items.map(renderItem)}
 
