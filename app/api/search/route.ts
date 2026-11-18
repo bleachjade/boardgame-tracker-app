@@ -1,22 +1,17 @@
 import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
+import { unstable_cache } from 'next/cache';
 
-// Force Next.js to NEVER cache this route
-export const dynamic = 'force-dynamic';
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400',
+};
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const q = searchParams.get('q');
-
-  if (!q) {
-    return NextResponse.json({ error: 'Missing search query' }, { status: 400 });
-  }
-
-  try {
+const getCachedSearch = unstable_cache(
+  async (q: string) => {
     const token = process.env.BGG_API_TOKEN;
     if (!token) {
       console.error("Missing BGG_API_TOKEN in environment variables.");
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+      throw new Error('Server configuration error');
     }
 
     // UPDATED: Added boardgameexpansion to the type filter and cache: 'no-store'
@@ -41,7 +36,7 @@ export async function GET(request: Request) {
     const parsed = parser.parse(xmlData);
     let items = parsed.items?.item;
     
-    if (!items) return NextResponse.json([]); 
+    if (!items) return []; 
     if (!Array.isArray(items)) items = [items]; 
 
     const results = items.map((game: any) => {
@@ -55,7 +50,23 @@ export async function GET(request: Request) {
       };
     });
 
-    return NextResponse.json(results);
+    return results;
+  },
+  ['bgg-search'],
+  { revalidate: 3600, tags: ['bgg'] }
+);
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const q = searchParams.get('q');
+
+  if (!q) {
+    return NextResponse.json({ error: 'Missing search query' }, { status: 400 });
+  }
+
+  try {
+    const results = await getCachedSearch(q);
+    return NextResponse.json(results, { headers: CACHE_HEADERS });
   } catch (error) {
     console.error('BGG Live Search Proxy Error:', error);
     return NextResponse.json({ error: 'Failed to search live BGG database' }, { status: 500 });

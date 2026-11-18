@@ -1,21 +1,16 @@
 import { NextResponse } from 'next/server';
 import { XMLParser } from 'fast-xml-parser';
+import { unstable_cache } from 'next/cache';
 
-// Force Next.js to NEVER cache this route
-export const dynamic = 'force-dynamic';
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
+};
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const ids = searchParams.get('ids');
-
-  if (!ids) {
-    return NextResponse.json({ error: 'Missing game IDs' }, { status: 400 });
-  }
-
-  try {
+const getCachedBggGames = unstable_cache(
+  async (ids: string) => {
     const token = process.env.BGG_API_TOKEN;
     if (!token) {
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+      throw new Error('Server configuration error');
     }
 
     const response = await fetch(`https://boardgamegeek.com/xmlapi2/thing?id=${ids}&stats=1&versions=1`, {
@@ -39,7 +34,7 @@ export async function GET(request: Request) {
     const parsed = parser.parse(xmlData);
     let items = parsed.items?.item;
     
-    if (!items) return NextResponse.json([]);
+    if (!items) return [];
     if (!Array.isArray(items)) items = [items];
 
     const formattedGames = items.map((game: any) => {
@@ -147,7 +142,23 @@ export async function GET(request: Request) {
       };
     });
 
-    return NextResponse.json(formattedGames);
+    return formattedGames;
+  },
+  ['bgg-thing'],
+  { revalidate: 86400, tags: ['bgg'] }
+);
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const ids = searchParams.get('ids');
+
+  if (!ids) {
+    return NextResponse.json({ error: 'Missing game IDs' }, { status: 400 });
+  }
+
+  try {
+    const formattedGames = await getCachedBggGames(ids);
+    return NextResponse.json(formattedGames, { headers: CACHE_HEADERS });
   } catch (error) {
     console.error('BGG Live Details Proxy Error:', error);
     return NextResponse.json({ error: 'Failed to fetch live BGG statistics' }, { status: 500 });
