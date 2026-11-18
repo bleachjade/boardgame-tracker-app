@@ -41,3 +41,13 @@ export const BggRatingHex = memo(function BggRatingHex({
     </span>
   );
 });
+
+export function BggRatingSkeleton({ size = "sm", className = "" }: { size?: BggRatingSize; className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`inline-block shrink-0 bg-slate-200 dark:bg-slate-700 animate-pulse ${sizeClasses[size]} ${className}`}
+      style={{ clipPath: HEX_CLIP }}
+    />
+  );
+}

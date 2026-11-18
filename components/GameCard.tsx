@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Check, Trash2, Trophy, FolderPlus, Puzzle, Pin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Game, Group } from "@/lib/types";
-import { BggRatingHex } from "@/components/BggRatingHex";
+import { BggRatingHex, BggRatingSkeleton } from "@/components/BggRatingHex";
 
 function ExpansionThumb({ image }: { image?: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -35,12 +35,13 @@ interface GameCardProps {
   activeGroup: Group | null; index: number;
   expansions?: Game[];
   userLists?: Group[]; // Added prop
+  ratingLoading?: boolean;
   onToggleBulk: (id: string) => void; onOpenDetails: (game: Game) => void; onDelete: (e: React.MouseEvent, game: Game) => void;
   onLogScore: (e: React.MouseEvent, game: Game) => void; onAssign: (e: React.MouseEvent, game: Game) => void;
   onTogglePin: (e: React.MouseEvent, game: Game) => void;
 }
 
-export const GameCard = memo(function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign, onTogglePin }: GameCardProps) {
+export const GameCard = memo(function GameCard({ game, userUid, isBulkMode, isSelected, iOwnIt, activeGroup, index, expansions = [], userLists = [], ratingLoading = false, onToggleBulk, onOpenDetails, onDelete, onLogScore, onAssign, onTogglePin }: GameCardProps) {
   const { t, i18n } = useTranslation();
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -135,9 +136,11 @@ export const GameCard = memo(function GameCard({ game, userUid, isBulkMode, isSe
           <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-tight mb-1 line-clamp-2 min-h-[38px]">{game.name}</h3>
           <div className="flex items-center justify-between gap-2 mb-2">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{game.year || t('gameCard.unknownYear')}</p>
-            {hasRating && (
+            {hasRating ? (
               <BggRatingHex rating={ratingValue} size="sm" />
-            )}
+            ) : ratingLoading ? (
+              <BggRatingSkeleton size="sm" />
+            ) : null}
           </div>
           <div className="flex justify-between text-[10px] sm:text-[11px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 p-2 rounded-lg md:mb-2">
             <span>{game.minPlayers || '?'}-{game.maxPlayers || '?'} {t('gameCard.players')}</span>

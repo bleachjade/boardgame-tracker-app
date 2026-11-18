@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { collection, query, where, getDocs, getDocsFromServer, updateDoc, doc, arrayUnion, arrayRemove, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Users, UserPlus, Heart, Search, Loader2, HeartHandshake, Unlink, UserMinus, Sparkles, QrCode, ScanLine } from "lucide-react";
+import { Users, UserPlus, Heart, Search, HeartHandshake, Unlink, UserMinus, Sparkles, QrCode, ScanLine } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { ProfileQrModal } from "@/components/modals/ProfileQrModal";
@@ -309,8 +309,27 @@ useEffect(() => {
 
   if (loadingFriends || !currentUserProfile) {
     return (
-      <div className="flex justify-center p-12">
-        <Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} />
+      <div className="space-y-6 md:space-y-8 px-1 sm:px-0" aria-busy="true" aria-label={t('common.loading')}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 space-y-4 animate-pulse">
+              <div className="h-5 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-3 w-56 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-20 w-full rounded-xl bg-slate-200 dark:bg-slate-700" />
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 flex items-center gap-3 animate-pulse">
+              <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-700 shrink-0" />
+              <div className="flex-1 space-y-2 min-w-0">
+                <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="h-3 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -474,7 +493,17 @@ useEffect(() => {
           </div>
 
           {loadingGames ? (
-            <div className="flex justify-center py-12"><Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} /></div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" aria-busy="true">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+                  <div className="aspect-square w-full bg-slate-200 dark:bg-slate-700" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-3 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+                    <div className="h-2.5 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : filteredGames.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-slate-800 border rounded-2xl text-slate-400 text-sm font-medium">{t('friends.noMatching')}</div>
           ) : (
@@ -518,7 +547,18 @@ useEffect(() => {
           </div>
 
           {loadingGameHistory ? (
-            <div className="flex justify-center py-10"><Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} /></div>
+            <div className="space-y-4" aria-busy="true">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 space-y-3 animate-pulse">
+                  <div className="flex justify-between">
+                    <div className="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+                    <div className="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700" />
+                  </div>
+                  <div className="h-10 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+                  <div className="h-10 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+                </div>
+              ))}
+            </div>
           ) : gameHistory.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-slate-800 border rounded-2xl text-slate-400 text-sm font-medium">No logged plays found for this game.</div>
           ) : (

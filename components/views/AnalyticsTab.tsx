@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Trophy, BarChart3, Loader2, PiggyBank, ArrowUpRight, ArrowDownRight, TrendingUp, Wallet } from "lucide-react";
+import { Trophy, BarChart3, PiggyBank, ArrowUpRight, ArrowDownRight, TrendingUp, Wallet } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type AnalyticsPlay = {
@@ -63,8 +63,34 @@ export function AnalyticsTab() {
 
   if (loadingPlays || loadingLibrary) {
     return (
-      <div className="flex justify-center p-12">
-        <Loader2 className="animate-spin text-indigo-600 dark:text-indigo-400" size={32} />
+      <div className="space-y-6 md:space-y-8 px-1 sm:px-0" aria-busy="true">
+        <div className="space-y-2">
+          <div className="h-7 w-40 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+          <div className="h-4 w-64 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 animate-pulse">
+              <div className="h-11 w-11 rounded-xl bg-slate-200 dark:bg-slate-700 shrink-0" />
+              <div className="flex-1 space-y-2 min-w-0">
+                <div className="h-3 w-16 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="h-6 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 sm:p-6 animate-pulse">
+              <div className="h-4 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="mt-4 h-44 flex items-end gap-2 sm:gap-3">
+                {Array.from({ length: 6 }).map((_, j) => (
+                  <div key={j} className="flex-1 rounded-t-lg bg-slate-200 dark:bg-slate-700" style={{ height: `${30 + ((j * 37) % 60)}%` }} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

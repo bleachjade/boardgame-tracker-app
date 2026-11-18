@@ -76,7 +76,27 @@ export function RecommendationsTab({ userGames }: { userGames: Game[] }) {
     } catch { toast.error(t('recommendations.failed')); } finally { setAddingId(null); }
   };
 
-  if (loading) return <div className="flex flex-col items-center justify-center h-64 text-slate-500 dark:text-slate-400 space-y-4"><Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" /><p className="font-bold">{t('recommendations.analyzing')}</p></div>;
+  if (loading) return (
+    <div className="space-y-6" aria-busy="true" aria-label={t('recommendations.analyzing')}>
+      <div className="h-32 md:h-40 rounded-2xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-5">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+            <div className="h-48 sm:h-56 w-full bg-slate-200 dark:bg-slate-700" />
+            <div className="p-3 sm:p-5 space-y-3">
+              <div className="h-5 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="flex items-center justify-between">
+                <div className="h-3 w-12 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="h-5 w-10 rounded bg-slate-200 dark:bg-slate-700" />
+              </div>
+              <div className="h-9 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+              <div className="h-10 w-full rounded-xl bg-slate-200 dark:bg-slate-700" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">

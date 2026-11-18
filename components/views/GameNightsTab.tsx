@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, getDocs, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Loader2, Trophy, Clock, Search, PartyPopper, Link as LinkIcon, UserPlus, UserCheck } from "lucide-react";
+import { CalendarDays, MapPin, Users, CheckCircle2, XCircle, Plus, X, Trophy, Clock, Search, PartyPopper, Link as LinkIcon, UserPlus, UserCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next"; // NEW
 import { useModalClose } from "@/lib/useModalClose";
@@ -139,7 +139,33 @@ export function GameNightsTab({ userGames }: { userGames: Game[] }) {
     catch { toast.error(t('gameNights.cancelFail')); }
   };
 
-  if (loading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-indigo-600" size={32} /></div>;
+  if (loading) return (
+    <div className="space-y-6 md:space-y-8 px-1 sm:px-0" aria-busy="true" aria-label={t('common.loading')}>
+      <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-4 animate-pulse">
+        <div className="space-y-2">
+          <div className="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700" />
+          <div className="h-3 w-64 rounded bg-slate-200 dark:bg-slate-700" />
+        </div>
+        <div className="h-10 w-32 rounded-xl bg-slate-200 dark:bg-slate-700 shrink-0" />
+      </div>
+      <div className="space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col md:flex-row animate-pulse">
+            <div className="p-5 md:w-1/3 bg-slate-100 dark:bg-slate-900/40 space-y-3">
+              <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-4 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+            </div>
+            <div className="p-5 flex-1 space-y-3">
+              <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-16 w-full rounded-xl bg-slate-200 dark:bg-slate-700" />
+              <div className="h-9 w-40 rounded-lg bg-slate-200 dark:bg-slate-700" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
   const filteredLibrary = userGames.filter(g => g.name.toLowerCase().includes(searchGame.toLowerCase()));
 
   // Upcoming events first (so the next game night is on top), then archived ones

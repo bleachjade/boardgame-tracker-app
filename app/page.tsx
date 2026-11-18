@@ -9,7 +9,6 @@ import NextImage from "next/image";
 import { Library, Menu, Plus, UserPlus, BookOpen, ListChecks, Filter, Users, ArrowDownAZ, Shuffle, X, Sun, Moon, LayoutGrid, LayoutList, Trophy, Image as ImageIcon, ChevronDown, ArrowUp } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 // Extracted Components
 import { Sidebar } from "@/components/Sidebar";
@@ -191,6 +190,7 @@ export default function Home() {
   const [gamesLoading, setGamesLoading] = useState(true);
   const [playCounts, setPlayCounts] = useState<Record<string, number>>({});
   const ratingBackfillIds = useRef<Set<string>>(new Set());
+  const [ratingsPending, setRatingsPending] = useState<Set<string>>(new Set());
 
   // Render-phase resets: clear dependent state the moment its scope changes,
   // instead of doing it synchronously inside an effect.
@@ -260,6 +260,11 @@ export default function Home() {
 
     if (missingIds.length === 0) return;
     missingIds.forEach((id) => ratingBackfillIds.current.add(id));
+    setRatingsPending((prev) => {
+      const next = new Set(prev);
+      missingIds.forEach((id) => next.add(id));
+      return next;
+    });
 
     (async () => {
       const ratings: Record<string, string> = {};
@@ -279,6 +284,13 @@ export default function Home() {
           });
         } catch { /* ignore chunk failures and keep existing card data */ }
       }
+
+      setRatingsPending((prev) => {
+        if (prev.size === 0) return prev;
+        const next = new Set(prev);
+        missingIds.forEach((id) => next.delete(id));
+        return next;
+      });
 
       if (Object.keys(ratings).length === 0) return;
       setGames((prev) => prev.map((game) => (
@@ -520,17 +532,65 @@ export default function Home() {
 
   if (authLoading || (user && !settingsLoaded) || gamesLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
-        <div className="w-48 h-48 flex items-center justify-center">
-          <DotLottieReact
-            src="/LoadingCat.lottie"
-            loop
-            autoplay
-          />
+      <div className="min-h-screen flex bg-slate-50 dark:bg-slate-900 transition-colors duration-300" aria-busy="true" aria-label={t('common.loading')}>
+        {/* Sidebar skeleton (desktop) */}
+        <aside className="hidden md:flex md:flex-col w-64 shrink-0 border-r border-slate-200 dark:border-slate-800 p-4 gap-3">
+          <div className="h-8 w-32 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+          <div className="mt-4 space-y-2">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-9 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+            ))}
+          </div>
+        </aside>
+
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Mobile top bar skeleton */}
+          <div className="md:hidden flex items-center justify-between p-2 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <div className="h-7 w-28 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+            <div className="flex gap-2">
+              <div className="h-8 w-8 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              <div className="h-8 w-8 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+            </div>
+          </div>
+
+          {/* Header + filter skeleton */}
+          <div className="p-3 md:p-8 border-b border-slate-200 dark:border-slate-800 md:border-0">
+            <div className="max-w-7xl mx-auto flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="space-y-2">
+                  <div className="h-7 w-48 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                </div>
+                <div className="hidden md:flex gap-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-11 w-28 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <div className="h-10 flex-1 min-w-[160px] rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                <div className="h-10 w-32 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                <div className="h-10 w-44 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              </div>
+            </div>
+          </div>
+
+          {/* Games grid skeleton */}
+          <div className="flex-1 p-4 md:p-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+                  <div className="aspect-square w-full bg-slate-200 dark:bg-slate-700" />
+                  <div className="p-2 sm:p-3 space-y-2">
+                    <div className="h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+                    <div className="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-700" />
+                    <div className="h-7 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <h2 suppressHydrationWarning className="mt-4 text-lg font-black text-slate-700 dark:text-slate-300 tracking-tight animate-pulse">
-          {t('common.loading')}
-        </h2>
       </div>
     );
   }
@@ -650,6 +710,7 @@ export default function Home() {
                                 activeGroup={activeGroup} index={index}
                                 expansions={expansionsByBaseId.get(game.bggId) || EMPTY_GAMES}
                                 userLists={userGroups}
+                                ratingLoading={ratingsPending.has(String(game.bggId))}
                                 onToggleBulk={toggleBulkSelection} onOpenDetails={setDetailsGame} onDelete={handleDeleteGame}
                                 onLogScore={handleLogScore}
                                 onAssign={handleAssign}

@@ -18,6 +18,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -58,7 +59,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
       .then((data) => {
         if (!cancelled && Array.isArray(data)) setGalleryImages(data);
       })
-      .catch(() => { /* gallery is optional */ });
+      .catch(() => { /* gallery is optional */ })
+      .finally(() => { if (!cancelled) setGalleryLoading(false); });
 
     return () => { cancelled = true; };
   }, [game.bggId]);
@@ -232,6 +234,8 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                       </span>
                     </button>
                   </>
+                ) : loading ? (
+                  <div className="w-full h-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold">{t('gameDetails.noImage')}</div>
                 )}
@@ -272,18 +276,24 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                 )}
               </div>
 
-              {carouselImages.length > 1 && (
+              {(galleryLoading || carouselImages.length > 1) && (
                 <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
-                  {carouselImages.map((img, idx) => (
-                    <button
-                      key={img}
-                      type="button"
-                      onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border-2 transition ${idx === safeImageIndex ? 'border-indigo-500' : 'border-transparent opacity-70 hover:opacity-100'}`}
-                    >
-                      <img src={`/api/media?url=${encodeURIComponent(img)}`} alt="" className="w-full h-full object-cover" />
-                    </button>
-                  ))}
+                  {galleryLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="w-12 h-12 rounded-lg shrink-0 bg-slate-200 dark:bg-slate-700 animate-pulse" aria-hidden="true" />
+                    ))
+                  ) : (
+                    carouselImages.map((img, idx) => (
+                      <button
+                        key={img}
+                        type="button"
+                        onClick={() => setActiveImageIndex(idx)}
+                        className={`relative w-12 h-12 rounded-lg overflow-hidden shrink-0 border-2 transition ${idx === safeImageIndex ? 'border-indigo-500' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                      >
+                        <img src={`/api/media?url=${encodeURIComponent(img)}`} alt="" className="w-full h-full object-cover" />
+                      </button>
+                    ))
+                  )}
                 </div>
               )}
             </div>
@@ -295,29 +305,42 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
                 </h3>
 
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  {!loading && hasRating && (
+                  {loading ? (
+                    <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+                      <span className="h-9 w-10 bg-slate-200 dark:bg-slate-700 animate-pulse" style={{ clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" }} />
+                      <span className="h-3 w-14 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                    </span>
+                  ) : hasRating ? (
                     <span className="inline-flex items-center gap-1.5 text-sm font-black text-slate-700 dark:text-slate-300">
                       <BggRatingHex rating={ratingValue} size="md" />
                       <span className="text-[10px] font-bold uppercase tracking-wide opacity-70">/ 10 BGG</span>
                     </span>
-                  )}
-                  {!loading && liveData.rank && (
+                  ) : null}
+                  {loading ? (
+                    <span className="h-6 w-24 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" aria-hidden="true" />
+                  ) : liveData.rank ? (
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
                       #{liveData.rank} BGG Rank
                     </span>
-                  )}
+                  ) : null}
                 </div>
 
                 <div className="mt-3 min-h-[28px] flex flex-wrap gap-1.5">
-                  {!loading && liveData.mechanics && liveData.mechanics.length > 0 && (
-                    liveData.mechanics.map((m: string) => (
-                      <span
-                        key={m}
-                        className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-bold border border-slate-200 dark:border-slate-600"
-                      >
-                        {m}
-                      </span>
+                  {loading ? (
+                    Array.from({ length: 4 }).map((_, i) => (
+                      <span key={i} className="h-6 w-16 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" aria-hidden="true" />
                     ))
+                  ) : (
+                    liveData.mechanics && liveData.mechanics.length > 0 && (
+                      liveData.mechanics.map((m: string) => (
+                        <span
+                          key={m}
+                          className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded text-xs font-bold border border-slate-200 dark:border-slate-600"
+                        >
+                          {m}
+                        </span>
+                      ))
+                    )
                   )}
                 </div>
               </div>
@@ -325,7 +348,7 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               <div className="bg-[#0f1115] text-white rounded-xl p-4 md:p-5 grid grid-cols-2 divide-x divide-slate-800 border border-slate-800 shadow-inner w-full">
                 <div className="flex flex-col justify-center pr-4">
                   <span className="text-lg md:text-xl font-black">{liveData.minPlayers}–{liveData.maxPlayers} {t('gameDetails.players')}</span>
-                  <span className="text-xs text-slate-400 font-medium border-b border-dotted border-slate-600 inline-block w-fit pb-[2px] mt-1">{t('gameDetails.community')}: {liveData.minPlayers}–{liveData.maxPlayers} — {t('gameDetails.best')}: {loading ? '...' : liveData.bestPlayers || '?'}</span>
+                  <span className="text-xs text-slate-400 font-medium border-b border-dotted border-slate-600 inline-block w-fit pb-[2px] mt-1">{t('gameDetails.community')}: {liveData.minPlayers}–{liveData.maxPlayers} — {t('gameDetails.best')}: {loading ? <span className="inline-block h-3 w-8 align-middle rounded bg-slate-600 dark:bg-slate-500 animate-pulse" aria-hidden="true" /> : (liveData.bestPlayers || '?')}</span>
                 </div>
                 <div className="flex flex-col justify-center pl-4 md:px-4">
                   <span className="text-lg md:text-xl font-black">{timeDisplay} {t('gameDetails.min')}</span>
@@ -375,7 +398,12 @@ export function GameDetailsModal({ game, onClose }: { game: any; onClose: () => 
               </div>
 
               {loading ? (
-                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold py-4"><Loader2 size={20} className="animate-spin" /> {t('gameDetails.fetching')}</div>
+                <div className="space-y-2 py-2" aria-busy="true">
+                  <div className="h-3 w-full rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  <div className="h-3 w-11/12 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  <div className="h-3 w-10/12 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  <div className="h-3 w-9/12 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                </div>
               ) : isEditingThaiDesc ? (
                 <div className="space-y-3 bg-slate-50 dark:bg-slate-900/40 p-4 border rounded-xl border-slate-200 dark:border-slate-700">
                   <textarea
