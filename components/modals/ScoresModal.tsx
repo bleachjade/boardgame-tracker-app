@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { collection, query, where, onSnapshot, getDocs, doc, getDoc, serverTimestamp, writeBatch, deleteDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthGroup } from "@/components/AuthGroupProvider";
-import { Trophy, X, Calculator, History, Calendar, Plus, Users, Image as ImageIcon, CheckCircle, XCircle, Trash2, Mic, MicOff, UserCheck, Circle } from "lucide-react";
+import { Trophy, X, Calculator, History, Calendar, Plus, Users, Image as ImageIcon, CheckCircle, XCircle, Trash2, Mic, MicOff, UserCheck, Circle, Delete } from "lucide-react";
 import { calculateScoreString } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -35,8 +35,9 @@ type SpeechWindow = Window & {
 export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void }) {
   const { user, userNickname, userProfile } = useAuthGroup();
   const { t } = useTranslation();
-  // Escape only — never a stray backdrop click that would discard a half-entered score sheet
-  useModalClose(onClose);
+  const [calcIdx, setCalcIdx] = useState<number | null>(null);
+  // Escape closes calculator first, then modal — never discard a half-entered score sheet
+  useModalClose(calcIdx !== null ? () => setCalcIdx(null) : onClose);
 
   // Match history stays inside this household/couple circle — never other users' plays
   const visiblePlayerUids = useCallback(() => {
@@ -153,6 +154,7 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
     setPlayers(players.filter((_, i) => i !== index));
     if (winnerIndex === index) setWinnerIndex(0);
     else if (winnerIndex > index) setWinnerIndex(winnerIndex - 1);
+    setCalcIdx((cur) => (cur === null ? null : cur === index ? null : cur > index ? cur - 1 : cur));
   };
 
   const updatePlayer = (index: number, field: "name" | "scoreInput", value: string) => {
@@ -161,17 +163,17 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
     setPlayers(newPlayers);
   };
 
-  const appendMath = (index: number, operator: string) => {
-    const current = players[index].scoreInput;
-    updatePlayer(index, "scoreInput", current + operator);
-  };
+  const calcPlayer = calcIdx !== null ? players[calcIdx] : null;
 
-  const quickIncrement = (index: number, amount: number) => {
-    const currentInput = players[index].scoreInput.trim();
-    if (!currentInput) updatePlayer(index, "scoreInput", String(amount));
-    else if (/^\d+$/.test(currentInput)) updatePlayer(index, "scoreInput", String(Number(currentInput) + amount));
-    else updatePlayer(index, "scoreInput", `${currentInput}+${amount}`);
+  const setCalcInput = (value: string) => { if (calcIdx !== null) updatePlayer(calcIdx, "scoreInput", value); };
+  const calcPress = (key: string) => {
+    if (calcIdx === null) return;
+    const cur = players[calcIdx].scoreInput;
+    if (/[+\-*]/.test(key) && /[+\-*]$/.test(cur)) { setCalcInput(cur.slice(0, -1) + key); return; }
+    setCalcInput(cur + key);
   };
+  const calcBackspace = () => { if (calcIdx !== null) setCalcInput(players[calcIdx].scoreInput.slice(0, -1)); };
+  const calcClear = () => setCalcInput("");
 
   const handleVoiceInput = (index: number) => {
     const windowSupported = typeof window !== "undefined";
@@ -362,7 +364,7 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
 
   return (
     <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh] animate-in zoom-in-95 duration-200">
+      <div className="relative overflow-hidden bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col border border-slate-200 dark:border-slate-700 max-h-[85vh] animate-in zoom-in-95 duration-200">
         
         <div className="p-4 border-b dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50 rounded-t-2xl shrink-0">
           <h2 className="font-black text-slate-900 dark:text-white text-lg flex items-center gap-2 truncate max-w-[320px]">
@@ -461,19 +463,17 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
                               {listeningIdx === idx ? <MicOff size={16}/> : <Mic size={16} />}
                             </button>
 
-                            <div className="relative w-32">
-                              <input 
-                                type="text" 
-                                inputMode="decimal"
-                                placeholder={t('scores.scoreMath')} 
-                                value={player.scoreInput} 
-                                onChange={(e) => updatePlayer(idx, "scoreInput", e.target.value)} 
-                                className="w-full border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600 transition-shadow" 
-                              />
+                            <button
+                              type="button"
+                              onClick={() => setCalcIdx(idx)}
+                              className="relative w-32 border border-slate-200 dark:border-slate-700 p-2 pr-12 text-sm rounded-lg text-right font-black bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-600 transition-shadow active:scale-[0.98]"
+                              title={t('scores.scoreMath')}
+                            >
+                              <span className={`block truncate ${player.scoreInput ? "" : "text-slate-400 dark:text-slate-500 font-medium"}`}>{player.scoreInput || t('scores.scoreMath')}</span>
                               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/50 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-800 shadow-sm">
                                 ={calculateScoreString(player.scoreInput)}
                               </span>
-                            </div>
+                            </button>
                           </div>
                         )}
 
@@ -494,25 +494,9 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
                         {players.length > 1 && <button onClick={() => removePlayerRow(idx)} className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 p-1 shrink-0 transition-colors active:scale-90"><X size={18} /></button>}
                       </div>
 
-                      {playMode === "score" && (
-                        <div className="flex items-center justify-end gap-1 pt-1 border-t border-slate-100 dark:border-slate-700/50 flex-wrap">
-                          {player.scoreInput.includes("+") || player.scoreInput.includes("*") || player.scoreInput.includes("-") ? (
-                            <span className="text-[10px] font-bold text-slate-400 mr-auto self-center truncate max-w-[100px]">{t('scores.eq')} {player.scoreInput}</span>
-                          ) : <div className="mr-auto"></div>}
-
-                          <div className="flex items-center gap-1 bg-indigo-50 dark:bg-indigo-900/30 p-1 rounded-lg border border-indigo-100 dark:border-indigo-800/50">
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '+')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">+</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '-')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">-</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => appendMath(idx, '*')} className="w-8 h-7 bg-white dark:bg-slate-700 text-indigo-700 dark:text-indigo-400 hover:text-indigo-900 font-black text-sm rounded shadow-sm flex items-center justify-center active:scale-90 transition-transform">*</button>
-                          </div>
-
-                          <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1"></div>
-
-                          <div className="flex items-center gap-1">
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 1)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+1</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 5)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+5</button>
-                            <button type="button" onMouseDown={e => e.preventDefault()} onTouchStart={e => e.preventDefault()} onClick={() => quickIncrement(idx, 10)} className="px-2 h-7 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 font-black text-xs rounded transition shadow-xs active:scale-90">+10</button>
-                          </div>
+                      {playMode === "score" && (player.scoreInput.includes("+") || player.scoreInput.includes("*") || player.scoreInput.includes("-")) && (
+                        <div className="pt-1 border-t border-slate-100 dark:border-slate-700/50 text-right">
+                          <span className="text-[10px] font-bold text-slate-400 truncate">{t('scores.eq')} {player.scoreInput}</span>
                         </div>
                       )}
                     </div>
@@ -638,6 +622,29 @@ export function ScoresModal({ game, onClose }: { game: Game; onClose: () => void
             </button>
           )}
         </div>
+
+        {calcPlayer && calcIdx !== null && (
+          <div className="absolute inset-x-0 bottom-0 z-30 rounded-t-3xl border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 pb-5 shadow-[0_-12px_40px_rgba(15,23,42,0.25)] animate-in slide-in-from-bottom-full duration-200">
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-300 dark:bg-slate-600" />
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="min-w-0">
+                <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 truncate">{calcPlayer.name || t('scores.playerName')}</p>
+                <p className="text-lg font-black text-slate-900 dark:text-white truncate">{calcPlayer.scoreInput || "0"} <span className="text-indigo-600 dark:text-indigo-400">= {calculateScoreString(calcPlayer.scoreInput)}</span></p>
+              </div>
+              <button type="button" onClick={() => setCalcIdx(null)} className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500"><X size={18} /></button>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {["7","8","9","/","4","5","6","*","1","2","3","-","0","(",")","+"].map((k) => (
+                <button key={k} type="button" onClick={() => calcPress(k)} className={`h-12 rounded-xl font-black text-lg active:scale-95 transition ${/[+\-*/()]/.test(k) ? "bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800" : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white"}`}>{k === "*" ? "×" : k === "/" ? "÷" : k === "-" ? "−" : k}</button>
+              ))}
+            </div>
+            <div className="grid grid-cols-4 gap-2 mt-2">
+              <button type="button" onClick={calcClear} className="h-11 rounded-xl font-bold text-sm bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 active:scale-95">{t('scores.calcClear')}</button>
+              <button type="button" onClick={calcBackspace} className="h-11 rounded-xl font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center active:scale-95"><Delete size={18} /></button>
+              <button type="button" onClick={() => setCalcIdx(null)} className="col-span-2 h-11 rounded-xl font-black bg-indigo-600 text-white active:scale-95 shadow-sm">{t('scores.calcDone')}</button>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
